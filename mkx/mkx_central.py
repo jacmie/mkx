@@ -2,9 +2,6 @@ import time
 
 from adafruit_hid.keycode import Keycode
 
-# from mkx.central_hid_base import CentralHidBase
-# from mkx.periphery_base import PeripheryBase
-
 from mkx.connect_periphery_abstract import ConnectPeripheryAbstract
 
 FRAME_INTERVAL_MS = 10
@@ -17,7 +14,6 @@ last_frame_time = time.monotonic_ns() // 1_000_000
 
 class MKX_Central:
     def __init__(self, keymap=None, coord_mapping=None):
-        # Default constructor (user provides everything or uses defaults)
         self.keymap = keymap if keymap is not None else []
         self.coord_mapping = coord_mapping
         self.hid_mode = None
@@ -26,7 +22,6 @@ class MKX_Central:
         self.central_periphery = None
 
     def add_interface(self, interface: ConnectPeripheryAbstract):
-        # print("interface: ", connect_central.value)
         self.interfaces.append(interface)
 
     def poll(self):
@@ -64,31 +59,6 @@ class MKX_Central:
             del self.held_keys[pos]
             return (keycode, False)
 
-    def safe_receive_messages(self, interface) -> list[dict]:
-        """Checks connection, tries to reconnect if needed, receives and parses messages."""
-        try:
-            if not interface.is_connected():
-                print("Not connected, attempting to reconnect...")
-                interface.reconnect()
-                if not interface.is_connected():
-                    print("Reconnection failed.")
-                    return []
-
-            raw_data = interface.receive()
-            # print("data: ", raw_data)
-            return raw_data
-            # parsed_messages = []
-            # for data_chunk in raw_data:
-            #     if isinstance(data_chunk, bytes):
-            #         parsed_messages.extend(interface.parse_buffered_lines(data_chunk))
-            #     else:
-            #         print("Warning: received non-bytes data")
-            # return parsed_messages
-
-        except Exception as e:
-            print(f"Error during message receiving: {e}")
-            return []
-
     def run_once(self):
         now = time.monotonic_ns() // 1_000_000
 
@@ -107,13 +77,11 @@ class MKX_Central:
                     )
 
             for interface in self.interfaces:
-                # Check connection TO DO
-
                 # Apply time sync TO DO
 
                 # Receive
                 # print("interface: ", interface)
-                data = self.safe_receive_messages(interface)
+                data = interface.receive()
                 print("data: ", data)
 
                 # Debouncing TO DO
@@ -122,18 +90,13 @@ class MKX_Central:
 
                 # AddOns TO DO
 
+                # process_key_event(self, row, col, pressed)
                 # self.hids[0].send_key(Keycode.A, True)  # Press "a"
                 # self.hids[0].send_key(Keycode.A, False)  # Release "a"
 
                 # msg = self.hids[0].send_key(3, True)
                 # print("msg: ", msg)
 
-                # events = interface.get_events()
-                # for row, col, pressed in events:
-                #     result = self.process_key_event(row, col, pressed)
-                #     if result:
-                #         keycode, action = result
-                #         self.output.send_key(keycode, action)
         time.sleep(0.5)
 
     def run_forever(self):

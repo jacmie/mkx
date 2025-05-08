@@ -29,8 +29,7 @@ class CentralUSB(ConnectPeripheryBase):
         print(f"[{self.device_id}] No USB device found")
 
     def receive(self):
-        if not self.is_connected():
-            self.reconnect()
+        if not self.ensure_connection():
             return []
 
         try:
@@ -44,9 +43,9 @@ class CentralUSB(ConnectPeripheryBase):
         return []
 
     def send(self, msg_type: str, data: dict):
-        if not self.is_connected():
-            self.reconnect()
+        if not self.ensure_connection():
             return
+
         try:
             self.serial.write(self.encode_message(msg_type, data))
         except Exception as e:

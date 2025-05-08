@@ -34,8 +34,7 @@ class ConnectPeripheryBLE(ConnectPeripheryAbstract):
             self.ble.stop_scan()
 
     def receive(self):
-        if not self.is_connected():
-            self.reconnect()
+        if not self.ensure_connection():
             return []
 
         try:
@@ -47,9 +46,9 @@ class ConnectPeripheryBLE(ConnectPeripheryAbstract):
         return []
 
     def send(self, msg_type: str, data: dict):
-        if not self.is_connected():
-            self.reconnect()
+        if not self.ensure_connection():
             return
+
         try:
             self.uart.write(encode_message(msg_type, data))
         except Exception as e:

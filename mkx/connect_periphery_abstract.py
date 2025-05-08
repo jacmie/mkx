@@ -22,3 +22,12 @@ class ConnectPeripheryAbstract:
         raise NotImplementedError(
             "Subclass of the ConnectPeripheryAbstract must implement send()"
         )
+
+    def ensure_connection(self) -> bool:
+        if not self.is_connected():
+            # print("Not connected, attempting to reconnect...")
+            self.reconnect()
+            if not self.is_connected():
+                print("Reconnection failed.")
+                return False
+        return True
