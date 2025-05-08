@@ -22,6 +22,7 @@ class ConnectPeripheryCentral(ConnectPeripheryAbstract):
         try:
             # data = self.uart.read(64)
             data = self.central_periphery.payload
+            self.central_periphery.payload = None
             if data:
                 return self.msg_parser.parse(data)
             # return self.msg_parser.parse(

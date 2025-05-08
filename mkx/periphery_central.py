@@ -3,6 +3,10 @@ from mkx.periphery_abstract import PeripheryAbstract
 
 
 class CentralPeriphery(PeripheryAbstract):
+    def __init__(self, device_id, col_pins, row_pins, **kwargs):
+        super().__init__(device_id, col_pins, row_pins, **kwargs)
+        self.payload = None
+
     def receive(self) -> list[dict]:
         # Central has no transport to receive messages
         return []

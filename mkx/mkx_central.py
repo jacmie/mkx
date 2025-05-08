@@ -91,16 +91,20 @@ class MKX_Central:
 
     def run_once(self):
         now = time.monotonic_ns() // 1_000_000
-        print("run_once now: ", now)
 
         if now - last_frame_time >= FRAME_INTERVAL_MS:
             frame_start = last_frame_time
             frame_end = last_frame_time + FRAME_INTERVAL_MS
 
             if self.central_periphery:
-                self.central_periphery.send(
-                    "key_event", {"row": 1, "col": 2, "pressed": True}
-                )
+                signal = self.central_periphery.get_key_events()
+                # print("dd", signal)
+                for col, row, pressed in signal:
+                    self.central_periphery.send(
+                        "key_event",
+                        {"col": col, "row": row, "pressed": pressed},
+                        # "key_event", {"row": 1, "col": 2, "pressed": True}
+                    )
 
             for interface in self.interfaces:
                 # Check connection TO DO
@@ -108,7 +112,7 @@ class MKX_Central:
                 # Apply time sync TO DO
 
                 # Receive
-                print("interface: ", interface)
+                # print("interface: ", interface)
                 data = self.safe_receive_messages(interface)
                 print("data: ", data)
 
@@ -130,6 +134,7 @@ class MKX_Central:
                 #     if result:
                 #         keycode, action = result
                 #         self.output.send_key(keycode, action)
+        time.sleep(0.5)
 
     def run_forever(self):
         while True:
