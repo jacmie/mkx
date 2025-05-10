@@ -18,8 +18,12 @@ class MKX_Central:
         self.coord_mapping = coord_mapping
         self.hid_mode = None
         self.hids = []
-        self.interfaces = []
+        self.interfaces = []  # List of interface to peripheries
         self.central_periphery = None
+
+        self.last_frame_time = 0
+        self.sync_offsets = {}  # Dictionary of offsets per interface
+        self.debounce_state = {}  # Store debounced states per interface
 
     def add_interface(self, interface: ConnectPeripheryAbstract):
         self.interfaces.append(interface)
@@ -59,100 +63,102 @@ class MKX_Central:
             del self.held_keys[pos]
             return (keycode, False)
 
+    def central_periphery_send(self):
+        if self.central_periphery:
+            signal = self.central_periphery.get_key_events()
+            # print("dd", signal)
+            for col, row, pressed in signal:
+                self.central_periphery.send(
+                    "key_event",
+                    {"col": col, "row": row, "pressed": pressed},
+                    # "key_event", {"row": 1, "col": 2, "pressed": True}
+                )
+
+    def process_debounce(self, interface, timestamp, msg):
+        # Implement debouncing logic here for the keys
+        key = msg.get("key")  # Assuming key is part of the message
+        if key:
+            if interface not in self.debounce_state:
+                self.debounce_state[interface] = {}
+
+            debounce_info = self.debounce_state[interface].get(key)
+
+            # If it's the first event for this key, process it
+            if debounce_info is None:
+                self.debounce_state[interface][key] = {
+                    "timestamp": timestamp,
+                    "state": msg["state"],
+                }
+                self.process_key_event(interface, key, msg["state"])
+            else:
+                # If the state is different (press/release), check debounce period
+                if debounce_info["state"] != msg["state"]:
+                    if timestamp - debounce_info["timestamp"] >= DEBOUNCE_MS:
+                        # Apply debounce threshold, then process the event
+                        self.debounce_state[interface][key] = {
+                            "timestamp": timestamp,
+                            "state": msg["state"],
+                        }
+                        self.process_key_event(interface, key, msg["state"])
+                else:
+                    # If the state hasn't changed, just update the timestamp
+                    self.debounce_state[interface][key]["timestamp"] = timestamp
+
     def run_once(self):
-        now = time.monotonic_ns() // 1_000_000
+        now = time.monotonic_ns() // 1_000_000  # Current time in ms
 
-        if now - last_frame_time >= FRAME_INTERVAL_MS:
-            frame_start = last_frame_time
-            frame_end = last_frame_time + FRAME_INTERVAL_MS
+        if now - self.last_frame_time >= FRAME_INTERVAL_MS:
+            frame_end = now + FRAME_INTERVAL_MS
 
-            if self.central_periphery:
-                signal = self.central_periphery.get_key_events()
-                # print("dd", signal)
-                for col, row, pressed in signal:
-                    self.central_periphery.send(
-                        "key_event",
-                        {"col": col, "row": row, "pressed": pressed},
-                        # "key_event", {"row": 1, "col": 2, "pressed": True}
-                    )
-
+            # Loop over all interfaces to process received data
             for interface in self.interfaces:
-                # Apply time sync TO DO
+                all_messages = []
 
-                # Receive
-                # print("interface: ", interface)
-                data = interface.receive()
-                print("data: ", data)
+                # Continuously receive data while we're within the frame time
+                while True:
+                    now = time.monotonic_ns() // 1_000_000
+                    if now >= frame_end:
+                        break
 
-                # Debouncing TO DO
+                    if interface.device_id == "central":
+                        self.central_periphery_send()
 
-                # Keys logic
+                    data = interface.receive()
+                    print("data: ", data)
 
-                # AddOns TO DO
+                    if data:
+                        all_messages.extend(data)
 
-                # process_key_event(self, row, col, pressed)
-                # self.hids[0].send_key(Keycode.A, True)  # Press "a"
-                # self.hids[0].send_key(Keycode.A, False)  # Release "a"
+                    time.sleep(0.005)  # Keep CPU usage low
 
-                # msg = self.hids[0].send_key(3, True)
-                # print("msg: ", msg)
+                # Process all accumulated messages
+                for msg in all_messages:
+                    timestamp = msg.get("timestamp")
 
-        time.sleep(0.5)
+                    # Sync time for this interface
+                    if interface not in self.sync_offsets:
+                        host_now = now
+                        self.sync_offsets[interface] = host_now - timestamp
+
+                    # adjusted_ts = timestamp + self.sync_offsets[interface]
+                    # self.process_debounce(interface, adjusted_ts, msg)
+
+            # Keys logic
+
+            # AddOns TO DO
+
+            # process_key_event(self, row, col, pressed)
+            # self.hids[0].send_key(Keycode.A, True)  # Press "a"
+            # self.hids[0].send_key(Keycode.A, False)  # Release "a"
+
+            # msg = self.hids[0].send_key(3, True)
+            # print("msg: ", msg)
+
+            self.last_frame_time = frame_end
+
+        time.sleep(0.01)  # Maintain reasonable loop rate
 
     def run_forever(self):
+        self.last_frame_time = time.monotonic_ns() // 1_000_000
         while True:
             self.run_once()
-
-
-# while True:
-#     now = time.monotonic_ns() // 1_000_000
-
-#     if now - last_frame_time >= FRAME_INTERVAL_MS:
-#         frame_start = last_frame_time
-#         frame_end = last_frame_time + FRAME_INTERVAL_MS
-
-#         # Combine debounced states across all peripherals
-#         global_key_states = {}
-
-#         for pid, pdata in peripherals.items():
-#             # Skip disconnected peripherals
-#             if now - pdata["last_seen"] > PERIPHERAL_TIMEOUT_MS:
-#                 continue
-
-#             # Apply time sync
-#             offset = pdata["sync_offset"]
-#             frame_events = [
-#                 (t + offset, key, state)
-#                 for t, key, state in pdata["event_queue"]
-#                 if frame_start <= (t + offset) < frame_end
-#             ]
-
-#             # Remove processed events
-#             pdata["event_queue"] = [
-#                 e for e in pdata["event_queue"] if (e[0] + offset) >= frame_end
-#             ]
-
-#             # Debounce per peripheral
-#             for t_adj, key, new_state in frame_events:
-#                 ds = pdata["debounce_state"]
-#                 prev = ds.get(key)
-
-#                 if prev is None:
-#                     ds[key] = {"state": new_state, "timestamp": t_adj}
-#                     global_key_states[key] = new_state
-#                 else:
-#                     if prev["state"] != new_state:
-#                         if t_adj - prev["timestamp"] >= DEBOUNCE_MS:
-#                             ds[key] = {"state": new_state, "timestamp": t_adj}
-#                             global_key_states[key] = new_state
-#                     else:
-#                         ds[key]["timestamp"] = t_adj
-#                         global_key_states[key] = new_state
-
-#         # Merge states: final list of pressed keys
-#         pressed_keys = [
-#             key for key, state in global_key_states.items() if state == "down"
-#         ]
-
-#         send_hid_report(pressed_keys)
-#         last_frame_time = frame_end
