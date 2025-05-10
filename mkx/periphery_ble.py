@@ -29,19 +29,6 @@ class BLEPeriphery(PeripheryAbstract):
                     print("BLE connect error:", e)
         self.ble.stop_scan()
 
-    def get_events(self):
-        events = []
-        for uart in self.uart_services:
-            while uart.in_waiting:
-                try:
-                    line = uart.readline().decode().strip()
-                    msg = json.loads(line)
-                    if msg.get("type") == "key":
-                        events.append((msg["row"], msg["col"], bool(msg["pressed"])))
-                except Exception as e:
-                    print("BLE JSON error:", e)
-        return events
-
     def receive(self) -> list[dict]:
         # Placeholder for receiving messages from central
         return []

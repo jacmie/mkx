@@ -11,21 +11,6 @@ class USBPeriphery(PeripheryBase):
         self.serial = usb_cdc.data
         self.buffer = b""
 
-    def get_events(self):
-        events = []
-        if self.serial.in_waiting:
-            data = self.serial.read(self.serial.in_waiting)
-            self.buffer += data
-            while b"\n" in self.buffer:
-                line, self.buffer = self.buffer.split(b"\n", 1)
-                try:
-                    msg = json.loads(line.decode().strip())
-                    if msg.get("type") == "key":
-                        events.append((msg["row"], msg["col"], bool(msg["pressed"])))
-                except Exception as e:
-                    print("USB parse error:", e)
-        return events
-
     def send_status(self, msg_type, data):
         msg = {"type": msg_type, **data}
         try:
