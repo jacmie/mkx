@@ -21,6 +21,8 @@ class StandardKey(AbstractKey):
 
 
 # Hardcoded standard key definitions
+NO = StandardKey(Keycode.A)
+
 A = StandardKey(Keycode.A)
 B = StandardKey(Keycode.B)
 C = StandardKey(Keycode.C)
@@ -48,19 +50,19 @@ X = StandardKey(Keycode.X)
 Y = StandardKey(Keycode.Y)
 Z = StandardKey(Keycode.Z)
 
-ZERO = StandardKey(Keycode.ZERO)
-ONE = StandardKey(Keycode.ONE)
-TWO = StandardKey(Keycode.TWO)
-THREE = StandardKey(Keycode.THREE)
-FOUR = StandardKey(Keycode.FOUR)
-FIVE = StandardKey(Keycode.FIVE)
-SIX = StandardKey(Keycode.SIX)
-SEVEN = StandardKey(Keycode.SEVEN)
-EIGHT = StandardKey(Keycode.EIGHT)
-NINE = StandardKey(Keycode.NINE)
+N0 = ZERO = StandardKey(Keycode.ZERO)
+N1 = ONE = StandardKey(Keycode.ONE)
+N2 = TWO = StandardKey(Keycode.TWO)
+N3 = THREE = StandardKey(Keycode.THREE)
+N4 = FOUR = StandardKey(Keycode.FOUR)
+N5 = FIVE = StandardKey(Keycode.FIVE)
+N6 = SIX = StandardKey(Keycode.SIX)
+N7 = SEVEN = StandardKey(Keycode.SEVEN)
+N8 = EIGHT = StandardKey(Keycode.EIGHT)
+N9 = NINE = StandardKey(Keycode.NINE)
 
-SPACE = StandardKey(Keycode.SPACE)
-ENTER = StandardKey(Keycode.ENTER)
+SPC = StandardKey(Keycode.SPACE)
+ENT = ENTER = StandardKey(Keycode.ENTER)
 TAB = StandardKey(Keycode.TAB)
 MINUS = StandardKey(Keycode.MINUS)
 EQUALS = StandardKey(Keycode.EQUALS)
@@ -69,7 +71,7 @@ RIGHT_BRACKET = StandardKey(Keycode.RIGHT_BRACKET)
 BACKSLASH = StandardKey(Keycode.BACKSLASH)
 SEMICOLON = StandardKey(Keycode.SEMICOLON)
 QUOTE = StandardKey(Keycode.QUOTE)
-GRAVE_ACCENT = StandardKey(Keycode.GRAVE_ACCENT)
+GRV = GRAVE_ACCENT = StandardKey(Keycode.GRAVE_ACCENT)
 COMMA = StandardKey(Keycode.COMMA)
 PERIOD = StandardKey(Keycode.PERIOD)
 FORWARD_SLASH = StandardKey(Keycode.FORWARD_SLASH)
@@ -89,6 +91,7 @@ F12 = StandardKey(Keycode.F12)
 
 __all__ = [
     "StandardKey",
+    "NO",
     "A",
     "B",
     "C",
@@ -115,6 +118,16 @@ __all__ = [
     "X",
     "Y",
     "Z",
+    "N0",
+    "N1",
+    "N2",
+    "N3",
+    "N4",
+    "N5",
+    "N6",
+    "N7",
+    "N8",
+    "N9",
     "ZERO",
     "ONE",
     "TWO",
@@ -125,6 +138,7 @@ __all__ = [
     "SEVEN",
     "EIGHT",
     "NINE",
+    "SPC",
     "SPACE",
     "ENTER",
     "TAB",
