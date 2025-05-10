@@ -1,3 +1,4 @@
+import time
 import json
 
 
@@ -20,13 +21,16 @@ class MessageParser:
 
 def encode_message(msg_type: str, data: dict) -> bytes:
     """
-    Generic messages example in newline-delimited JSON format, type followed by data:
-    {"type": "key", "col": 1, "row": 2, "pressed": true}
-    {"type": "battery", "voltage": 3.73}
-    {"type": "led_status", "color": "green"}
-    {"type": "encoder", "delta": -1}
+    Generic messages example in newline-delimited JSON format, timestamp, type, data:
+    {"timestamp": 112345678, "type": "key", "col": 1, "row": 2, "pressed": true}
+    {"timestamp": 112345678, "type": "battery", "voltage": 3.73}
+    {"timestamp": 112345678, "type": "led_status", "color": "green"}
+    {"timestamp": 112345678, "type": "encoder", "delta": -1}
     """
-    msg = {"type": msg_type}
+    msg = {
+        "timestamp": time.monotonic_ns() // 1_000_000,  # Timestamp in milliseconds
+        "type": msg_type,
+    }
     msg.update(data)
     try:
         return (json.dumps(msg) + "\n").encode()
