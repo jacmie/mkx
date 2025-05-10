@@ -45,9 +45,10 @@ pip install circup
 With the board plugged and Circuit Python installed, dowload the appropriate version of the bundle:
 circup list
 
+DO IT BEFORE RENAMING THE DRIVE!!!
 circup install adafruit_ble adafruit_hid
 circup install adafruit_ble adafruit_hid adafruit_register adafruit_uuid
-circup install adafruit_ble --drive MYBOARD
+circup install adafruit_ble adafruit_hid --path /media/jacmie/CIRCUITPY
 
 
 ## Build with mpy
