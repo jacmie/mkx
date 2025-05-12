@@ -29,11 +29,11 @@ class BLEPeriphery(PeripheryAbstract):
                     print("BLE connect error:", e)
         self.ble.stop_scan()
 
-    def receive(self) -> list[dict]:
+    def receive(self, verbose=False) -> list[dict]:
         # Placeholder for receiving messages from central
         return []
 
-    def send(self, msg_type, data):
+    def send(self, msg_type, data, verbose=False):
         payload = self._message(msg_type, data)
         for uart in self.uart_services:
             try:

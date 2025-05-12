@@ -14,11 +14,11 @@ class UARTPeriphery(PeripheryAbstract):
         self.uart = busio.UART(tx_pin, rx_pin, baudrate=baudrate, timeout=0.01)
         self.buffer = b""
 
-    def receive(self) -> list[dict]:
+    def receive(self, verbose=False) -> list[dict]:
         # Placeholder for receiving messages from central
         return []
 
-    def send(self, msg_type, data):
+    def send(self, msg_type, data, verbose=False):
         payload = self._message(msg_type, data)
         try:
             self.uart.write(payload)

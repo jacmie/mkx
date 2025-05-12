@@ -33,7 +33,7 @@ class ConnectPeripheryBLE(ConnectPeripheryAbstract):
         finally:
             self.ble.stop_scan()
 
-    def receive(self):
+    def receive(self, verbose=False):
         if not self.ensure_connection():
             return []
 
@@ -45,7 +45,7 @@ class ConnectPeripheryBLE(ConnectPeripheryAbstract):
             self.conn = None  # Force reconnect
         return []
 
-    def send(self, msg_type: str, data: dict):
+    def send(self, msg_type: str, data: dict, verbose=False):
         if not self.ensure_connection():
             return
 

@@ -14,16 +14,16 @@ class ConnectPeripheryCentral(ConnectPeripheryAbstract):
     def reconnect(self):
         pass  # Not needed
 
-    def receive(self):
+    def receive(self, verbose=False):
         try:
             data = self.central_periphery.payload
             self.central_periphery.payload = None
             if data:
-                return self.msg_parser.parse(data)
+                return self.msg_parser.parse(data, verbose)
         except Exception as e:
             print(f"[{self.device_id}] Central read error: {e}")
             self.uart = None  # Mark as disconnected
         return []
 
-    def send(self, msg_type: str, data: dict):
+    def send(self, msg_type: str, data: dict, verbose=False):
         pass  # Placeholder for sending messages from central to perypheries

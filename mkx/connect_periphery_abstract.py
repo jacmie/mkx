@@ -13,12 +13,12 @@ class ConnectPeripheryAbstract:
             "Subclass of the ConnectPeripheryAbstract must implement reconnect()"
         )
 
-    def receive(self) -> list[dict]:
+    def receive(self, verbose=False) -> list[dict]:
         raise NotImplementedError(
             "Subclass of the ConnectPeripheryAbstract must implement receive()"
         )
 
-    def send(self, msg_type: str, data: dict):
+    def send(self, msg_type: str, data: dict, verbose=False):
         raise NotImplementedError(
             "Subclass of the ConnectPeripheryAbstract must implement send()"
         )

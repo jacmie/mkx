@@ -29,7 +29,7 @@ class CentralUART(ConnectPeripheryAbstract):
             print(f"[{self.device_id}] UART reconnect failed: {e}")
             self.uart = None
 
-    def receive(self):
+    def receive(self, verbose=False):
         if not self.ensure_connection():
             return []
 
@@ -42,7 +42,7 @@ class CentralUART(ConnectPeripheryAbstract):
             self.uart = None  # Mark as disconnected
         return []
 
-    def send(self, msg_type: str, data: dict):
+    def send(self, msg_type: str, data: dict, verbose=False):
         if not self.ensure_connection():
             return
 

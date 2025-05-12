@@ -7,9 +7,9 @@ class CentralPeriphery(PeripheryAbstract):
         super().__init__(device_id, col_pins, row_pins, **kwargs)
         self.payload = None
 
-    def receive(self) -> list[dict]:
+    def receive(self, verbose=False) -> list[dict]:
         # Central has no transport to receive messages
         return []
 
-    def send(self, msg_type: str, data: dict):
-        self.payload = encode_message(msg_type, data)
+    def send(self, msg_type: str, data: dict, verbose=False):
+        self.payload = encode_message(self.device_id, msg_type, data, verbose)

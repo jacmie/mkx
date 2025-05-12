@@ -28,7 +28,7 @@ class CentralUSB(ConnectPeripheryBase):
                     print(f"[{self.device_id}] Failed to open {port.device}: {e}")
         print(f"[{self.device_id}] No USB device found")
 
-    def receive(self):
+    def receive(self, verbose=False):
         if not self.ensure_connection():
             return []
 
@@ -42,7 +42,7 @@ class CentralUSB(ConnectPeripheryBase):
             self.serial = None
         return []
 
-    def send(self, msg_type: str, data: dict):
+    def send(self, msg_type: str, data: dict, verbose=False):
         if not self.ensure_connection():
             return
 

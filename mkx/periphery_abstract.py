@@ -29,13 +29,13 @@ class PeripheryAbstract:
         """Returns a list of (row, col, pressed) events"""
         return self.matrix_scanner.get_key_events()
 
-    def receive(self) -> list[dict]:
+    def receive(self, verbose=False) -> list[dict]:
         """Return list of incoming messages as parsed dicts."""
         raise NotImplementedError(
             "Subclass of the PeripheryAbstract must implement receive()"
         )
 
-    def send(self, msg_type: str, data: dict):
+    def send(self, msg_type: str, data: dict, verbose=False):
         """Send a structured message to the peripheral."""
         raise NotImplementedError(
             "Subclass of the PeripheryAbstract must implement send()"

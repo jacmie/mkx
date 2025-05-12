@@ -1,4 +1,5 @@
 import time
+from collections import OrderedDict
 
 from adafruit_hid.keycode import Keycode
 
@@ -70,7 +71,10 @@ class MKX_Central:
             for col, row, pressed in signal:
                 self.central_periphery.send(
                     "key_event",
-                    {"col": col, "row": row, "pressed": pressed},
+                    OrderedDict(
+                        [("col", col), ("row", row), ("pressed", pressed)],
+                    ),
+                    verbose=False,
                     # "key_event", {"row": 1, "col": 2, "pressed": True}
                 )
 
@@ -123,8 +127,7 @@ class MKX_Central:
                     if interface.device_id == "central":
                         self.central_periphery_send()
 
-                    data = interface.receive()
-                    print("data: ", data)
+                    data = interface.receive(verbose=True)
 
                     if data:
                         all_messages.extend(data)
