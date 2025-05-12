@@ -3,6 +3,9 @@ from keypad import Event as KeyEvent
 
 from mkx.diode_orientation import DiodeOrientation
 
+# COL2ROW:
+# [ Column (output) ] → [ + anode ]---|>|---[ - cathode ] → [ Row (input) ]
+
 
 def ensure_digital_in_out(pin):
     # Check if the object looks like a DigitalInOut (has the right interface)
@@ -13,7 +16,6 @@ def ensure_digital_in_out(pin):
     ):
         return pin
     return digitalio.DigitalInOut(pin)
-    # return pin if pin.__class__.__name__ == 'DigitalInOut' else digitalio.DigitalInOut(pin)
 
 
 class MatrixScanner:
@@ -21,9 +23,8 @@ class MatrixScanner:
         self,
         cols,
         rows,
-        diode_orientation=DiodeOrientation.COLUMNS,
+        diode_orientation=DiodeOrientation.COL2ROW,
         pull=digitalio.Pull.DOWN,
-        rollover_cols_every_rows=None,
     ):
         self.len_cols = len(cols)
         self.len_rows = len(rows)
@@ -37,12 +38,10 @@ class MatrixScanner:
         ), "Cannot use a pin as both a column and row"
 
         # Set diode_orientation
-        if diode_orientation == DiodeOrientation.COLUMNS:
+        if diode_orientation == DiodeOrientation.COL2ROW:
             anode_pins, cathode_pins = cols, rows
-            self.translate_coords = True
-        elif diode_orientation == DiodeOrientation.ROWS:
+        elif diode_orientation == DiodeOrientation.ROW2COL:
             anode_pins, cathode_pins = rows, cols
-            self.translate_coords = False
         else:
             raise ValueError(f"Invalid DiodeOrientation: {diode_orientation}")
 
@@ -63,80 +62,44 @@ class MatrixScanner:
         for pin in self.inputs:
             pin.switch_to_input(pull=self.pull)
 
-        self.rollover_cols_every_rows = rollover_cols_every_rows or self.len_rows
-
-        initial_state_value = b"\x01" if pull is digitalio.Pull.UP else b"\x00"
-        self.state = bytearray(initial_state_value) * self.len_cols * self.len_rows
+        initial_val = 1 if pull is digitalio.Pull.UP else 0
+        self.state = bytearray([initial_val] * (self.len_cols * self.len_rows))
 
     def get_key_events(self) -> list[tuple[int, int, bool]]:
         raw_events = []
-        output_active = self.pull is not digitalio.Pull.UP
-        input_active_val = 0 if self.pull is digitalio.Pull.UP else 1
-        ba_idx = 0
+        output_active = (
+            self.pull is not digitalio.Pull.UP
+        )  # True if pull = digitalio.Pull.DOWN
+        input_active_val = (
+            0 if self.pull is digitalio.Pull.UP else 1
+        )  # What value means "pressed"
+        ba_idx = 0  # Index into the flat state byte array
 
-        for oidx, opin in enumerate(self.outputs):
-            opin.value = output_active
+        for out_idx, out_pin in enumerate(self.outputs):
+            out_pin.value = output_active
 
-            for iidx, ipin in enumerate(self.inputs):
-                new_val = int(ipin.value)
+            for in_idx, in_pin in enumerate(self.inputs):
+                new_val = int(in_pin.value)
                 old_val = self.state[ba_idx]
 
                 if old_val != new_val:
                     self.state[ba_idx] = new_val
                     pressed = new_val == input_active_val
 
-                    # Translate coords based on diode orientation
-                    if self.translate_coords:
-                        row = iidx % self.rollover_cols_every_rows
-                        col = oidx + self.len_cols * (
-                            iidx // self.rollover_cols_every_rows
-                        )
+                    if self.diode_orientation == DiodeOrientation.COL2ROW:
+                        col = in_idx
+                        row = out_idx
                     else:
-                        row = oidx
-                        col = iidx
+                        row = in_idx
+                        col = out_idx
 
-                    raw_events.append((row, col, pressed))
+                    if col < self.len_cols and row < self.len_rows:
+                        raw_events.append((col, row, pressed))
+                    else:
+                        print(f"Ignoring out-of-bounds key event: col={col}, row={row}")
 
                 ba_idx += 1
 
-            opin.value = not output_active
+            out_pin.value = not output_active
 
         return raw_events
-
-    def scan_for_changes(self):
-        """
-        Scans the entire key matrix for all state changes.
-        Returns a list of KeyEvent instances or an empty list if no change.
-        """
-        ba_idx = 0
-        key_events = []
-        output_active = self.pull is not digitalio.Pull.UP
-        input_active_val = 0 if self.pull is digitalio.Pull.UP else 1
-
-        for oidx, opin in enumerate(self.outputs):
-            opin.value = output_active
-
-            for iidx, ipin in enumerate(self.inputs):
-                new_val = int(ipin.value)
-                old_val = self.state[ba_idx]
-
-                if old_val != new_val:
-                    if self.translate_coords:
-                        row = iidx % self.rollover_cols_every_rows
-                        col = oidx + self.len_cols * (
-                            iidx // self.rollover_cols_every_rows
-                        )
-                    else:
-                        row = oidx
-                        col = iidx
-
-                    pressed = new_val == input_active_val
-                    key_number = self.len_cols * row + col + self.offset
-                    key_events.append(KeyEvent(key_number, pressed))
-                    self.state[ba_idx] = new_val
-
-                ba_idx += 1
-
-            opin.value = not output_active  # reset output
-
-        return key_events

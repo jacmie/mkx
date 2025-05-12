@@ -13,7 +13,6 @@ class PeripheryAbstract:
         *,
         diode_orientation=DiodeOrientation.COLUMNS,
         pull=digitalio.Pull.UP,
-        rollover_cols_every_rows=None
     ):
         self.device_id = device_id or "unknown"
 
@@ -22,7 +21,6 @@ class PeripheryAbstract:
             rows=row_pins,
             diode_orientation=diode_orientation,
             pull=pull,
-            rollover_cols_every_rows=rollover_cols_every_rows,
         )
 
     def get_key_events(self) -> list[tuple[int, int, bool]]:
