@@ -11,8 +11,8 @@ class PeripheryAbstract:
         col_pins,
         row_pins,
         *,
-        diode_orientation=DiodeOrientation.COLUMNS,
-        pull=digitalio.Pull.UP,
+        diode_orientation=DiodeOrientation.COL2ROW,
+        pull=digitalio.Pull.DOWN,
     ):
         self.device_id = device_id or "unknown"
 

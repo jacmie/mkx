@@ -4,7 +4,10 @@ from keypad import Event as KeyEvent
 from mkx.diode_orientation import DiodeOrientation
 
 # COL2ROW:
-# [ Column (output) ] → [ + anode ]---|>|---[ - cathode ] → [ Row (input) ]
+# [ Column (output) ] → [ + anode ]---|>|---[ - cathode (diode | ) ] → [ Row (input) ]
+
+# ROW2COL:
+# [ Row (output) ] → [ + anode ]---|>|---[ - cathode (diode | ) ] → [ Column (input) ]
 
 
 def ensure_digital_in_out(pin):
@@ -23,8 +26,8 @@ class MatrixScanner:
         self,
         cols,
         rows,
-        diode_orientation=DiodeOrientation.COL2ROW,
-        pull=digitalio.Pull.DOWN,
+        diode_orientation,
+        pull,
     ):
         self.len_cols = len(cols)
         self.len_rows = len(rows)
@@ -38,28 +41,33 @@ class MatrixScanner:
         ), "Cannot use a pin as both a column and row"
 
         # Set diode_orientation
-        if diode_orientation == DiodeOrientation.COL2ROW:
-            anode_pins, cathode_pins = cols, rows
-        elif diode_orientation == DiodeOrientation.ROW2COL:
-            anode_pins, cathode_pins = rows, cols
+        if self.diode_orientation == DiodeOrientation.COL2ROW:
+            self.anodes = cols
+            self.cathodes = rows
+        elif self.diode_orientation == DiodeOrientation.ROW2COL:
+            self.anodes = rows
+            self.cathodes = cols
         else:
-            raise ValueError(f"Invalid DiodeOrientation: {diode_orientation}")
+            raise ValueError(f"Invalid Diode Orientation: {self.diode_orientation}")
+
+        # Set pins
+        if self.pull == digitalio.Pull.DOWN:
+            self.drive_pins = self.anodes
+            self.sense_pins = self.cathodes
+        elif self.pull == digitalio.Pull.UP:
+            self.drive_pins = self.cathodes
+            self.sense_pins = self.anodes
+        else:
+            raise ValueError(f"Invalid Pull: {self.pull}")
 
         # In CircuitPython, to use a GPIO pin, wrap it in a digitalio.DigitalInOut(pin) object.
-        self.anodes = [ensure_digital_in_out(p) for p in anode_pins]
-        self.cathodes = [ensure_digital_in_out(p) for p in cathode_pins]
+        self.drive_pins = [ensure_digital_in_out(p) for p in self.drive_pins]
+        self.sense_pins = [ensure_digital_in_out(p) for p in self.sense_pins]
 
-        # Recognize pull direction
-        self.outputs, self.inputs = (
-            (self.anodes, self.cathodes)
-            if pull == digitalio.Pull.DOWN
-            else (self.cathodes, self.anodes)
-        )
-
-        # Set input and output pins
-        for pin in self.outputs:
+        # Set drive and sense pin roles
+        for pin in self.drive_pins:
             pin.switch_to_output()
-        for pin in self.inputs:
+        for pin in self.sense_pins:
             pin.switch_to_input(pull=self.pull)
 
         initial_val = 1 if pull is digitalio.Pull.UP else 0
@@ -75,10 +83,10 @@ class MatrixScanner:
         )  # What value means "pressed"
         ba_idx = 0  # Index into the flat state byte array
 
-        for out_idx, out_pin in enumerate(self.outputs):
+        for out_idx, out_pin in enumerate(self.drive_pins):
             out_pin.value = output_active
 
-            for in_idx, in_pin in enumerate(self.inputs):
+            for in_idx, in_pin in enumerate(self.sense_pins):
                 new_val = int(in_pin.value)
                 old_val = self.state[ba_idx]
 
@@ -87,11 +95,11 @@ class MatrixScanner:
                     pressed = new_val == input_active_val
 
                     if self.diode_orientation == DiodeOrientation.COL2ROW:
-                        col = in_idx
-                        row = out_idx
-                    else:
-                        row = in_idx
                         col = out_idx
+                        row = in_idx
+                    else:
+                        row = out_idx
+                        col = in_idx
 
                     if col < self.len_cols and row < self.len_rows:
                         raw_events.append((col, row, pressed))
