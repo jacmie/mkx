@@ -8,7 +8,7 @@ import json
 from mkx.periphery_abstract import PeripheryAbstract
 
 
-class BLEPeriphery(PeripheryAbstract):
+class PeripheryBLE(PeripheryAbstract):
     def __init__(self, device_id="ble"):
         super().__init__(device_id)
         self.ble = BLERadio()

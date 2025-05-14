@@ -6,7 +6,7 @@ import json
 from periphery_abstract import PeripheryAbstract
 
 
-class UARTPeriphery(PeripheryAbstract):
+class PeripheryUART(PeripheryAbstract):
     def __init__(
         self, tx_pin=board.TX, rx_pin=board.RX, baudrate=115200, device_id="uart"
     ):

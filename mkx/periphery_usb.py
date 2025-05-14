@@ -2,10 +2,10 @@
 
 import usb_cdc
 import json
-from periphery_base import PeripheryBase
+from periphery_abstract import PeripheryAbstract
 
 
-class USBPeriphery(PeripheryBase):
+class PeripheryUSB(PeripheryAbstract):
     def __init__(self, device_id="usb"):
         super().__init__(device_id)
         self.serial = usb_cdc.data
