@@ -4,6 +4,7 @@ from collections import OrderedDict
 from adafruit_hid.keycode import Keycode
 
 from mkx.connect_periphery_abstract import ConnectPeripheryAbstract
+from mkx.communication_message import sync_messages, debounce
 
 FRAME_INTERVAL_MS = 10
 SYNC_INTERVAL_MS = 5000
@@ -78,54 +79,22 @@ class MKX_Central:
                     # "key_event", {"row": 1, "col": 2, "pressed": True}
                 )
 
-    def process_debounce(self, interface, timestamp, msg):
-        # Implement debouncing logic here for the keys
-        key = msg.get("key")  # Assuming key is part of the message
-        if key:
-            if interface not in self.debounce_state:
-                self.debounce_state[interface] = {}
-
-            debounce_info = self.debounce_state[interface].get(key)
-
-            # If it's the first event for this key, process it
-            if debounce_info is None:
-                self.debounce_state[interface][key] = {
-                    "timestamp": timestamp,
-                    "state": msg["state"],
-                }
-                self.process_key_event(interface, key, msg["state"])
-            else:
-                # If the state is different (press/release), check debounce period
-                if debounce_info["state"] != msg["state"]:
-                    if timestamp - debounce_info["timestamp"] >= DEBOUNCE_MS:
-                        # Apply debounce threshold, then process the event
-                        self.debounce_state[interface][key] = {
-                            "timestamp": timestamp,
-                            "state": msg["state"],
-                        }
-                        self.process_key_event(interface, key, msg["state"])
-                else:
-                    # If the state hasn't changed, just update the timestamp
-                    self.debounce_state[interface][key]["timestamp"] = timestamp
-
     def run_once(self):
         now = time.monotonic_ns() // 1_000_000  # Current time in ms
 
         if now - self.last_frame_time >= FRAME_INTERVAL_MS:
             frame_end = now + FRAME_INTERVAL_MS
 
+            all_messages = []
+
             # Loop over all interfaces to process received data
             for interface in self.interfaces:
-                all_messages = []
-
                 # Continuously receive data while we're within the frame time
                 while True:
-                    now = time.monotonic_ns() // 1_000_000
-                    if now >= frame_end:
+                    if time.monotonic_ns() // 1_000_000 >= frame_end:
                         break
 
-                    if interface.device_id == "central":
-                        self.central_periphery_send()
+                    self.central_periphery_send()
 
                     data = interface.receive(verbose=True)
 
@@ -134,19 +103,22 @@ class MKX_Central:
 
                     time.sleep(0.005)  # Keep CPU usage low
 
-                # Process all accumulated messages
-                for msg in all_messages:
-                    timestamp = msg.get("timestamp")
+            messages_per_device = {}
 
-                    # Sync time for this interface
-                    if interface not in self.sync_offsets:
-                        host_now = now
-                        self.sync_offsets[interface] = host_now - timestamp
+            for msg in all_messages:
+                device_id = msg.get("device_id")
 
-                    # adjusted_ts = timestamp + self.sync_offsets[interface]
-                    # self.process_debounce(interface, adjusted_ts, msg)
+                if device_id not in messages_per_device:
+                    messages_per_device[device_id] = []
 
-            # Keys logic
+                messages_per_device[device_id].append(msg)
+
+            sync_msg = sync_messages(
+                self, messages_per_device, time.monotonic_ns() // 1_000_000
+            )
+            debounce(sync_msg)
+
+            # Keys logicself,
 
             # AddOns TO DO
 
