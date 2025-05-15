@@ -114,9 +114,14 @@ class MKX_Central:
                 messages_per_device[device_id].append(msg)
 
             sync_msg = sync_messages(
-                self, messages_per_device, time.monotonic_ns() // 1_000_000
+                messages_per_device, time.monotonic_ns() // 1_000_000, verbose=True
             )
-            debounce(sync_msg)
+            if sync_msg:
+                print("sync_msg:", sync_msg)
+
+            debounced_msg = debounce(sync_msg)
+            if debounced_msg:
+                print("debounced_msg:", debounced_msg)
 
             # Keys logicself,
 
@@ -130,8 +135,6 @@ class MKX_Central:
             # print("msg: ", msg)
 
             self.last_frame_time = frame_end
-
-        time.sleep(0.01)  # Maintain reasonable loop rate
 
     def run_forever(self):
         self.last_frame_time = time.monotonic_ns() // 1_000_000

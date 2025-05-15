@@ -59,7 +59,7 @@ def encode_message(device_id: str, msg_type: str, data: dict, verbose=False) -> 
 RESYNC_INTERVAL_MS = 5000  # 5 seconds
 
 
-def sync_messages(self, messages_per_device, now):
+def sync_messages(messages_per_device, now, verbose=False):
     adjusted_messages = {}
     sync_offsets = {}
 
@@ -73,6 +73,9 @@ def sync_messages(self, messages_per_device, now):
         if device_id not in sync_offsets:
             sync_offsets[device_id] = now - messages[0].get("timestamp")
 
+        if verbose:
+            print("sync_offset:", device_id, sync_offsets[device_id])
+
         for msg in messages:
             msg["timestamp"] = msg.get("timestamp") + sync_offsets[device_id]
             adjusted.append(msg)
@@ -85,16 +88,16 @@ def sync_messages(self, messages_per_device, now):
 DEBOUNCE_MS = 5
 
 
-def debounce(messages_per_device):
+def debounce(messages_per_device, verbose=False):
     debounced_messages = {}
 
     for device_id, messages in messages_per_device.items():
         debounced_msg = []
         key_states = {}
 
+        # TO DO - Upgrade to keep key_states across Timeframes
         # if device_id not in self.key_states:
         #     self.key_states[device_id] = {}
-
         # key_states = self.key_states[device_id]
 
         for msg in messages:
@@ -119,6 +122,13 @@ def debounce(messages_per_device):
                 if timestamp - state_info["timestamp"] >= DEBOUNCE_MS:
                     key_states[key] = {"timestamp": timestamp, "pressed": pressed}
                     debounced_msg.append(msg)
+                elif verbose:
+                    print(
+                        "debounced:",
+                        device_id,
+                        timestamp - state_info["timestamp"],
+                        debounced_msg,
+                    )
             else:  # Same state, only update timestamp
                 state_info["timestamp"] = timestamp
 
