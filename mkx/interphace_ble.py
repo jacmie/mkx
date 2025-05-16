@@ -2,11 +2,11 @@ from adafruit_ble import BLERadio
 from adafruit_ble.services.nordic import UARTService
 from adafruit_ble.advertising.standard import ProvideServicesAdvertisement
 
-from mkx.connect_periphery_abstract import ConnectPeripheryAbstract
+from mkx.interphace_abstract import InterfahceAbstract
 from mkx.communication_message import encode_message, parse_message
 
 
-class ConnectPeripheryBLE(ConnectPeripheryAbstract):
+class InterphaceBLE(InterfahceAbstract):
     def __init__(self, device_id="ble"):
         super().__init__(device_id)
         self.ble = BLERadio()

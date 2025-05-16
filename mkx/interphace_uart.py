@@ -1,11 +1,11 @@
 import busio
 import board
 
-from mkx.connect_periphery_abstract import ConnectPeripheryAbstract
+from mkx.interphace_abstract import InterfahceAbstract
 from mkx.communication_message import encode_message, parse_message
 
 
-class CentralUART(ConnectPeripheryAbstract):
+class InterphaceUART(InterfahceAbstract):
     def __init__(
         self, tx_pin=board.TX, rx_pin=board.RX, baudrate=115200, device_id="uart"
     ):

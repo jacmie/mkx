@@ -1,9 +1,9 @@
 import serial
 
-from mkx.connect_periphery_base import ConnectPeripheryBase
+from mkx.interphace_abstract import InterfahceAbstract
 
 
-class CentralUSB(ConnectPeripheryBase):
+class InterphaceUSB(InterfahceAbstract):
     def __init__(self, device_id="usb", baudrate=115200):
         super().__init__(device_id)
         self.baudrate = baudrate

@@ -1,26 +1,26 @@
-class ConnectPeripheryAbstract:
+class InterfahceAbstract:
     def __init__(self, device_id):
         self.device_id = device_id
         self.buffer = b""
 
     def is_connected(self) -> bool:
         raise NotImplementedError(
-            "Subclass of the ConnectPeripheryAbstract must implement is_connected()"
+            "Subclass of the InterfahceAbstract must implement is_connected()"
         )
 
     def reconnect(self):
         raise NotImplementedError(
-            "Subclass of the ConnectPeripheryAbstract must implement reconnect()"
+            "Subclass of the InterfahceAbstract must implement reconnect()"
         )
 
     def receive(self, verbose=False) -> list[dict]:
         raise NotImplementedError(
-            "Subclass of the ConnectPeripheryAbstract must implement receive()"
+            "Subclass of the InterfahceAbstract must implement receive()"
         )
 
     def send(self, msg_type: str, data: dict, verbose=False):
         raise NotImplementedError(
-            "Subclass of the ConnectPeripheryAbstract must implement send()"
+            "Subclass of the InterfahceAbstract must implement send()"
         )
 
     def ensure_connection(self) -> bool:

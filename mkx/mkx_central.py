@@ -3,7 +3,7 @@ from collections import OrderedDict
 
 from adafruit_hid.keycode import Keycode
 
-from mkx.connect_periphery_abstract import ConnectPeripheryAbstract
+from mkx.interphace_abstract import InterfahceAbstract
 from mkx.communication_message import sync_messages, debounce
 
 FRAME_INTERVAL_MS = 5
@@ -27,7 +27,7 @@ class MKX_Central:
         self.sync_offsets = {}  # Dictionary of offsets per interface
         self.debounce_state = {}  # Store debounced states per interface
 
-    def add_interface(self, interface: ConnectPeripheryAbstract):
+    def add_interface(self, interface: InterfahceAbstract):
         self.interfaces.append(interface)
 
     def poll(self):

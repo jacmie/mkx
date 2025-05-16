@@ -1,8 +1,8 @@
-from mkx.connect_periphery_abstract import ConnectPeripheryAbstract
+from mkx.interphace_abstract import InterfahceAbstract
 from mkx.communication_message import MessageParser
 
 
-class ConnectPeripheryCentral(ConnectPeripheryAbstract):
+class InterphaceCentral(InterfahceAbstract):
     def __init__(self, central_periphery):
         super().__init__("central")
         self.central_periphery = central_periphery
