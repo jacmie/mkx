@@ -6,7 +6,7 @@ from adafruit_hid.keycode import Keycode
 from mkx.connect_periphery_abstract import ConnectPeripheryAbstract
 from mkx.communication_message import sync_messages, debounce
 
-FRAME_INTERVAL_MS = 10
+FRAME_INTERVAL_MS = 5
 SYNC_INTERVAL_MS = 5000
 PERIPHERAL_TIMEOUT_MS = 1000
 DEBOUNCE_MS = 5
@@ -53,17 +53,33 @@ class MKX_Central:
             if adapter.is_connected():
                 adapter.send(msg_type, data)
 
-    def process_key_event(self, row, col, pressed):
-        pos = (row, col)
-        if pos not in self.keymap:
-            return None
-        keycode = self.keymap[pos]
+    def process_key_event(self, event_json, layer=0):
+        timestamp = (event_json["timestamp"],)
+        device_id = (event_json["device_id"],)
+        col = (event_json["col"],)
+        row = (event_json["row"],)
+        pressed = event_json["pressed"]
+
+        # Flattened matrix assumed to have fixed column width (e.g. 12)
+        matrix_cols = 12
+        index_in_mapping = row * matrix_cols + col
+
+        try:
+            logical_index = self.coord_mapping[index_in_mapping]
+        except IndexError:
+            print(f"Invalid matrix index: row={row}, col={col}")
+            return
+
+        try:
+            key = self.keymap[layer][logical_index]
+        except IndexError:
+            print(f"Key index {logical_index} out of bounds for layer {layer}")
+            return
+
         if pressed:
-            self.held_keys[pos] = True
-            return (keycode, True)
-        elif pos in self.held_keys:
-            del self.held_keys[pos]
-            return (keycode, False)
+            key.on_press()
+        else:
+            key.on_release()
 
     def central_periphery_send(self):
         if self.central_periphery:
@@ -101,7 +117,7 @@ class MKX_Central:
                     if data:
                         all_messages.extend(data)
 
-                    time.sleep(0.005)  # Keep CPU usage low
+                    time.sleep(0.001)  # Keep CPU usage low
 
             messages_per_device = {}
 
@@ -140,3 +156,12 @@ class MKX_Central:
         self.last_frame_time = time.monotonic_ns() // 1_000_000
         while True:
             self.run_once()
+
+
+# dynamic throttling Pseudocode:
+# if active_keys:
+#     loop_delay = 1  # ms — high responsiveness
+# elif recent_key_activity < 500 ms:
+#     loop_delay = 5  # ms — balance
+# else:
+#     loop_delay = 10–20  # ms — power saving
