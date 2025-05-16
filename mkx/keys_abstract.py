@@ -1,7 +1,4 @@
-# from abc import ABC, abstractmethod
-
-
-class AbstractKey:
+class KeysAbstract:
     """
     Abstract base class for all key types.
     Subclasses must implement `on_press` and `on_release`.

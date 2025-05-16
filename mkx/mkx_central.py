@@ -16,6 +16,7 @@ last_frame_time = time.monotonic_ns() // 1_000_000
 
 class MKX_Central:
     def __init__(self, keymap=None, coord_mapping=None):
+        print("MKX_Central -> Start:")
         self.keymap = keymap if keymap is not None else []
         self.coord_mapping = coord_mapping
         self.hid_mode = None
