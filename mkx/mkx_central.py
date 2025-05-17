@@ -1,4 +1,5 @@
-import time
+import sys, time
+import json
 from collections import OrderedDict
 
 from adafruit_hid.keycode import Keycode
@@ -17,6 +18,8 @@ last_frame_time = time.monotonic_ns() // 1_000_000
 class MKX_Central:
     def __init__(self, keymap=None, coord_mapping=None):
         print("MKX_Central -> Start:")
+        self.col_size = 0
+        self.row_size = 0
         self.keymap = keymap if keymap is not None else []
         self.coord_mapping = coord_mapping
         self.hid_mode = None
@@ -30,6 +33,15 @@ class MKX_Central:
 
     def add_interface(self, interface: InterfahceAbstract):
         self.interfaces.append(interface)
+
+    def add_keymap(self, keymap, col_size, row_size):
+        self.keymap = keymap
+        self.col_size = col_size
+        self.row_size = row_size
+
+        if not all(len(row) == col_size * row_size for row in keymap):
+            print("Keymap layers must be rectangular and match given size!")
+            sys.exit(1)
 
     def poll(self):
         for device_id, adapter in self.adapters.items():
@@ -120,25 +132,16 @@ class MKX_Central:
 
                     time.sleep(0.001)  # Keep CPU usage low
 
-            messages_per_device = {}
-
-            for msg in all_messages:
-                device_id = msg.get("device_id")
-
-                if device_id not in messages_per_device:
-                    messages_per_device[device_id] = []
-
-                messages_per_device[device_id].append(msg)
-
             sync_msg = sync_messages(
-                messages_per_device, time.monotonic_ns() // 1_000_000, verbose=True
+                all_messages, time.monotonic_ns() // 1_000_000, verbose=True
             )
             if sync_msg:
-                print("sync_msg:", sync_msg)
+                print("sync_msg:", json.dumps(sync_msg))
 
-            debounced_msg = debounce(sync_msg)
+            debounced_msg = debounce(sync_msg, verbose=True)
             if debounced_msg:
-                print("debounced_msg:", debounced_msg)
+                print("debounced_msg:", json.dumps(debounced_msg))
+                print("")
 
             # Keys logicself,
 
@@ -157,6 +160,9 @@ class MKX_Central:
         self.last_frame_time = time.monotonic_ns() // 1_000_000
         while True:
             self.run_once()
+
+    def check(self):
+        print("")
 
 
 # dynamic throttling Pseudocode:

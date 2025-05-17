@@ -59,80 +59,81 @@ def encode_message(device_id: str, msg_type: str, data: dict, verbose=False) -> 
 RESYNC_INTERVAL_MS = 5000  # 5 seconds
 
 
-def sync_messages(messages_per_device, now, verbose=False):
-    adjusted_messages = {}
+def sync_messages(all_messages, now, verbose=False):
+    adjusted_msg = []
     sync_offsets = {}
 
-    for device_id, messages in messages_per_device.items():
-        adjusted = []
-        if not messages:
-            adjusted_messages[device_id] = adjusted
+    for msg in all_messages:
+        device_id = msg.get("device_id")
+        if device_id is None:
             continue
 
-        # Will resync every timeframe in the MKX_Central
+        # Compute offset if not already done
         if device_id not in sync_offsets:
-            sync_offsets[device_id] = now - messages[0].get("timestamp")
+            sync_offsets[device_id] = now - msg["timestamp"]
+            if verbose:
+                print("sync_offset:", device_id, sync_offsets[device_id])
 
-        if verbose:
-            print("sync_offset:", device_id, sync_offsets[device_id])
+        # Adjust timestamp
+        ordered_msg = OrderedDict(
+            (
+                ("timestamp", msg["timestamp"] + sync_offsets[device_id]),
+                ("device_id", device_id),
+                ("type", msg.get("type")),
+                ("col", msg.get("col")),
+                ("row", msg.get("row")),
+                ("pressed", msg.get("pressed")),
+            )
+        )
+        adjusted_msg.append(ordered_msg)
 
-        for msg in messages:
-            msg["timestamp"] = msg.get("timestamp") + sync_offsets[device_id]
-            adjusted.append(msg)
-
-        adjusted_messages[device_id] = adjusted
-
-    return adjusted_messages
+    # Sort globally by adjusted timestamp
+    adjusted_msg.sort(key=lambda m: m["timestamp"])
+    return adjusted_msg
 
 
 DEBOUNCE_MS = 5
 
 
-def debounce(messages_per_device, verbose=False):
-    debounced_messages = {}
+def debounce(messages, verbose=False):
+    debounced_msg = []
+    key_states = {}
 
-    for device_id, messages in messages_per_device.items():
-        debounced_msg = []
-        key_states = {}
+    # TO DO - Upgrade to keep key_states across Timeframes
+    # if device_id not in self.key_states:
+    #     self.key_states[device_id] = {}
+    # key_states = self.key_states[device_id]
 
-        # TO DO - Upgrade to keep key_states across Timeframes
-        # if device_id not in self.key_states:
-        #     self.key_states[device_id] = {}
-        # key_states = self.key_states[device_id]
+    for msg in messages:
+        if msg.get("type") != "key_event":
+            continue  # Ignore non-key_events
 
-        for msg in messages:
-            if msg.get("type") != "key_event":
-                continue  # Ignore non-key_events
+        timestamp = msg.get("timestamp")
+        col = msg.get("col")
+        row = msg.get("row")
+        pressed = msg.get("pressed")
 
-            timestamp = msg.get("timestamp")
-            col = msg.get("col")
-            row = msg.get("row")
-            pressed = msg.get("pressed")
+        if None in (col, row, pressed):
+            continue  # Skip malformed
 
-            if None in (col, row, pressed):
-                continue  # Skip malformed
+        key = (msg["device_id"], col, row)
+        state = key_states.get(key)
 
-            key = (col, row)
-            state_info = key_states.get(key)
-
-            if state_info is None:  # First time seeing this key
+        if state is None:  # First time seeing this key
+            key_states[key] = {"timestamp": timestamp, "pressed": pressed}
+            debounced_msg.append(msg)
+        elif state["pressed"] != pressed:
+            if timestamp - state["timestamp"] >= DEBOUNCE_MS:
                 key_states[key] = {"timestamp": timestamp, "pressed": pressed}
                 debounced_msg.append(msg)
-            elif state_info["pressed"] != pressed:
-                if timestamp - state_info["timestamp"] >= DEBOUNCE_MS:
-                    key_states[key] = {"timestamp": timestamp, "pressed": pressed}
-                    debounced_msg.append(msg)
-                elif verbose:
-                    print(
-                        "debounced:",
-                        device_id,
-                        timestamp - state_info["timestamp"],
-                        debounced_msg,
-                    )
-            else:  # Same state, only update timestamp
-                state_info["timestamp"] = timestamp
+            elif verbose:
+                print(
+                    "debounced:",
+                    key,
+                    timestamp - state["timestamp"],
+                    debounced_msg,
+                )
+        else:  # Same state, only update timestamp
+            state["timestamp"] = timestamp
 
-        if debounced_msg:
-            debounced_messages[device_id] = debounced_msg
-
-    return debounced_messages
+    return debounced_msg
