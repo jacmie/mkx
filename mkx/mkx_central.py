@@ -238,7 +238,7 @@ class MKX_Central:
                 except IndexError:
                     key_obj = None
 
-                char = str(key_obj) if key_obj is not None else "None"
+                char = str(key_obj.key_name) if key_obj is not None else "None"
                 # shorten long names so grid stays narrow
                 char = char[:8]
                 shadow[r][c] = char
