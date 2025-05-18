@@ -1,6 +1,5 @@
 import usb_hid
 from adafruit_hid.keyboard import Keyboard
-from adafruit_hid.keycode import Keycode
 
 from mkx.hid_abstract import HID_abstract
 
