@@ -1,3 +1,6 @@
+from adafruit_hid.keyboard import Keyboard
+
+
 class KeysAbstract:
     """
     Abstract base class for all key types.
@@ -7,20 +10,22 @@ class KeysAbstract:
     def __init__(self):
         self._is_pressed = False
 
-    def press(self, keyboard):
+    def press(self, keyboard: Keyboard, timestamp: int):
         if not self._is_pressed:
             self._is_pressed = True
-            self.on_press(keyboard)
+            self.on_press(keyboard, timestamp)
 
-    def release(self, keyboard, timestamp):
+    def release(self, keyboard: Keyboard, timestamp: int):
         if self._is_pressed:
             self._is_pressed = False
             self.on_release(keyboard, timestamp)
 
-    # @abstractmethod
-    def on_press(self, keyboard, timestamp):
-        pass
+    def on_press(self, keyboard: Keyboard, timestamp: int):
+        raise NotImplementedError(
+            "Subclass of the KeysAbstract must implement on_press()"
+        )
 
-    # @abstractmethod
-    def on_release(self, keyboard, timestamp):
-        pass
+    def on_release(self, keyboard: Keyboard, timestamp: int):
+        raise NotImplementedError(
+            "Subclass of the KeysAbstract must implement on_release()"
+        )

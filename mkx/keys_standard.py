@@ -9,15 +9,15 @@ class KeysStandard(KeysAbstract):
     A standard key that sends a HID keycode using Adafruit HID library.
     """
 
-    def __init__(self, key_code, key_name):
+    def __init__(self, key_code: Keycode, key_name: str):
         super().__init__()
         self.key_code = key_code
         self.key_name = key_name
 
-    def on_press(self, keyboard: Keyboard):
+    def on_press(self, keyboard: Keyboard, _):
         keyboard.press(self.key_code)
 
-    def on_release(self, keyboard: Keyboard):
+    def on_release(self, keyboard: Keyboard, _):
         keyboard.release(self.key_code)
 
 

@@ -2,13 +2,14 @@ import sys, time
 import json
 from collections import OrderedDict
 
-from adafruit_hid.keycode import Keycode
-
 import usb_hid
 from adafruit_hid.keyboard import Keyboard
 
 from mkx.interphace_abstract import InterfahceAbstract
 from mkx.communication_message import sync_messages, debounce
+
+from mkx.timed_keys import TimedKeys, TimedKeysManager
+from mkx.keys_layers import Layers
 
 FRAME_INTERVAL_MS = 5
 SYNC_INTERVAL_MS = 5000
@@ -33,6 +34,9 @@ class MKX_Central:
         self.last_frame_time = 0
         self.sync_offsets = {}  # Dictionary of offsets per interface
         self.debounce_state = {}  # Store debounced states per interface
+
+        self.timed_keys_manager = TimedKeysManager()
+        self.layers = Layers(default_layer=0)
 
     def add_interface(self, interface: InterfahceAbstract):
         self.interfaces.append(interface)
@@ -69,16 +73,17 @@ class MKX_Central:
             if adapter.is_connected():
                 adapter.send(msg_type, data)
 
-    def process_key_event(self, event_json, layer=0):
+    def process_key_event(self, event_json):
+        timestamp = event_json["timestamp"]
         device_id = event_json["device_id"]
         local_col = event_json["col"]
         local_row = event_json["row"]
         pressed = event_json["pressed"]
 
-        print("All interfaces:")
-        for i in self.interfaces:
-            print("  -", i, "device_id:", getattr(i, "device_id", "MISSING"))
-            # next(i, None)
+        # print("All interfaces:")
+        # for i in self.interfaces:
+        #     print("  -", i, "device_id:", getattr(i, "device_id", "MISSING"))
+        # next(i, None)
 
         # find the interface for this device_id
         # next((i for i in self.interfaces), None)
@@ -99,20 +104,27 @@ class MKX_Central:
             print(e)
             return
 
+        active_layer = self.layers.get_top_layer()
+
         # look up key in desired layer
         try:
-            key_obj = self.keymap[layer][logical_index]
+            key = self.keymap[active_layer][logical_index]
         except IndexError:
-            print(f"Key index {logical_index} out of bounds for layer {layer}")
+            print(f"Key index {logical_index} out of bounds for layer {active_layer}")
             return
 
-        if key_obj is None:
+        if key is None:
             return
+
+        if isinstance(key, TimedKeys):
+            self.timed_keys_manager.register(key)
 
         if pressed:
-            key_obj.on_press(self.keyboard)
+            print("key:", key.key_name, "pressed")
+            key.on_press(self.keyboard, timestamp)
         else:
-            key_obj.on_release(self.keyboard)
+            print("key:", key.key_name, "released")
+            key.on_release(self.keyboard, timestamp)
 
     def central_periphery_send(self):
         if self.central_periphery:
@@ -163,17 +175,14 @@ class MKX_Central:
                 print("debounced_msg:", json.dumps(debounced_msg))
                 print("")
 
-            for key_event in debounced_msg:
-                self.process_key_event(key_event)
-
             # AddOns TO DO
 
-            # process_key_event(self, row, col, pressed)
-            # self.hids[0].send_key(Keycode.A, True)  # Press "a"
-            # self.hids[0].send_key(Keycode.A, False)  # Release "a"
+            self.timed_keys_manager.update(
+                self.keyboard, time.monotonic_ns() // 1_000_000
+            )
 
-            # msg = self.hids[0].send_key(3, True)
-            # print("msg: ", msg)
+            for key_event in debounced_msg:
+                self.process_key_event(key_event)
 
             self.last_frame_time = frame_end
 
