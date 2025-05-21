@@ -9,6 +9,7 @@ from mkx.interphace_abstract import InterfahceAbstract
 from mkx.communication_message import sync_messages, debounce
 
 from mkx.timed_keys import TimedKeys, TimedKeysManager
+from mkx.keys_sticky import SK, StickyKeyManager
 from mkx.keys_layers import Layers
 
 FRAME_INTERVAL_MS = 5
@@ -36,6 +37,7 @@ class MKX_Central:
         self.debounce_state = {}  # Store debounced states per interface
 
         self.timed_keys_manager = TimedKeysManager()
+        self.sticky_key_manager = StickyKeyManager()
         self.layers = Layers(default_layer=0)
 
     def add_interface(self, interface: InterfahceAbstract):
@@ -73,6 +75,20 @@ class MKX_Central:
             if adapter.is_connected():
                 adapter.send(msg_type, data)
 
+    def central_periphery_send(self):
+        if self.central_periphery:
+            signal = self.central_periphery.get_key_events()
+            # print("dd", signal)
+            for col, row, pressed in signal:
+                self.central_periphery.send(
+                    "key_event",
+                    OrderedDict(
+                        [("col", col), ("row", row), ("pressed", pressed)],
+                    ),
+                    verbose=False,
+                    # "key_event", {"row": 1, "col": 2, "pressed": True}
+                )
+
     def process_key_event(self, event_json):
         timestamp = event_json["timestamp"]
         device_id = event_json["device_id"]
@@ -80,14 +96,7 @@ class MKX_Central:
         local_row = event_json["row"]
         pressed = event_json["pressed"]
 
-        # print("All interfaces:")
-        # for i in self.interfaces:
-        #     print("  -", i, "device_id:", getattr(i, "device_id", "MISSING"))
-        # next(i, None)
-
         # find the interface for this device_id
-        # next((i for i in self.interfaces), None)
-        # iface = next((i for i in self.interfaces if i.device_id == device_id), None)
         iface = None
         for i in self.interfaces:
             if i.device_id == device_id:
@@ -121,24 +130,18 @@ class MKX_Central:
 
         if pressed:
             print("key:", key.key_name, "pressed")
+
+            if isinstance(key, SK):
+                self.sticky_key_manager.register(key)
+
             key.on_press(self.keyboard, timestamp)
         else:
             print("key:", key.key_name, "released")
+
             key.on_release(self.keyboard, timestamp)
 
-    def central_periphery_send(self):
-        if self.central_periphery:
-            signal = self.central_periphery.get_key_events()
-            # print("dd", signal)
-            for col, row, pressed in signal:
-                self.central_periphery.send(
-                    "key_event",
-                    OrderedDict(
-                        [("col", col), ("row", row), ("pressed", pressed)],
-                    ),
-                    verbose=False,
-                    # "key_event", {"row": 1, "col": 2, "pressed": True}
-                )
+            if not isinstance(key, SK):
+                self.sticky_key_manager.clear_stickies(self.keyboard, timestamp)
 
     def run_once(self):
         now = time.monotonic_ns() // 1_000_000  # Current time in ms
