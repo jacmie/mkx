@@ -10,7 +10,7 @@ from mkx.communication_message import sync_messages, debounce
 
 from mkx.timed_keys import TimedKeys, TimedKeysManager
 from mkx.keys_sticky import SK, StickyKeyManager
-from mkx.keys_layers import Layers
+from mkx.keys_layers import KeysLayer, LayersManager
 
 FRAME_INTERVAL_MS = 5
 SYNC_INTERVAL_MS = 5000
@@ -36,9 +36,13 @@ class MKX_Central:
         self.sync_offsets = {}  # Dictionary of offsets per interface
         self.debounce_state = {}  # Store debounced states per interface
 
+        self.pressed_keys = (
+            {}
+        )  # Track pressed keys on the active layer even after layer change
+
         self.timed_keys_manager = TimedKeysManager()
         self.sticky_key_manager = StickyKeyManager()
-        self.layers = Layers(default_layer=0)
+        self.layers_manager = LayersManager(default_layer=0)
 
     def add_interface(self, interface: InterfahceAbstract):
         self.interfaces.append(interface)
@@ -113,35 +117,105 @@ class MKX_Central:
             print(e)
             return
 
-        active_layer = self.layers.get_top_layer()
-
-        # look up key in desired layer
-        try:
-            key = self.keymap[active_layer][logical_index]
-        except IndexError:
-            print(f"Key index {logical_index} out of bounds for layer {active_layer}")
-            return
-
-        if key is None:
-            return
-
-        if isinstance(key, TimedKeys):
-            self.timed_keys_manager.register(key)
+        key_pos = (device_id, logical_index)
 
         if pressed:
+            active_layer = self.layers_manager.get_top_layer()
+
+            try:
+                key = self.keymap[active_layer][logical_index]
+            except IndexError:
+                print(
+                    f"Key index {logical_index} out of bounds for layer {active_layer}"
+                )
+                return
+
+            if key is None:
+                return
+
+            # ✅ Only store KeysLayer keys for tracking release
+            if isinstance(key, KeysLayer):
+                self.pressed_keys[key_pos] = key
+
+            if isinstance(key, KeysLayer):
+                key.on_press(self.layers_manager, self.keyboard, timestamp)
+                return
+
+            if isinstance(key, TimedKeys):
+                self.timed_keys_manager.register(key)
+
             print("key:", key.key_name, "pressed")
 
             if isinstance(key, SK):
                 self.sticky_key_manager.register(key)
 
             key.on_press(self.keyboard, timestamp)
+
         else:
+            # ✅ Retrieve previously stored KeysLayer key (if any)
+            key = self.pressed_keys.pop(key_pos, None)
+
+            if key is None:
+                # Fallback: look up from top layer if not tracked
+                active_layer = self.layers_manager.get_top_layer()
+                try:
+                    key = self.keymap[active_layer][logical_index]
+                except IndexError:
+                    print(
+                        f"Key index {logical_index} out of bounds for layer {active_layer}"
+                    )
+                    return
+
+                if key is None:
+                    return
+
+            if isinstance(key, KeysLayer):
+                key.on_release(self.layers_manager, self.keyboard, timestamp)
+                return
+
             print("key:", key.key_name, "released")
 
             key.on_release(self.keyboard, timestamp)
 
             if not isinstance(key, SK):
                 self.sticky_key_manager.clear_stickies(self.keyboard, timestamp)
+
+        # active_layer = self.layers_manager.get_top_layer()
+
+        # # look up key in desired layer
+        # try:
+        #     key = self.keymap[active_layer][logical_index]
+        # except IndexError:
+        #     print(f"Key index {logical_index} out of bounds for layer {active_layer}")
+        #     return
+
+        # if key is None:
+        #     return
+
+        # if isinstance(key, KeysLayer):
+        #     if pressed:
+        #         key.on_press(self.layers_manager, self.keyboard, timestamp)
+        #     else:
+        #         key.on_release(self.layers_manager, self.keyboard, timestamp)
+        #     return
+
+        # if isinstance(key, TimedKeys):
+        #     self.timed_keys_manager.register(key)
+
+        # if pressed:
+        #     print("key:", key.key_name, "pressed")
+
+        #     if isinstance(key, SK):
+        #         self.sticky_key_manager.register(key)
+
+        #     key.on_press(self.keyboard, timestamp)
+        # else:
+        #     print("key:", key.key_name, "released")
+
+        #     key.on_release(self.keyboard, timestamp)
+
+        #     if not isinstance(key, SK):
+        #         self.sticky_key_manager.clear_stickies(self.keyboard, timestamp)
 
     def run_once(self):
         now = time.monotonic_ns() // 1_000_000  # Current time in ms
@@ -176,7 +250,6 @@ class MKX_Central:
             debounced_msg = debounce(sync_msg, verbose=True)
             if debounced_msg:
                 print("debounced_msg:", json.dumps(debounced_msg))
-                print("")
 
             # AddOns TO DO
 
@@ -186,6 +259,7 @@ class MKX_Central:
 
             for key_event in debounced_msg:
                 self.process_key_event(key_event)
+                print("")
 
             self.last_frame_time = frame_end
 
