@@ -116,7 +116,7 @@ class MO(KeysLayer):
                         # release -> active_layers = [0], Shift released
     """
 
-    def __init__(self, layer, mod=None):
+    def __init__(self, layer, mod: KeysAbstract = None):
         super().__init__(layer)
         self.mod = mod
         self.key_name = f"MO({layer})"
@@ -126,14 +126,14 @@ class MO(KeysLayer):
     ):
         layer_manager.activate_layer(self.layer, prioritize=True)
         if self.mod:
-            keyboard.press(self.mod)
+            self.mod.on_press(keyboard, timestamp)
 
     def on_release(
         self, layer_manager: LayersManager, keyboard: Keyboard, timestamp: int
     ):
         layer_manager.deactivate_layer(self.layer)
         if self.mod:
-            keyboard.release(self.mod)
+            self.mod.on_release(keyboard, timestamp)
 
 
 class TG(KeysLayer):

@@ -133,7 +133,7 @@ class MKX_Central:
             if key is None:
                 return
 
-            # ✅ Only store KeysLayer keys for tracking release
+            # Only store KeysLayer keys for tracking release
             if isinstance(key, KeysLayer):
                 self.pressed_keys[key_pos] = key
 
@@ -152,7 +152,7 @@ class MKX_Central:
             key.on_press(self.keyboard, timestamp)
 
         else:
-            # ✅ Retrieve previously stored KeysLayer key (if any)
+            # Retrieve previously stored KeysLayer key (if any)
             key = self.pressed_keys.pop(key_pos, None)
 
             if key is None:
@@ -179,43 +179,6 @@ class MKX_Central:
 
             if not isinstance(key, SK):
                 self.sticky_key_manager.clear_stickies(self.keyboard, timestamp)
-
-        # active_layer = self.layers_manager.get_top_layer()
-
-        # # look up key in desired layer
-        # try:
-        #     key = self.keymap[active_layer][logical_index]
-        # except IndexError:
-        #     print(f"Key index {logical_index} out of bounds for layer {active_layer}")
-        #     return
-
-        # if key is None:
-        #     return
-
-        # if isinstance(key, KeysLayer):
-        #     if pressed:
-        #         key.on_press(self.layers_manager, self.keyboard, timestamp)
-        #     else:
-        #         key.on_release(self.layers_manager, self.keyboard, timestamp)
-        #     return
-
-        # if isinstance(key, TimedKeys):
-        #     self.timed_keys_manager.register(key)
-
-        # if pressed:
-        #     print("key:", key.key_name, "pressed")
-
-        #     if isinstance(key, SK):
-        #         self.sticky_key_manager.register(key)
-
-        #     key.on_press(self.keyboard, timestamp)
-        # else:
-        #     print("key:", key.key_name, "released")
-
-        #     key.on_release(self.keyboard, timestamp)
-
-        #     if not isinstance(key, SK):
-        #         self.sticky_key_manager.clear_stickies(self.keyboard, timestamp)
 
     def run_once(self):
         now = time.monotonic_ns() // 1_000_000  # Current time in ms
