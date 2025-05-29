@@ -1,43 +1,8 @@
 from adafruit_hid.keyboard import Keyboard
 
 from mkx.keys_abstract import KeysAbstract
+from mkx.manager_layers import LayersManager
 from mkx.timed_keys import TimedKeys
-
-
-class LayersManager:
-    def __init__(self, default_layer=0):
-        self.default_layer = default_layer
-        self.active_layers = [default_layer]
-
-    def activate_layer(self, layer, *, prioritize=False):
-        if layer in self.active_layers:
-            if prioritize:
-                self.active_layers.remove(layer)
-                self.active_layers.append(layer)
-        else:
-            self.active_layers.append(layer)
-
-    def deactivate_layer(self, layer):
-        if layer in self.active_layers and layer != self.default_layer:
-            self.active_layers.remove(layer)
-
-    def set_active_layer(self, layer):
-        self.active_layers = [layer]
-
-    def set_default_layer(self, layer):
-        self.default_layer = layer
-        if layer not in self.active_layers:
-            self.active_layers.insert(0, layer)
-
-    def toggle_layer(self, layer, *, prioritize=False):
-        if layer in self.active_layers:
-            self.deactivate_layer(layer)
-        else:
-            self.activate_layer(layer, prioritize=prioritize)
-
-    def get_top_layer(self):
-        print("active_layers:", self.active_layers)
-        return self.active_layers[-1] if self.active_layers else self.default_layer
 
 
 class KeysLayer(KeysAbstract):
@@ -101,7 +66,10 @@ class RL(KeysLayer):
         self.key_name = f"RL({layer})"
 
     def on_press(self, layer_manager: LayersManager, _, __):
-        layer_manager.set_active_layer(self.layer)
+        if len(layer_manager.active_layers) > 1:
+            layer_manager.active_layers[-1] = self.layer  # Replace top layer
+        else:  # If only one layer is active (default), just add RL layer
+            layer_manager.activate_layer(self.layer)
 
 
 class MO(KeysLayer):
@@ -126,14 +94,76 @@ class MO(KeysLayer):
     ):
         layer_manager.activate_layer(self.layer, prioritize=True)
         if self.mod:
-            self.mod.on_press(keyboard, timestamp)
+            self.mod.on_press(layer_manager, keyboard, timestamp)
 
     def on_release(
         self, layer_manager: LayersManager, keyboard: Keyboard, timestamp: int
     ):
         layer_manager.deactivate_layer(self.layer)
         if self.mod:
-            self.mod.on_release(keyboard, timestamp)
+            self.mod.on_release(layer_manager, keyboard, timestamp)
+
+
+class LT(KeysLayer, TimedKeys):
+    """
+    Layer Tap - Momentarily activates a layer if held, sends a key if tapped.
+
+    If the key is quickly tapped (within `timeout` ms), it behaves like `tap_key`.
+    If held longer, it activates the `layer` as long as the key is held.
+
+    Example:
+        LT(1, KC.ESC)  # tap = Escape, hold = activate layer 1
+    """
+
+    def __init__(self, layer, tap_key: KeysAbstract, timeout=200):
+        assert tap_key is not None, "tap_key must not be None"
+        KeysLayer.__init__(self, layer)
+        TimedKeys.__init__(self)
+        self.tap_key = tap_key
+        self.timeout = timeout
+        self._hold = False
+        self._pressed_time = None
+        self.key_name = f"LT({layer}, {getattr(tap_key, 'key_name', 'UNKNOWN')})"
+
+    def on_press(
+        self, layer_manager: LayersManager, keyboard: Keyboard, timestamp: int
+    ):
+        self._hold = False
+        self._pressed_time = timestamp
+        self.start_timer(timestamp)
+
+    def on_release(
+        self, layer_manager: LayersManager, keyboard: Keyboard, timestamp: int
+    ):
+        if self._pressed_time is None:
+            return
+
+        duration = timestamp - self._pressed_time
+
+        if self._hold:
+            # Held long enough, deactivate layer
+            layer_manager.deactivate_layer(self.layer)
+        elif duration < self.timeout:
+            # Tap: trigger tap key now
+            self.tap_key.on_press(layer_manager, keyboard, timestamp)
+            self.tap_key.on_release(layer_manager, keyboard, timestamp)
+        else:
+            # Fallback: activate/deactivate layer quickly (in case check_time didn’t fire)
+            layer_manager.activate_layer(self.layer)
+            layer_manager.deactivate_layer(self.layer)
+
+        self.stop_timer()
+        self._pressed_time = None
+
+    def check_time(self, layers_manager: LayersManager, _, timestamp: int):
+        print("_pressed_time", self._pressed_time)
+        if self._pressed_time is None:
+            return
+
+        print(not self._hold, (timestamp - self._pressed_time >= self.timeout))
+        if not self._hold and (timestamp - self._pressed_time >= self.timeout):
+            layers_manager.activate_layer(self.layer)
+            self._hold = True
 
 
 class TG(KeysLayer):
@@ -160,16 +190,25 @@ class TG(KeysLayer):
         layer_manager.toggle_layer(self.layer)
 
 
-class LayerSet(KeysAbstract):
+class TO(KeysLayer):
+    """
+    To Layer (Toggle One-Shot Layer) - Sets the given layer as the sole active layer.
+    Clears any other currently active layers.
+
+    Example:
+    layers = [0]
+    TO(2) press   => layers = [2]
+    TO(1) press   => layers = [1]
+    """
+
     def __init__(self, layer):
-        super().__init__()
-        self.layer = layer
+        super().__init__(layer)
+        self.key_name = f"TO({layer})"
 
-    def on_press(self, keyboard):
-        keyboard.set_active_layer(self.layer)
-
-    def on_release(self, keyboard):
-        pass  # One-shot, no release handling
+    def on_press(
+        self, layer_manager: LayersManager, keyboard: Keyboard, timestamp: int
+    ):
+        layer_manager.set_active_layer(self.layer)
 
 
 class LayerTapKey(KeysAbstract):
@@ -193,58 +232,118 @@ class LayerTapKey(KeysAbstract):
         keyboard.deactivate_layer(self.layer)
 
 
-class LayerTapToggle(KeysAbstract):
-    def __init__(self, layer):
-        super().__init__()
-        self.layer = layer
-        self._press_time = None
-        self._tap_count = 0
-        self._threshold = 200  # ms
-        self._toggle_window = 500  # ms to register rapid taps
+class TT(KeysLayer, TimedKeys):
+    """
+    Tap-Toggle - Momentarily activates a layer if held, toggles layer if double-tapped.
 
-    def on_press(self, keyboard, timestamp):
-        self._press_time = timestamp
-        keyboard.activate_layer(self.layer)
+    - Hold: activates layer while held (like MO)
+    - Double-tap: toggles layer on/off
+    - Single or >2 taps: no-op
 
-    def on_release(self, keyboard, timestamp):
-        held = timestamp - self._press_time
-        if held < self._threshold:
-            self._tap_count += 1
-            if self._tap_count >= 2:
-                keyboard.toggle_layer(self.layer)
-                self._tap_count = 0
-        else:
-            keyboard.deactivate_layer(self.layer)
+    Example:
+        TT(1)  # tap-tap toggles layer 1; hold = momentary
+    """
 
-
-class LayerTap(KeysAbstract, TimedKeys):
-    def __init__(self, layer, tap_key, timeout=200):
-        KeysAbstract.__init__(self)
+    def __init__(self, layer, timeout=200):
+        KeysLayer.__init__(self, layer)
         TimedKeys.__init__(self)
-        self.layer = layer
-        self.tap_key = tap_key
         self.timeout = timeout
-        self._hold_activated = False
+        self._pressed_time = None
+        self._hold = False
+        self._tap_count = 0
+        self._last_timestamp = 0
+        self.key_name = f"TT({layer})"
 
-    def on_press(self, keyboard, timestamp):
-        self._hold_activated = False
-        self.tap_key.on_press(keyboard, timestamp)
+    def on_press(self, layer_manager: LayersManager, _, timestamp: int):
+        if (timestamp - self._last_timestamp) > self.timeout:
+            self._tap_count = 0  # Reset tap count if delay too long
+
+        self._tap_count += 1
+        self._last_timestamp = timestamp
+        self._pressed_time = timestamp
+        self._hold = False
         self.start_timer(timestamp)
 
-    def on_release(self, keyboard, timestamp):
-        if not self._hold_activated and (timestamp - self._pressed_time < self.timeout):
-            self.tap_key.on_release(keyboard, timestamp)
-        else:
-            keyboard.layers.deactivate_layer(self.layer)
+    def on_release(self, layer_manager: LayersManager, _, timestamp: int):
+        if self._pressed_time is None:
+            return
+
+        if self._hold:
+            layer_manager.deactivate_layer(self.layer)
+
         self.stop_timer()
+        self._pressed_time = None
 
-    def check_time(self, keyboard, timestamp):
-        if not self._hold_activated and (
-            timestamp - self._pressed_time >= self.timeout
-        ):
-            self.tap_key.on_release(keyboard, timestamp)  # cancel tap
-            keyboard.layers.activate_layer(self.layer)
-            self._hold_activated = True
+    def check_time(self, layer_manager: LayersManager, _, timestamp: int):
+        print("_pressed_time", self._pressed_time)
+        if self._pressed_time is None:
+            return
+
+        print(not self._hold, (timestamp - self._pressed_time >= self.timeout))
+        if not self._hold and (timestamp - self._pressed_time >= self.timeout):
+            print("elapsed")
+            print("self._tap_count", self._tap_count)
+            if self._tap_count >= 2:
+                print("tap")
+                # Toggle layer on double-tap
+                layer_manager.toggle_layer(self.layer)
+            elif self._tap_count == 1:
+                # else:
+                print("hold")
+                # Hold behavior: activate layer only while held
+                layer_manager.activate_layer(self.layer)
+                self._hold = True
+            # Reset after acting
+            self._tap_count = 0
+            self.stop_timer()
 
 
-# LT_NAV_ESC = LayerTap(layer=1, tap_key=KC.ESCAPE)
+# class TT(KeysAbstract, TimedKeys):
+#     """
+#     Tap-Toggle Layer key.
+
+#     - Hold: momentarily activate the layer
+#     - Tap x2: toggle layer ON
+#     - All other taps: do nothing
+#     """
+
+#     def __init__(self, layer: int, timeout=200):
+#         KeysAbstract.__init__(self)
+#         TimedKeys.__init__(self)
+#         self.layer = layer
+#         self._timeout = timeout
+#         self.key_name = f"TT({layer})"
+#         self._tap_count = 0
+#         self._last_timestamp = 0
+#         self._hold = False
+
+#     def on_press(self, layer_manager: LayersManager, _, timestamp: int):
+#         if (timestamp - self._last_timestamp) > self._timeout:
+#             self._tap_count = 0  # Reset if timeout exceeded
+
+#         self._tap_count += 1
+#         self._last_timestamp = timestamp
+#         self._hold = False
+#         self.start_timer(timestamp)
+
+#     def on_release(self, layer_manager: LayersManager, _, __):
+#         if self._hold:
+#             layer_manager.deactivate_layer(self.layer)
+#         # self.stop_timer()
+
+#     def check_time(self, layer_manager: LayersManager, _, timestamp: int):
+#         if self._pressed_time is None:
+#             return
+
+#         if not self._hold:
+#             if (timestamp - self._pressed_time) >= self._timeout:
+#             #     if self._tap_count >= 2:
+#             #         layer_manager.activate_layer(self.layer)
+#             #     # Tap once or more than twice: no-op
+#             #     self._tap_count = 0
+#             #     self.stop_timer()
+#             # else:
+#                 # Treat as hold if still held past timeout
+#                 # if self._tap_count == 1:
+#                 layer_manager.activate_layer(self.layer)
+#                 self._hold = True

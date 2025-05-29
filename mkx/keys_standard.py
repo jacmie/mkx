@@ -14,10 +14,10 @@ class KeysStandard(KeysAbstract):
         self.key_code = key_code
         self.key_name = key_name
 
-    def on_press(self, keyboard: Keyboard, _):
+    def on_press(self, _, keyboard: Keyboard, __):
         keyboard.press(self.key_code)
 
-    def on_release(self, keyboard: Keyboard, _):
+    def on_release(self, _, keyboard: Keyboard, __):
         keyboard.release(self.key_code)
 
 

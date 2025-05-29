@@ -14,26 +14,26 @@ class SK(KeysAbstract):
         self._interrupted = False
         self._interrupted_key_down = False
 
-    def on_press(self, keyboard: Keyboard, timestamp: int):
+    def on_press(self, layers_manager, keyboard: Keyboard, timestamp: int):
         if self._active and self._retap_cancel:
             self.clear(keyboard, timestamp)
         elif not self._active:
-            self._key.on_press(keyboard, timestamp)
+            self._key.on_press(layers_manager, keyboard, timestamp)
             self._active = True
             self._pressed = True
             self._interrupted = False
             self._interrupted_key_down = False
 
-    def on_release(self, keyboard: Keyboard, timestamp: int):
+    def on_release(self, layers_manager, keyboard: Keyboard, timestamp: int):
         self._pressed = False
         if self._active and not self._defer_release:
             if self._interrupted and not self._interrupted_key_down:
                 # Only release if the interrupting key is no longer pressed
-                self.clear(keyboard, timestamp)
+                self.clear(layers_manager, keyboard, timestamp)
 
-    def clear(self, keyboard: Keyboard, timestamp: int):
+    def clear(self, layers_manager, keyboard: Keyboard, timestamp: int):
         if self._active:
-            self._key.on_release(keyboard, timestamp)
+            self._key.on_release(layers_manager, keyboard, timestamp)
             self._active = False
             self._pressed = False
             self._interrupted = False

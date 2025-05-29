@@ -14,7 +14,7 @@ class TD(KeysAbstract, TimedKeys):
         self._tap_count = 0
         self._last_timestamp = 0
 
-    def on_press(self, _, timestamp: int):
+    def on_press(self, _, __, timestamp: int):
         if (timestamp - self._last_timestamp) > self._timeout:
             self._tap_count = 0  # Reset tap count on timeout
 
@@ -22,7 +22,7 @@ class TD(KeysAbstract, TimedKeys):
         self._last_timestamp = timestamp
         self.start_timer(timestamp)
 
-    def on_release(self, _, __):
+    def on_release(self, _, __, ___):
         # Wait until timeout to act (handled in check_time)
         pass
 

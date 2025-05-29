@@ -9,8 +9,10 @@ from mkx.interphace_abstract import InterfahceAbstract
 from mkx.communication_message import sync_messages, debounce
 
 from mkx.timed_keys import TimedKeys, TimedKeysManager
+from mkx.manager_layers import LayersManager
+
 from mkx.keys_sticky import SK, StickyKeyManager
-from mkx.keys_layers import KeysLayer, LayersManager
+from mkx.keys_layers import KeysLayer, LT, TT
 
 FRAME_INTERVAL_MS = 5
 SYNC_INTERVAL_MS = 5000
@@ -139,8 +141,13 @@ class MKX_Central:
 
             if isinstance(key, KeysLayer):
                 key.on_press(self.layers_manager, self.keyboard, timestamp)
-                return
+                if not isinstance(key, LT) and not isinstance(key, TT):
+                    return
 
+            # Call on_press for all types of keys (except KeysLayer, which you already handled above)
+            key.on_press(self.layers_manager, self.keyboard, timestamp)
+
+            # If the key is time-based, register it *after* on_press so it's active
             if isinstance(key, TimedKeys):
                 self.timed_keys_manager.register(key)
 
@@ -148,8 +155,6 @@ class MKX_Central:
 
             if isinstance(key, SK):
                 self.sticky_key_manager.register(key)
-
-            key.on_press(self.keyboard, timestamp)
 
         else:
             # Retrieve previously stored KeysLayer key (if any)
@@ -175,7 +180,7 @@ class MKX_Central:
 
             print("key:", key.key_name, "released")
 
-            key.on_release(self.keyboard, timestamp)
+            key.on_release(self.layers_manager, self.keyboard, timestamp)
 
             if not isinstance(key, SK):
                 self.sticky_key_manager.clear_stickies(self.keyboard, timestamp)
@@ -217,7 +222,7 @@ class MKX_Central:
             # AddOns TO DO
 
             self.timed_keys_manager.update(
-                self.keyboard, time.monotonic_ns() // 1_000_000
+                self.layers_manager, self.keyboard, time.monotonic_ns() // 1_000_000
             )
 
             for key_event in debounced_msg:
