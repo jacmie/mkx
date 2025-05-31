@@ -135,9 +135,8 @@ class MKX_Central:
             if key is None:
                 return
 
-            # Only store KeysLayer keys for tracking release
-            if isinstance(key, KeysLayer):
-                self.pressed_keys[key_pos] = key
+            # Store keys for tracking release and avoid keys lock: key press -> layer changed -> key release
+            self.pressed_keys[key_pos] = key
 
             if isinstance(key, KeysLayer):
                 key.on_press(self.layers_manager, self.keyboard, timestamp)
