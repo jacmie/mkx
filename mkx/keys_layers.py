@@ -252,98 +252,46 @@ class TT(KeysLayer, TimedKeys):
         self._hold = False
         self._tap_count = 0
         self._last_timestamp = 0
+        self._last_tap_time = 0
         self.key_name = f"TT({layer})"
 
     def on_press(self, layer_manager: LayersManager, _, timestamp: int):
-        if (timestamp - self._last_timestamp) > self.timeout:
-            self._tap_count = 0  # Reset tap count if delay too long
-
-        self._tap_count += 1
-        self._last_timestamp = timestamp
         self._pressed_time = timestamp
         self._hold = False
         self.start_timer(timestamp)
 
     def on_release(self, layer_manager: LayersManager, _, timestamp: int):
+        print("on_release")
+        print(self._pressed_time)
         if self._pressed_time is None:
             return
 
-        if self._hold:
+        duration = timestamp - self._pressed_time
+        print(duration, self.timeout)
+
+        if duration < self.timeout:
+            print("tap")
+            # Valid tap — increment tap count
+            if (timestamp - self._last_tap_time) > self.timeout:
+                self._tap_count = 0  # Too slow — reset count
+
+            self._tap_count += 1
+            self._last_tap_time = timestamp
+            self.start_timer(timestamp)  # restart timer for second tap window
+            return  # <-- Prevent state reset here
+        elif self._hold:
+            print("hold")
             layer_manager.deactivate_layer(self.layer)
 
         self.stop_timer()
         self._pressed_time = None
 
     def check_time(self, layer_manager: LayersManager, _, timestamp: int):
-        print("_pressed_time", self._pressed_time)
         if self._pressed_time is None:
             return
 
-        print(not self._hold, (timestamp - self._pressed_time >= self.timeout))
-        if not self._hold and (timestamp - self._pressed_time >= self.timeout):
-            print("elapsed")
-            print("self._tap_count", self._tap_count)
-            if self._tap_count >= 2:
-                print("tap")
-                # Toggle layer on double-tap
-                layer_manager.toggle_layer(self.layer)
-            elif self._tap_count == 1:
-                # else:
-                print("hold")
-                # Hold behavior: activate layer only while held
-                layer_manager.activate_layer(self.layer)
-                self._hold = True
-            # Reset after acting
-            self._tap_count = 0
-            self.stop_timer()
-
-
-# class TT(KeysAbstract, TimedKeys):
-#     """
-#     Tap-Toggle Layer key.
-
-#     - Hold: momentarily activate the layer
-#     - Tap x2: toggle layer ON
-#     - All other taps: do nothing
-#     """
-
-#     def __init__(self, layer: int, timeout=200):
-#         KeysAbstract.__init__(self)
-#         TimedKeys.__init__(self)
-#         self.layer = layer
-#         self._timeout = timeout
-#         self.key_name = f"TT({layer})"
-#         self._tap_count = 0
-#         self._last_timestamp = 0
-#         self._hold = False
-
-#     def on_press(self, layer_manager: LayersManager, _, timestamp: int):
-#         if (timestamp - self._last_timestamp) > self._timeout:
-#             self._tap_count = 0  # Reset if timeout exceeded
-
-#         self._tap_count += 1
-#         self._last_timestamp = timestamp
-#         self._hold = False
-#         self.start_timer(timestamp)
-
-#     def on_release(self, layer_manager: LayersManager, _, __):
-#         if self._hold:
-#             layer_manager.deactivate_layer(self.layer)
-#         # self.stop_timer()
-
-#     def check_time(self, layer_manager: LayersManager, _, timestamp: int):
-#         if self._pressed_time is None:
-#             return
-
-#         if not self._hold:
-#             if (timestamp - self._pressed_time) >= self._timeout:
-#             #     if self._tap_count >= 2:
-#             #         layer_manager.activate_layer(self.layer)
-#             #     # Tap once or more than twice: no-op
-#             #     self._tap_count = 0
-#             #     self.stop_timer()
-#             # else:
-#                 # Treat as hold if still held past timeout
-#                 # if self._tap_count == 1:
-#                 layer_manager.activate_layer(self.layer)
-#                 self._hold = True
+        # Still being held and past timeout → treat as hold
+        if not self._hold and (timestamp - self._pressed_time) >= self.timeout:
+            layer_manager.activate_layer(self.layer)
+            self._hold = True
+            self._tap_count = 0  # Cancel tap sequence
