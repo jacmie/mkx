@@ -14,6 +14,8 @@ from mkx.manager_layers import LayersManager
 from mkx.keys_sticky import SK, StickyKeyManager
 from mkx.keys_layers import KeysLayer, LT, TT
 
+from mkx.check import check
+
 FRAME_INTERVAL_MS = 5
 SYNC_INTERVAL_MS = 5000
 PERIPHERAL_TIMEOUT_MS = 1000
@@ -232,86 +234,13 @@ class MKX_Central:
 
     def run_forever(self):
         self.keyboard = Keyboard(usb_hid.devices)
-        self.check()
+
+        if check(self.col_size, self.row_size, self.keymap, self.interfaces):
+            sys.exit(1)
+
         self.last_frame_time = time.monotonic_ns() // 1_000_000
         while True:
             self.run_once()
-
-    def check(self):
-        total_rows = self.row_size
-        total_cols = self.col_size
-        keymap_size = total_rows * total_cols
-
-        print(f"\n=== KEYMAP-CHECK (layer 0) ===")
-
-        for iface in self.interfaces:
-            name = getattr(iface, "device_id", "unknown")
-
-            iface.generate_rect_map(12)
-
-            # -------------------------------------------------
-            # 1.  Bounds check
-            # -------------------------------------------------
-            errors = False
-            for dim, val, limit in [
-                ("row_min", iface.row_min, total_rows),
-                ("row_max", iface.row_max, total_rows),
-                ("col_min", iface.col_min, total_cols),
-                ("col_max", iface.col_max, total_cols),
-            ]:
-                if not (0 <= val < limit):
-                    print(f"[ERROR] {name}: {dim}={val} out of bounds 0-{limit-1}")
-                    errors = True
-
-            # coordinate map presence
-            cmap = getattr(iface, "_coord_map", None)
-            if cmap is None:
-                print(f"[WARNING] {name}: no coordinate map set")
-                continue
-
-            # -------------------------------------------------
-            # 2.  Coordinate‑map index range check
-            # -------------------------------------------------
-            for i, idx in enumerate(cmap):
-                if not (0 <= idx < keymap_size):
-                    print(
-                        f"[ERROR] {name}: coord_map[{i}]={idx} out of range 0-{keymap_size-1}"
-                    )
-                    errors = True
-
-            # -------------------------------------------------
-            # 3.  Build a shadow matrix for visualisation
-            # -------------------------------------------------
-            shadow = [["·" for _ in range(total_cols)] for _ in range(total_rows)]
-
-            for local_i, flat_idx in enumerate(cmap):
-                r, c = divmod(flat_idx, total_cols)
-                try:
-                    key_obj = self.keymap[0][flat_idx]
-                except IndexError:
-                    key_obj = None
-
-                char = str(key_obj.key_name) if key_obj is not None else "None"
-                # shorten long names so grid stays narrow
-                char = char[:8]
-                shadow[r][c] = char
-
-            # -------------------------------------------------
-            # 4.  Print results
-            # -------------------------------------------------
-            print(
-                "\n[{}] covers rows {}-{}, cols {}-{}".format(
-                    name, iface.row_min, iface.row_max, iface.col_min, iface.col_max
-                )
-            )
-
-            if errors:
-                print("  (Errors above)")
-
-            # pretty‑print shadow
-            for r in range(total_rows):
-                row_str = "  ".join(f"{cell:>8}" for cell in shadow[r])
-                print(row_str)
 
 
 # dynamic throttling Pseudocode:
