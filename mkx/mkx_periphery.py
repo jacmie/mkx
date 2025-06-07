@@ -1,18 +1,28 @@
-from communication.central_hid.central_hid_base import CentralHidBase
+import time
+from collections import OrderedDict
+
+from mkx.periphery_abstract import PeripheryAbstract
 
 
 class MKX_Periphery:
-    def __init__(self, output: CentralHidBase):
-        self.output = output
-        self.prev_state = {}
+    def __init__(self, periphery: PeripheryAbstract):
+        self.periphery = periphery
 
     def run_once(self):
-        state = self.matrix.scan()
-        for (row, col), pressed in state.items():
-            prev = self.prev_state.get((row, col), False)
-            if pressed != prev:
-                self.output.send_key(row, col, pressed)
-        self.prev_state = state.copy()
+        if self.periphery:
+            signal = self.periphery.get_key_events()
+            # print("dd", signal)
+            for col, row, pressed in signal:
+                self.periphery.send(
+                    "key_event",
+                    OrderedDict(
+                        [("col", col), ("row", row), ("pressed", pressed)],
+                    ),
+                    verbose=True,
+                    # "key_event", {"row": 1, "col": 2, "pressed": True}
+                )
+
+        time.sleep(0.001)  # Keep CPU usage low
 
     def run_forever(self):
         while True:

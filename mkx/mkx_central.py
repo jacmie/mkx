@@ -60,17 +60,6 @@ class MKX_Central:
             print("Keymap layers must be rectangular and match given size!")
             sys.exit(1)
 
-    def poll(self):
-        for device_id, adapter in self.adapters.items():
-            if not adapter.is_connected():
-                adapter.reconnect()
-            try:
-                messages = adapter.receive()
-                for msg in messages:
-                    print(f"[{device_id}] {msg}")
-            except Exception as e:
-                print(f"[{device_id}] poll error: {e}")
-
     def send_to(self, device_id: str, msg_type: str, data: dict):
         adapter = self.adapters.get(device_id)
         if adapter and adapter.is_connected():
@@ -194,21 +183,21 @@ class MKX_Central:
 
             all_messages = []
 
-            # Loop over all interfaces to process received data
-            for interface in self.interfaces:
-                # Continuously receive data while we're within the frame time
-                while True:
-                    if time.monotonic_ns() // 1_000_000 >= frame_end:
-                        break
+            # Continuously receive data while we're within the frame time
+            while True:
+                if time.monotonic_ns() // 1_000_000 >= frame_end:
+                    break
 
-                    self.central_periphery_send()
+                self.central_periphery_send()
 
+                # Loop over all interfaces to process received data
+                for interface in self.interfaces:
                     data = interface.receive(verbose=True)
-
                     if data:
                         all_messages.extend(data)
 
-                    time.sleep(0.001)  # Keep CPU usage low
+                time.sleep(0.001)  # Keep CPU usage low
+                # time.sleep(1)  # Keep CPU usage low
 
             sync_msg = sync_messages(
                 all_messages, time.monotonic_ns() // 1_000_000, verbose=True

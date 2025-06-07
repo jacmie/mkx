@@ -1,16 +1,22 @@
-# uart_periphery.py
-
 import busio
-import board
-import json
-from periphery_abstract import PeripheryAbstract
+
+from mkx.communication_message import encode_message
+from mkx.periphery_abstract import PeripheryAbstract
 
 
 class PeripheryUART(PeripheryAbstract):
     def __init__(
-        self, tx_pin=board.TX, rx_pin=board.RX, baudrate=115200, device_id="uart"
+        self,
+        device_id,
+        col_pins,
+        row_pins,
+        tx_pin,
+        *,
+        rx_pin=None,
+        baudrate=9600,
+        **kwargs
     ):
-        super().__init__(device_id)
+        super().__init__(device_id, col_pins, row_pins, **kwargs)
         self.uart = busio.UART(tx_pin, rx_pin, baudrate=baudrate, timeout=0.01)
         self.buffer = b""
 
@@ -18,8 +24,8 @@ class PeripheryUART(PeripheryAbstract):
         # Placeholder for receiving messages from central
         return []
 
-    def send(self, msg_type, data, verbose=False):
-        payload = self._message(msg_type, data)
+    def send(self, msg_type: str, data: dict, verbose=False):
+        payload = encode_message(self.device_id, msg_type, data, verbose)
         try:
             self.uart.write(payload)
         except Exception as e:
