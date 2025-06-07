@@ -2,6 +2,7 @@ from adafruit_hid.keyboard import Keyboard
 
 from mkx.keys_abstract import KeysAbstract
 from mkx.timed_keys import TimedKeys
+from mkx.manager_layers import LayersManager
 
 
 class TD(KeysAbstract, TimedKeys):
@@ -26,15 +27,17 @@ class TD(KeysAbstract, TimedKeys):
         # Wait until timeout to act (handled in check_time)
         pass
 
-    def check_time(self, keyboard: Keyboard, timestamp: int):
+    def check_time(
+        self, layer_manager: LayersManager, keyboard: Keyboard, timestamp: int
+    ):
         if self._pressed_time is None:
             return
 
         if (timestamp - self._pressed_time) >= self._timeout:
             if self._tap_count <= len(self._keys):
                 selected_key = self._keys[self._tap_count - 1]
-                selected_key.on_press(keyboard, timestamp)
-                selected_key.on_release(keyboard, timestamp)
+                selected_key.on_press(layer_manager, keyboard, timestamp)
+                selected_key.on_release(layer_manager, keyboard, timestamp)
             else:
                 print("TapDance: tap count exceeds defined keys")
 
