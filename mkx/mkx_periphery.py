@@ -11,7 +11,6 @@ class MKX_Periphery:
     def run_once(self):
         if self.periphery:
             signal = self.periphery.get_key_events()
-            # print("dd", signal)
             for col, row, pressed in signal:
                 self.periphery.send(
                     "key_event",
@@ -23,6 +22,9 @@ class MKX_Periphery:
                 )
 
         time.sleep(0.001)  # Keep CPU usage low
+
+        if self.periphery:
+            self.periphery.debug_receive(verbose=True)
 
     def run_forever(self):
         while True:

@@ -8,57 +8,6 @@ from collections import OrderedDict
 HEADER_BYTE = 0xB2
 DEBOUNCE_MS = 5
 
-# class MessageParser:
-#     REQUIRED_FIELDS = ["timestamp", "device_id", "type"]
-
-#     def __init__(self, max_message_size=256):
-#         self.buffer = b""
-#         self.max_message_size = max_message_size
-
-#     def parse(self, new_data: bytes, verbose=False) -> list[dict]:
-#         messages = []
-#         self.buffer += new_data
-
-#         if len(self.buffer) > self.max_message_size:
-#             print("Warning: message buffer exceeded max size, discarding buffer")
-#             self.buffer = b""
-#             return messages
-
-#         print("USING JSON MODULE:", json.__name__)
-
-#         while b"\n" in self.buffer:
-#             line, self.buffer = self.buffer.split(b"\n", 1)
-#             line_str: str = None
-#             try:
-#                 # Strip control characters and whitespace
-#                 print("DEBUG type(line):", type(line))
-#                 print(line)
-#                 line_str = line.decode("utf-8", "replace").strip()
-
-#                 if verbose:
-#                     print("receive:", line_str)  # Keeps the order of the sent message
-
-#                 # Skip empty lines
-#                 if not line_str:
-#                     continue
-
-#                 msg = json.loads(line_str)  # After this json order may be lost
-
-#                 if self._validate_message(msg):
-#                     messages.append(msg)
-#                 else:
-#                     print("Invalid message structure:", msg)
-
-#             except Exception as e:
-#                 print("Failed to parse line:", line, "Error:", e)
-#                 print("DEBUG: ", repr(line_str))
-#                 sys.exit(1)
-
-#         return messages
-
-#     def _validate_message(self, msg: dict) -> bool:
-#         return all(field in msg for field in self.REQUIRED_FIELDS)
-
 
 class MessageParser:
     def __init__(self, max_message_size=256):
@@ -68,6 +17,9 @@ class MessageParser:
     def parse(self, new_data: bytes, verbose=False) -> list[dict]:
         messages = []
         self.buffer += new_data
+
+        if verbose:
+            print("data:", self.buffer)
 
         while True:
             # Need at least header(1) + length(2)
@@ -83,8 +35,12 @@ class MessageParser:
             length = struct.unpack(">H", self.buffer[1:3])[0]
 
             # Check if full message is present
+            if verbose:
+                print("in buffer:", len(self.buffer), "data size:", 3 + length + 1)
+
             if len(self.buffer) < 3 + length + 1:
                 # Wait for more data
+                print("Wait for more data, break")
                 break
 
             payload = self.buffer[3 : 3 + length]
@@ -102,20 +58,18 @@ class MessageParser:
 
             try:
                 line_str = payload.decode("ascii").strip()
-                if verbose:
-                    print("receive:", line_str)
 
-                # Split by ":"
+                if verbose:
+                    print("received:", line_str)
+
                 parts = line_str.split(":")
                 if len(parts) < 3:
                     print("Invalid message format:", line_str)
                 else:
-                    msg = {
-                        "timestamp": int(parts[0]),
-                        "device_id": parts[1],
-                        "type": parts[2],
-                    }
-                    # Remaining fields go as "data"
+                    msg = OrderedDict()
+                    msg["timestamp"] = int(parts[0])
+                    msg["device_id"] = parts[1]
+                    msg["type"] = parts[2]
                     msg["data"] = parts[3:]
 
                     messages.append(msg)
@@ -128,6 +82,9 @@ class MessageParser:
 
             # Remove this message from the buffer
             self.buffer = self.buffer[3 + length + 1 :]
+
+        if verbose:
+            print("messages: ", messages, "\n")
 
         return messages
 
@@ -168,31 +125,6 @@ def encode_message(device_id: str, msg_type: str, data: dict, verbose=False) -> 
     return bytes(message)
 
 
-# def encode_message(device_id: str, msg_type: str, data: dict, verbose=False) -> bytes:
-#     """
-#     Generic messages example in newline-delimited JSON format, timestamp, type, data:
-#     {"timestamp": 112345678, "device_id": "central", "type": "key", "col": 1, "row": 2, "pressed": true}
-#     {"timestamp": 112345678, "device_id": "central", "type": "battery", "voltage": 3.73}
-#     {"timestamp": 112345678, "device_id": "central", "type": "led_status", "color": "green"}
-#     {"timestamp": 112345678, "device_id": "central", "type": "encoder", "delta": -1}
-#     """
-#     msg = OrderedDict()
-#     msg["timestamp"] = time.monotonic_ns() // 1_000_000  # Timestamp in milliseconds
-#     msg["device_id"] = device_id
-#     msg["type"] = msg_type
-#     msg.update(data)
-#     try:
-#         if verbose:
-#             print("send:", json.dumps(msg, separators=(",", ":")))
-#         return (json.dumps(msg, separators=(",", ":")) + "\n").encode("utf-8")
-#     except Exception as e:
-#         print("Message encode error:", e)
-#         return b""
-
-
-# 179156727:central:key:2:0:true
-
-
 def sync_messages(all_messages, now, verbose=False):
     adjusted_msg = []
     sync_offsets = {}
@@ -201,6 +133,12 @@ def sync_messages(all_messages, now, verbose=False):
         device_id = msg.get("device_id")
         if device_id is None:
             continue
+
+        print("msg", msg)
+        print("device_id", device_id)
+        print("timestamp", msg["timestamp"])
+        print("type", msg["type"])
+        print("data", msg["data"])
 
         # Compute offset if not already done
         if device_id not in sync_offsets:
@@ -256,6 +194,7 @@ def debounce(messages, verbose=False):
             "row": row,
             "pressed": pressed,
         }
+        print("normalized_msg:", normalized_msg)
 
         key = (device_id, col, row)
         state = key_states.get(key)
