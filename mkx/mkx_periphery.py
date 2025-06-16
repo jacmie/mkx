@@ -5,8 +5,9 @@ from mkx.periphery_abstract import PeripheryAbstract
 
 
 class MKX_Periphery:
-    def __init__(self, periphery: PeripheryAbstract):
+    def __init__(self, periphery: PeripheryAbstract, debug=False):
         self.periphery = periphery
+        self.debug = debug
 
     def run_once(self):
         if self.periphery:
@@ -18,12 +19,11 @@ class MKX_Periphery:
                         [("col", col), ("row", row), ("pressed", pressed)],
                     ),
                     verbose=True,
-                    # "key_event", {"row": 1, "col": 2, "pressed": True}
                 )
 
         time.sleep(0.001)  # Keep CPU usage low
 
-        if self.periphery:
+        if self.debug and self.periphery:
             self.periphery.debug_receive(verbose=True)
 
     def run_forever(self):

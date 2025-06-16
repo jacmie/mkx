@@ -21,13 +21,8 @@ class PeripheryUART(PeripheryAbstract):
 
         self.msg_parser = MessageParser()  # for debug_receive()
 
-    def receive(self, verbose=False) -> list[dict]:
-        # Placeholder for receiving messages from central
-        return []
-
     def debug_receive(self, verbose=False) -> list[dict]:
         messages = []
-
         if self.uart is not None and self.uart.in_waiting >= 1:
             try:
                 data = self.uart.read(self.uart.in_waiting)
@@ -39,6 +34,10 @@ class PeripheryUART(PeripheryAbstract):
                 print("UART receive error:", e)
 
         return messages
+
+    def receive(self, verbose=False) -> list[dict]:
+        # Placeholder for receiving messages from central
+        return []
 
     def send(self, msg_type: str, data: dict, verbose=False):
         payload = encode_message(self.device_id, msg_type, data, verbose)
