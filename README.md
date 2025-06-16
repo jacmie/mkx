@@ -46,6 +46,9 @@ With the board plugged and Circuit Python installed, dowload the appropriate ver
 circup list
 
 DO IT BEFORE RENAMING THE DRIVE!!!
+If the drive was renamed, rename it back to the CIRCUITPY
+https://learn.adafruit.com/welcome-to-circuitpython/renaming-circuitpy
+
 circup install adafruit_ble adafruit_hid
 circup install adafruit_ble adafruit_hid adafruit_register adafruit_uuid
 circup install adafruit_ble adafruit_hid --path /media/jacmie/CIRCUITPY
