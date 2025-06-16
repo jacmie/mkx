@@ -1,4 +1,4 @@
-import digitalio
+import digitalio, time
 from keypad import Event as KeyEvent
 
 from mkx.diode_orientation import DiodeOrientation
@@ -28,6 +28,7 @@ class MatrixScanner:
         rows,
         diode_orientation,
         pull,
+        warmup_cycles=100,
     ):
         self.len_cols = len(cols)
         self.len_rows = len(rows)
@@ -72,6 +73,12 @@ class MatrixScanner:
 
         initial_val = 1 if pull is digitalio.Pull.UP else 0
         self.state = bytearray([initial_val] * (self.len_cols * self.len_rows))
+        time.sleep(1)
+
+        # Run safety warmup cycles before hardware pins stabilize
+        for _ in range(warmup_cycles):
+            _ = self.get_key_events()  # Throw away events
+            time.sleep(0.001)
 
     def get_key_events(self) -> list[tuple[int, int, bool]]:
         raw_events = []
@@ -110,4 +117,5 @@ class MatrixScanner:
 
             out_pin.value = not output_active
 
+        # print(raw_events)
         return raw_events
