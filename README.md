@@ -1,9 +1,4 @@
-<div>
-  <img src="docs/mkx.svg" alt="icon" height="60" style="display:inline-block; vertical-align: middle;">
-  <span style="font-size: 2.4em; font-weight: bold; vertical-align: middle; padding-left: 10px;">MKX</span>
-</div>
-
-#
+# <img src="docs/mkx.svg" alt="icon" height="60" style="display:inline-block; vertical-align: middle;">  MKX    
 
 [![version](https://img.shields.io/badge/version-1.0.0-blue)](#)
 [![docs](https://img.shields.io/badge/docs-online-blue)](https://your-docs-url)
