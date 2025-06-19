@@ -1,5 +1,9 @@
-<img src="docs/mkx.svg" alt="icon" height="60" style="vertical-align: middle; padding: 10px;"> 
-<span style="vertical-align: middle; font-size: 2.4em; font-weight: bold;">MKX</span>
+<table>
+  <tr>
+    <td><img src="docs/mkx.svg" alt="icon" height="60"></td>
+    <td><span style="font-size: 2.4em; font-weight: bold; padding-left: 10px;">MKX</span></td>
+  </tr>
+</table>
 
 #
 
