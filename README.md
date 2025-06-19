@@ -1,74 +1,45 @@
-# MKX
+<img src="docs/mkx.svg" alt="icon" height="60" style="vertical-align: middle; padding: 10px;"> 
+<span style="vertical-align: middle; font-size: 2.4em; font-weight: bold;">MKX</span>
+
+#
+
+[![version](https://img.shields.io/badge/version-1.0.0-blue)](#)
+[![docs](https://img.shields.io/badge/docs-online-blue)](https://your-docs-url)
+[![CircuitPython](https://img.shields.io/badge/CircuitPython-Learn%20More-purple)](https://circuitpython.org/)
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
+
 
 Next Generation Mechanical Keyboard Firmware
 
-    ┌──────────────────────────────┐
-    │        PC / Host Device      │
-    │   (receives USB HID input)   │
-    └──────────────────────────────┘
-                ▲
-            USB HID
-                ▲
-        ┌───────────────┐
-        │   CENTRAL     │
-        │ Master Logic  │
-        └───────────────┘
-          ▲     ▲     ▲
-        BLE UART  USB HID
-        │           │
-    ┌────────────┐ ┌────────────┐
-    │ Left Half  │ │ Right Half │
-    │  BLE/ UART │ │  BLE/ UART │
-    │ (Only Scan)│ │ (Only Scan)│
-    └────────────┘ └────────────┘
+## Features
 
+:white_check_mark: HID device with USB and BLE connection  
+:white_check_mark: split keyboards time synchronization  
+:white_check_mark: keys signal debouncing  
+:white_check_mark: user configuration check  
+:white_check_mark: communication with messages  
+:white_check_mark: possible two way communication  
+:white_check_mark: unique functional keys  
+:white_check_mark: hardware VIM  
 
-## Autosync library with board
-pip install watchdog
+## Key Types
+:white_check_mark: standard  
+:white_check_mark: layers  
+:white_check_mark: hold tap  
+:white_check_mark: tap dance  
+:white_check_mark: sticky  
+:white_check_mark: media TO DO  
+:white_check_mark: keys sequence  
+:white_check_mark: vim  
 
-error: externally-managed-environment
-...
-hint: See PEP 668 for the detailed specification.
+## Docs
 
-python3 -m dev ../dev
-source ../dev/bin/activate
-pip install watchdog
-python auto_sync.py
-
-python auto_sync.py
-to stop CTRL + C
-
-## Install adafruit bundle 
-In the dev environment:
-pip install circup
-
-With the board plugged and Circuit Python installed, dowload the appropriate version of the bundle:
-circup list
-
-DO IT BEFORE RENAMING THE DRIVE!!!
-If the drive was renamed, rename it back to the CIRCUITPY
-https://learn.adafruit.com/welcome-to-circuitpython/renaming-circuitpy
-
-circup install adafruit_ble adafruit_hid
-circup install adafruit_ble adafruit_hid adafruit_register adafruit_uuid
-circup install adafruit_ble adafruit_hid --path /media/jacmie/CIRCUITPY
-
-
-## Build with mpy
-python build.py compile
-python build.py upload
-python build.py clean
-
-## Code rules
-- keep files structure flat
-- place the library on board in the default CIRCUITPYTHON/lib
+GH Pages TO DO
 
 
 
-Peripheral board sends key press/release events.
 
-Central board processes input and sends HID reports.
 
-You want to group key events in time windows, to ensure consistent and correct modifier behavior (e.g., Ctrl+Z).
 
-You’re concerned about desync, particularly modifiers and main keys falling into different frames.
+
+
