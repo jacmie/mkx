@@ -1,9 +1,7 @@
-<table>
-  <tr>
-    <td><img src="docs/mkx.svg" alt="icon" height="60"></td>
-    <td><span style="font-size: 2.4em; font-weight: bold; padding-left: 10px;">MKX</span></td>
-  </tr>
-</table>
+<div>
+  <img src="docs/mkx.svg" alt="icon" height="60" style="display:inline-block; vertical-align: middle;">
+  <span style="font-size: 2.4em; font-weight: bold; vertical-align: middle; padding-left: 10px;">MKX</span>
+</div>
 
 #
 
