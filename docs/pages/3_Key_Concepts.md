@@ -22,3 +22,8 @@
     └────────────┘ └────────────┘
 
 
+Peripheral board sends key press/release events.
+
+Central board processes input and sends HID reports.
+
+You want to group key events in time windows, to ensure consistent and correct modifier behavior (e.g., Ctrl+Z).

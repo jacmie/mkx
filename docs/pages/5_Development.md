@@ -13,3 +13,6 @@ python build.py upload
 python build.py clean
 ```
 
+## Code rules
+- keep files structure flat
+- place the library on board in the default CIRCUITPYTHON/lib
