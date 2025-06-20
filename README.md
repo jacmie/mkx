@@ -19,6 +19,7 @@ Next Generation Mechanical Keyboard Firmware
 :white_check_mark: hardware VIM  
 
 ## Key Types
+
 :white_check_mark: standard  
 :white_check_mark: layers  
 :white_check_mark: hold tap  

@@ -1,11 +1,11 @@
-@page p_5 5 Development
+@page p_6 6 Development
 @tableofcontents
 
 
-@section p_5_1_1 Dev
+@section p_6_1 Dev
 
 
-@section p_5_2_1 Build with mpy
+@section p_6_2 Build with mpy
 
 ```
 python build.py compile
