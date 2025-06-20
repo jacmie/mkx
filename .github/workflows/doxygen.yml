@@ -1,0 +1,28 @@
+name: Generate and Deploy Doxygen Docs
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  doxygen:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v3
+
+    - name: Install Doxygen
+      run: sudo apt-get update && sudo apt-get install -y doxygen graphviz
+
+    - name: Generate Doxygen Documentation
+      working-directory: ./docs  # Run Doxygen inside the ./docs folder
+      run: doxygen Doxyfile
+
+    - name: Deploy to GitHub Pages
+      uses: peaceiris/actions-gh-pages@v4
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./docs/html     # This is where the HTML ends up
+        publish_branch: gh-pages
