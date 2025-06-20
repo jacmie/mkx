@@ -1,10 +1,9 @@
-# <img src="docs/mkx.svg" alt="icon" height="60" style="display:inline-block; vertical-align: middle;">  MKX    
+# <img src="docs/mkx.svg" alt="icon" height="60" style="display:inline-block; vertical-align: middle;">  MKX  
 
 [![version](https://img.shields.io/badge/version-1.0.0-blue)](#)
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 [![docs](https://img.shields.io/badge/docs-online-blue)](https://your-docs-url)
 [![CircuitPython](https://img.shields.io/badge/CircuitPython-Learn%20More-purple)](https://circuitpython.org/)
-[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
-
 
 Next Generation Mechanical Keyboard Firmware
 
