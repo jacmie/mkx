@@ -270,7 +270,7 @@ PSCR = KeysStandard(Keycode.PRINT_SCREEN, "PSCR")
 
 SCROLL_LOCK = KeysStandard(Keycode.SCROLL_LOCK, "SCROLL_LOCK")
 """Scroll Lock"""
-SCROLLLOCK = KeysStandard(Keycode.SCROLL_LOCK, "SCROLLLOCK")
+SCROLLOCK = KeysStandard(Keycode.SCROLL_LOCK, "SCROLLOCK")
 """Scroll Lock"""
 SLCK = KeysStandard(Keycode.SCROLL_LOCK, "SLCK")
 """Scroll Lock"""
