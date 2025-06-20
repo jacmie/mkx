@@ -2,7 +2,7 @@
 
 [![version](https://img.shields.io/badge/version-1.0.0-blue)](#)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
-[![docs](https://img.shields.io/badge/docs-online-blue)](https://your-docs-url)
+[![docs](https://img.shields.io/badge/docs-online-blue)](https://jacmie.github.io/mkx/)
 [![CircuitPython](https://img.shields.io/badge/CircuitPython-Learn%20More-purple)](https://circuitpython.org/)
 
 Next Generation Mechanical Keyboard Firmware
@@ -30,7 +30,7 @@ Next Generation Mechanical Keyboard Firmware
 
 ## Docs
 
-GH Pages TO DO
+For more details see the [Docs](https://jacmie.github.io/mkx/).
 
 
 
