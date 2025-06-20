@@ -1,5 +1,8 @@
 var searchData=
 [
-  ['python_0',['1.1 Install Circuit Python',['../p_1.html#p_1_1',1,'']]],
-  ['python_20environment_20optional_1',['1.2 Set Python environment (optional)',['../p_1.html#p_1_2',1,'']]]
+  ['main_20concepts_0',['1 Main Concepts',['../p_1.html',1,'']]],
+  ['mkx_1',['2.4 Install MKX',['../p_2.html#p_2_4',1,'']]],
+  ['mkx_20api_2',['4 MKX API',['../p_4.html',1,'']]],
+  ['mkx_20keyboard_3',['1.3 MKX Keyboard',['../p_1.html#p_1_3',1,'']]],
+  ['mpy_4',['Build with mpy',['../p_6.html#p_6_2',1,'']]]
 ];

@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.9.8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>MKX: 1 Istallation</title>
+<title>MKX: 1 Main Concepts</title>
 <link rel="icon" type="image/x-icon" href="mkx.svg">
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
@@ -103,62 +103,61 @@ $(document).ready(function(){initNavTree('p_1.html',''); initResizable(); });
 </div>
 
 <div><div class="header">
-  <div class="headertitle"><div class="title">1 Istallation</div></div>
+  <div class="headertitle"><div class="title">1 Main Concepts</div></div>
 </div><!--header-->
 <div class="contents">
 <div class="toc"><h3>Table of Contents</h3>
-<ul><li class="level1"><a href="#p_1_1">1.1 Install Circuit Python</a></li>
-<li class="level1"><a href="#p_1_2">1.2 Set Python environment (optional)</a></li>
-<li class="level1"><a href="#p_1_3">1.3 Install adafruit bundles</a></li>
-<li class="level1"><a href="#p_1_4">1.4 Install MKX</a><ul><li class="level2"><a href="#p_1_4_1">1.4.1 Synchronize Github repository with the CIRCUITPY drive</a></li>
-</ul>
-</li>
+<ul><li class="level1"><a href="#p_1_1">1.1 Central</a></li>
+<li class="level1"><a href="#p_1_2">1.2 Periphery</a></li>
+<li class="level1"><a href="#p_1_3">1.3 MKX Keyboard</a></li>
 </ul>
 </div>
-<div class="textblock"><h1><a class="anchor" id="p_1_1"></a>
-1.1 Install Circuit Python</h1>
-<p>You probably already know it, that first you need to install the <a href="https://circuitpython.org/">Circuit Python</a> on the supported board. Go to the <a href="https://circuitpython.org/downloads">Circuit Python Downloads</a>, find your board and follow the installation instructions. In many cases it's just plugging the board to USB and dragging the downloaded <b>*.uf2</b> file on the mounted <b>CIRCUITPY</b> drive. <br  />
+<div class="textblock"><pre class="fragment">┌──────────────────────────────┐
+│        PC / Host Device      │
+│   (receives USB HID input)   │
+└──────────────────────────────┘
+                ▲
+           USB/BLE HID
+                ▲
+        ┌───────────────┐
+        │    CENTRAL    │
+        │ Master Logic  │
+        └───────────────┘
+                ▲
+  ┌───────────┐   ┌───────────┐
+  │ PERIPHERY │   │ PERIPHERY │
+  │  Central  │   │    UART   │
+  │(Only Scan)│   │(Only Scan)│
+  └───────────┘   └───────────┘
+</pre><p> <br  />
+</p>
+<h1><a class="anchor" id="p_1_1"></a>
+1.1 Central</h1>
+<p>The <b>Central</b> board handles all data processing from the <b>Peripheries</b> and transmits HID reports to the host system over USB or BLE. <br  />
  <br  />
 </p>
 <h1><a class="anchor" id="p_1_2"></a>
-1.2 Set Python environment (optional)</h1>
-<p>Installing <a href="https://www.python.org/">Python</a> is optional, but convienint for users and developers of the <b>MKX</b>. <br  />
- Set Python environment <b>dev</b> and activate:</p>
-<div class="fragment"><div class="line">python3 -m dev ../dev</div>
-<div class="line">source ../dev/bin/activate</div>
-</div><!-- fragment --><p> <br  />
+1.2 Periphery</h1>
+<p>The <b>Periphery</b> is responsible only for sensing the key matrix (and possibly other elements, such as battery level) and sending messages to the <b>Central</b>. <br  />
+ <b>Periphery</b> is designed to be fast and power-efficient. <br  />
+</p>
+<p>The <b>Central</b> board can simultaneously act as a <b>Periphery</b>, allowing it to listen to itself. <br  />
+ <br  />
 </p>
 <h1><a class="anchor" id="p_1_3"></a>
-1.3 Install adafruit bundles</h1>
-<p><b>MKX</b> needs additional adafruit libraries. You can download them manually from the <a href="https://circuitpython.org/libraries">Circuit Python Libraries</a> and copy to the <b>CIRCUITPY/lib</b> directory. <br  />
+1.3 MKX Keyboard</h1>
+<p>All boards capable of running <a href="https://circuitpython.org/downloads">Circuit Python</a> should be suitable for a keyboard. <br  />
+ The library has already been tested on boards: Waveshare RP2040-Zero, Seeed XIAO RP2040, PGA2040, Feather ESP32-S3 <br  />
 </p>
-<p>More clean and recommended way is to use the <b>circup</b> tool. For that you need installed Python and activated environment (<em>see section 1.2</em>). <br  />
- In the <b>dev</b> environment: </p><div class="fragment"><div class="line">pip install circup</div>
-</div><!-- fragment --><p>The boards drive must to be named <b>CIRCUITPY</b> (default). If the drive has different name, rename it back to the CIRCUITPY: <a href="https://learn.adafruit.com/welcome-to-circuitpython/renaming-circuitpy">Renaming CIRCUITPY</a> <br  />
- Later on you may want to rename the drive on purpose. This is often the case for split keyboards. Install the adafruit libraries:</p>
-<div class="fragment"><div class="line">circup install adafruit_ble adafruit_hid</div>
-</div><!-- fragment --><p> <br  />
+<p>The MKX architecture is designed to be flexible and reliable. <br  />
+ It includes mechanisms for time synchronization, debouncing, matrix scanning warm-up, user configuration checks, and other features that enhance stability. <br  />
 </p>
-<h1><a class="anchor" id="p_1_4"></a>
-1.4 Install MKX</h1>
-<p>Download the latest release, unpack and copy the <b>mkx</b> folder to the <b>CIRCUITPY/lib</b> directory. <br  />
-</p>
-<h2><a class="anchor" id="p_1_4_1"></a>
-1.4.1 Synchronize Github repository with the CIRCUITPY drive</h2>
-<p>MKX repository has a tool <b>auto_sync</b> to synchronize repository content with the CIRCUITPY drive. This is especially convenient for developers but not only. <br  />
- The tool requires installed <b>watchdog</b> module. Activate your Python <b>dev</b> environment and install:</p>
-<div class="fragment"><div class="line">pip install watchdog</div>
-</div><!-- fragment --><p>Clone the <b>MKX</b> repository, or your fork:</p>
-<div class="fragment"><div class="line">git clone git@github.com:jacmie/mkx.git</div>
-</div><!-- fragment --><p>When you run the <b>auto_sync</b> in the repository it will copy the <b>mkx</b> foler from the repository to the the <b>CIRCUITPY/lib</b> directory. <br  />
- Next, every time file in the repository is saved it will be also copied on the board. <br  />
- Stop the tool by <b>CTRL+C</b>.</p>
-<div class="fragment"><div class="line">python auto_sync.py</div>
-</div><!-- fragment --><p>If the drive was renamed use flag <b>-d</b> and the new drives name:</p>
-<div class="fragment"><div class="line">python auto_sync.py -d MY_CIRCUITPY_DRIVE_NAME</div>
-</div><!-- fragment --><p>For more <b>auto_sync</b> options try:</p>
-<div class="fragment"><div class="line">python auto_sync.py -h</div>
-</div><!-- fragment --> </div></div><!-- contents -->
+<p>The system is theoretically capable of supporting multiple <b>Peripheries</b> connected to and communicating bidirectionally with the <b>Central</b>, but there are a few limitations:</p><ul>
+<li>Circuit Python can establish only one stable BLE connection</li>
+<li>Currently, only UART is used for communication between the <b>Peripheries</b> and the <b>Central</b></li>
+<li>Sending data from the <b>Central</b> to the <b>Peripheries</b> is possible, but not yet implemented </li>
+</ul>
+</div></div><!-- contents -->
 </div><!-- PageDoc -->
 </div><!-- doc-content -->
 <!-- start footer part -->

@@ -1,7 +1,5 @@
 var searchData=
 [
-  ['circuit_20python_0',['1.1 Install Circuit Python',['../p_1.html#p_1_1',1,'']]],
-  ['circuitpy_20drive_1',['1.4.1 Synchronize Github repository with the CIRCUITPY drive',['../p_1.html#p_1_4_1',1,'']]],
-  ['code_20rules_2',['Code rules',['../p_5.html#autotoc_md0',1,'']]],
-  ['concepts_3',['3 Key Concepts',['../p_3.html',1,'']]]
+  ['build_20with_20mpy_0',['Build with mpy',['../p_6.html#p_6_2',1,'']]],
+  ['bundles_1',['2.3 Install Adafruit Bundles',['../p_2.html#p_2_3',1,'']]]
 ];

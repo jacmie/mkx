@@ -26,21 +26,28 @@ var NAVTREE =
 [
   [ "MKX", "index.html", [
     [ "Introduction", "index.html", null ],
-    [ "1 Istallation", "p_1.html", [
-      [ "1.1 Install Circuit Python", "p_1.html#p_1_1", null ],
-      [ "1.2 Set Python environment (optional)", "p_1.html#p_1_2", null ],
-      [ "1.3 Install adafruit bundles", "p_1.html#p_1_3", null ],
-      [ "1.4 Install MKX", "p_1.html#p_1_4", [
-        [ "1.4.1 Synchronize Github repository with the CIRCUITPY drive", "p_1.html#p_1_4_1", null ]
+    [ "1 Main Concepts", "p_1.html", [
+      [ "1.1 Central", "p_1.html#p_1_1", null ],
+      [ "1.2 Periphery", "p_1.html#p_1_2", null ],
+      [ "1.3 MKX Keyboard", "p_1.html#p_1_3", null ]
+    ] ],
+    [ "2 Istallation", "p_2.html", [
+      [ "2.1 Install Circuit Python", "p_2.html#p_2_1", null ],
+      [ "2.2 Set Python environment (optional)", "p_2.html#p_2_2", null ],
+      [ "2.3 Install Adafruit Bundles", "p_2.html#p_2_3", null ],
+      [ "2.4 Install MKX", "p_2.html#p_2_4", [
+        [ "2.4.1 Synchronize Github repository with the CIRCUITPY drive", "p_2.html#p_2_4_1", null ]
       ] ]
     ] ],
-    [ "2 Get Started", "p_2.html", null ],
-    [ "3 Key Concepts", "p_3.html", null ],
+    [ "3 Get Started", "p_3.html", null ],
     [ "4 MKX API", "p_4.html", null ],
-    [ "5 Development", "p_5.html", [
-      [ "Dev", "p_5.html#p_5_1_1", null ],
-      [ "Build with mpy", "p_5.html#p_5_2_1", [
-        [ "Code rules", "p_5.html#autotoc_md0", null ]
+    [ "5 Keys", "p_5.html", [
+      [ "Dev", "p_5.html#p_5_1", null ]
+    ] ],
+    [ "6 Development", "p_6.html", [
+      [ "Dev", "p_6.html#p_6_1", null ],
+      [ "Build with mpy", "p_6.html#p_6_2", [
+        [ "Code rules", "p_6.html#autotoc_md2", null ]
       ] ]
     ] ]
   ] ]

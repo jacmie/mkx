@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['3_20key_20concepts_0',['3 Key Concepts',['../p_3.html',1,'']]]
+  ['3_20get_20started_0',['3 Get Started',['../p_3.html',1,'']]]
 ];

@@ -1,6 +1,8 @@
 var searchData=
 [
-  ['dev_0',['Dev',['../p_5.html#p_5_1_1',1,'']]],
-  ['development_1',['5 Development',['../p_5.html',1,'']]],
-  ['drive_2',['1.4.1 Synchronize Github repository with the CIRCUITPY drive',['../p_1.html#p_1_4_1',1,'']]]
+  ['central_0',['1.1 Central',['../p_1.html#p_1_1',1,'']]],
+  ['circuit_20python_1',['2.1 Install Circuit Python',['../p_2.html#p_2_1',1,'']]],
+  ['circuitpy_20drive_2',['2.4.1 Synchronize Github repository with the CIRCUITPY drive',['../p_2.html#p_2_4_1',1,'']]],
+  ['code_20rules_3',['Code rules',['../p_6.html#autotoc_md2',1,'']]],
+  ['concepts_4',['1 Main Concepts',['../p_1.html',1,'']]]
 ];

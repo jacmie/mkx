@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['1_5fistallation_2emd_0',['1_Istallation.md',['../1__Istallation_8md.html',1,'']]]
+  ['1_5fmain_5fconcepts_2emd_0',['1_Main_Concepts.md',['../1__Main__Concepts_8md.html',1,'']]]
 ];

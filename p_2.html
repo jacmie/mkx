@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.9.8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>MKX: 2 Get Started</title>
+<title>MKX: 2 Istallation</title>
 <link rel="icon" type="image/x-icon" href="mkx.svg">
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
@@ -103,85 +103,71 @@ $(document).ready(function(){initNavTree('p_2.html',''); initResizable(); });
 </div>
 
 <div><div class="header">
-  <div class="headertitle"><div class="title">2 Get Started</div></div>
+  <div class="headertitle"><div class="title">2 Istallation</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><div class="fragment"><div class="line"><span class="keyword">import</span> board</div>
-<div class="line"> </div>
-<div class="line"><span class="keyword">from</span> mkx.mkx_central <span class="keyword">import</span> MKX_Central</div>
-<div class="line"><span class="keyword">from</span> mkx.hid_usb <span class="keyword">import</span> HID_USB</div>
-<div class="line"> </div>
-<div class="line"><span class="comment"># from mkx.hid_ble import HID_BLE</span></div>
-<div class="line"><span class="keyword">from</span> mkx.keys_standard <span class="keyword">import</span> *</div>
-<div class="line"><span class="keyword">from</span> mkx.keys_holdtap <span class="keyword">import</span> HT</div>
-<div class="line"><span class="keyword">from</span> mkx.keys_sticky <span class="keyword">import</span> SK</div>
-<div class="line"><span class="keyword">from</span> mkx.keys_tapdance <span class="keyword">import</span> TD</div>
-<div class="line"><span class="keyword">from</span> mkx.keys_layers <span class="keyword">import</span> DF, MO, LT, TG, TO, TT</div>
-<div class="line"> </div>
-<div class="line"><span class="keyword">from</span> mkx.periphery_central <span class="keyword">import</span> PeripheryCentral</div>
-<div class="line"><span class="keyword">from</span> mkx.interphace_central <span class="keyword">import</span> InterphaceCentral</div>
-<div class="line"><span class="keyword">from</span> mkx.interphace_uart <span class="keyword">import</span> InterphaceUART</div>
-<div class="line"><span class="keyword">from</span> mkx.switch_hid_mode <span class="keyword">import</span> SwitchHIDmode</div>
-<div class="line"> </div>
-<div class="line">keyboard = MKX_Central()</div>
-<div class="line"> </div>
-<div class="line">col_pins = (board.GP9, board.GP7, board.GP5, board.GP4, board.GP3, board.GP2)</div>
-<div class="line">row_pins = (board.GP10, board.GP11, board.GP13, board.GP15, board.GP17)</div>
-<div class="line">central_peryphery = PeripheryCentral(<span class="stringliteral">&quot;central&quot;</span>, col_pins, row_pins)</div>
-<div class="line">keyboard.central_periphery = central_peryphery</div>
-<div class="line"> </div>
-<div class="line">interphace_central = InterphaceCentral(central_peryphery, 0, 0, 5, 4)</div>
-<div class="line">keyboard.add_interface(interphace_central)</div>
-<div class="line"> </div>
-<div class="line">interphace_right = InterphaceUART(<span class="stringliteral">&quot;booster_r&quot;</span>, <span class="keywordtype">None</span>, board.GP1, 11, 0, 6, 4)</div>
-<div class="line">keyboard.add_interface(interphace_right)</div>
-<div class="line"> </div>
-<div class="line">LSFT_SPC = HT(SPC, LSFT)</div>
-<div class="line"> </div>
-<div class="line"><span class="comment"># Normal sticky</span></div>
-<div class="line">SK_C = SK(LSFT)</div>
-<div class="line"> </div>
-<div class="line"><span class="comment"># Defer release sticky (hold until all keys released)</span></div>
-<div class="line">SK_S = SK(N2, defer_release=<span class="keyword">True</span>)</div>
-<div class="line"> </div>
-<div class="line"><span class="comment"># Sticky that doesn’t cancel on repeat tap</span></div>
-<div class="line">SK_NO = SK(N3, retap_cancel=<span class="keyword">False</span>)</div>
-<div class="line"> </div>
-<div class="line">TD_D = TD(D, DEL)</div>
-<div class="line"> </div>
-<div class="line"> </div>
-<div class="line">LT_NAV_ESC = DF(0)</div>
-<div class="line"> </div>
-<div class="line"><span class="comment"># fmt: off</span></div>
-<div class="line">keymap = [</div>
-<div class="line">    [</div>
-<div class="line">        SK_C,  N1,      N2,      N3,      N4,      N5,      N6,      N7,      N8,       N9,      N0,      A,</div>
-<div class="line">        SK_S,  Q,       TD_D,    R,       W,       DF(1),   J,       F,       U,        P,       A,       A,</div>
-<div class="line">        SK_NO, A,       S,       H,       T,       MO(1, SHIFT),   Y,       N,       E,        O,       I,       A,</div>
-<div class="line">        LCTL,  Z,       X,       C,       TT(1),   TG(1),       K,       M,       A,        A,       A,       A,</div>
-<div class="line">        <span class="keywordtype">None</span>,  <span class="keywordtype">None</span>,    <span class="keywordtype">None</span>,    <span class="keywordtype">None</span>,    LSFT_SPC,LT(1, B),       ENTER,   A,       <span class="keywordtype">None</span>,     <span class="keywordtype">None</span>,    <span class="keywordtype">None</span>,    <span class="keywordtype">None</span>,</div>
-<div class="line">    ],</div>
-<div class="line">    [</div>
-<div class="line">        A,     N1,      N2,      N3,      N4,      N5,      N6,      N7,      N8,       N9,      N0,      A,</div>
-<div class="line">        A,     N1,      D,       R,       W,       DF(0),   J,       F,       U,        P,       A,       A,</div>
-<div class="line">        A,     N2,      S,       H,       TO(0),   G,       Y,       N,       E,        O,       I,       A,</div>
-<div class="line">        A,     N3,      X,       C,       V,       TG(1),   K,       M,       A,        A,       A,       A,</div>
-<div class="line">        <span class="keywordtype">None</span>,  <span class="keywordtype">None</span>,    <span class="keywordtype">None</span>,    <span class="keywordtype">None</span>,    SPACE ,  A,       ENTER,   A,       <span class="keywordtype">None</span>,     <span class="keywordtype">None</span>,    <span class="keywordtype">None</span>,    <span class="keywordtype">None</span>,</div>
-<div class="line">    ]</div>
-<div class="line">]</div>
-<div class="line"><span class="comment"># fmt: on</span></div>
-<div class="line">keyboard.add_keymap(keymap, 12, 5)</div>
-<div class="line"> </div>
-<div class="line">usb = HID_USB()</div>
-<div class="line"><span class="comment"># ble = HID_BLE()</span></div>
-<div class="line">hids = [usb]</div>
-<div class="line">keyboard.hids = hids</div>
-<div class="line"> </div>
-<div class="line"><span class="comment"># hid_mode = SwitchHIDmode(usb_output=usb, ble_output=ble, switch_func=&quot;usb&quot;)</span></div>
-<div class="line">keyboard.hid_mode = <span class="stringliteral">&quot;usb&quot;</span></div>
-<div class="line"> </div>
-<div class="line"><span class="comment"># keyboard.run_once()</span></div>
-<div class="line">keyboard.run_forever()</div>
+<div class="toc"><h3>Table of Contents</h3>
+<ul><li class="level1"><a href="#p_2_1">2.1 Install Circuit Python</a></li>
+<li class="level1"><a href="#p_2_2">2.2 Set Python environment (optional)</a></li>
+<li class="level1"><a href="#p_2_3">2.3 Install Adafruit Bundles</a></li>
+<li class="level1"><a href="#p_2_4">2.4 Install MKX</a><ul><li class="level2"><a href="#p_2_4_1">2.4.1 Synchronize Github repository with the CIRCUITPY drive</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="textblock"><h1><a class="anchor" id="p_2_1"></a>
+2.1 Install Circuit Python</h1>
+<p>You probably already know this, but the first step is to install <a href="https://circuitpython.org/">Circuit Python</a> on the supported board. <br  />
+ Go to the <a href="https://circuitpython.org/downloads">Circuit Python Downloads</a>, locate your board, and follow the installation instructions. <br  />
+ In many cases, it's as simple as plugging the board into your computer via USB and dragging the downloaded <b>*.uf2</b> file onto the mounted <b>CIRCUITPY</b> drive. <br  />
+ <br  />
+</p>
+<h1><a class="anchor" id="p_2_2"></a>
+2.2 Set Python environment (optional)</h1>
+<p>Installing <a href="https://www.python.org/">Python</a> is optional but convenient for users and developers of <b>MKX</b>. <br  />
+ Set up a Python environment named <b>dev</b> and activate it:</p>
+<div class="fragment"><div class="line">python3 -m dev ../dev</div>
+<div class="line">source ../dev/bin/activate</div>
+</div><!-- fragment --><p> <br  />
+</p>
+<h1><a class="anchor" id="p_2_3"></a>
+2.3 Install Adafruit Bundles</h1>
+<p><b>MKX</b> requires additional Adafruit libraries. <br  />
+ You can download them manually from the <a href="https://circuitpython.org/libraries">Circuit Python Libraries</a> and copy to the <b>CIRCUITPY/lib</b> directory. <br  />
+</p>
+<p>Cleaner and more recommended approach is to use the <b>circup</b> tool. <br  />
+ This requires Python to be installed and your environment activated (<em>see section 2.2</em>). <br  />
+ In the <b>dev</b> Python environment: </p><div class="fragment"><div class="line">pip install circup</div>
+</div><!-- fragment --><p>The board’s drive must be named <b>CIRCUITPY</b> (this is the default). <br  />
+ If the drive has a different name, rename it back to CIRCUITPY: <a href="https://learn.adafruit.com/welcome-to-circuitpython/renaming-circuitpy">Renaming CIRCUITPY</a> <br  />
+</p>
+<p>Later on, you may want to intentionally rename the drive — this is often the case with split keyboards. <br  />
+</p>
+<p>Install the Adafruit libraries:</p>
+<div class="fragment"><div class="line">circup install adafruit_ble adafruit_hid</div>
+</div><!-- fragment --><p> <br  />
+</p>
+<h1><a class="anchor" id="p_2_4"></a>
+2.4 Install MKX</h1>
+<p>Download the latest release, unpack and copy the <b>mkx</b> folder to the <b>CIRCUITPY/lib</b> directory. <br  />
+ <br  />
+</p>
+<h2><a class="anchor" id="p_2_4_1"></a>
+2.4.1 Synchronize Github repository with the CIRCUITPY drive</h2>
+<p>The <b>MKX</b> repository includes a tool called <b>auto_sync</b> that can synchronize repository content with the <b>CIRCUITPY</b> drive. <br  />
+ This is especially convenient for developers — but useful for other users as well. <br  />
+ The tool requires installed <b>watchdog</b> module. Activate your Python <b>dev</b> environment and install it with:</p>
+<div class="fragment"><div class="line">pip install watchdog</div>
+</div><!-- fragment --><p>Clone the <b>MKX</b> repository, or your own fork:</p>
+<div class="fragment"><div class="line">git clone git@github.com:jacmie/mkx.git</div>
+</div><!-- fragment --><p>When you run the <b>auto_sync</b> in the repository, it will copy the <b>mkx</b> folder from the repository to the <b>CIRCUITPY/lib</b> directory. <br  />
+ After that, every time a file in the repository is saved, it will also be copied to the board. <br  />
+ To stop the tool, press <b>CTRL+C</b>.</p>
+<div class="fragment"><div class="line">python auto_sync.py</div>
+</div><!-- fragment --><p>If the drive was renamed, use the <b>-d</b> flag followed by the new drive name:</p>
+<div class="fragment"><div class="line">python auto_sync.py -d MY_CIRCUITPY_DRIVE_NAME</div>
+</div><!-- fragment --><p>For more <b>auto_sync</b> options, try:</p>
+<div class="fragment"><div class="line">python auto_sync.py -h</div>
 </div><!-- fragment --> </div></div><!-- contents -->
 </div><!-- PageDoc -->
 </div><!-- doc-content -->
