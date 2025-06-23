@@ -5,8 +5,9 @@ var searchData=
   ['2_203_20install_20adafruit_20bundles_2',['2.3 Install Adafruit Bundles',['../p_2.html#p_2_3',1,'']]],
   ['2_204_201_20synchronize_20github_20repository_20with_20the_20circuitpy_20drive_3',['2.4.1 Synchronize Github repository with the CIRCUITPY drive',['../p_2.html#p_2_4_1',1,'']]],
   ['2_204_20install_20mkx_4',['2.4 Install MKX',['../p_2.html#p_2_4',1,'']]],
-  ['2_20istallation_5',['2 Istallation',['../p_2.html',1,'']]],
-  ['2_20modifiers_20keys_6',['5.2 Modifiers Keys',['../p_5.html#p_5_2',1,'']]],
-  ['2_20periphery_7',['1.2 Periphery',['../p_1.html#p_1_2',1,'']]],
-  ['2_5fistallation_2emd_8',['2_Istallation.md',['../2__Istallation_8md.html',1,'']]]
+  ['2_20edit_20mode_5',['5.8.2 Edit Mode',['../p_5.html#p_5_8_2',1,'']]],
+  ['2_20istallation_6',['2 Istallation',['../p_2.html',1,'']]],
+  ['2_20modifiers_20keys_7',['5.2 Modifiers Keys',['../p_5.html#p_5_2',1,'']]],
+  ['2_20periphery_8',['1.2 Periphery',['../p_1.html#p_1_2',1,'']]],
+  ['2_5fistallation_2emd_9',['2_Istallation.md',['../2__Istallation_8md.html',1,'']]]
 ];

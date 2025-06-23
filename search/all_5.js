@@ -7,7 +7,11 @@ var searchData=
   ['5_205_20holdtap_20keys_4',['5.5 HoldTap Keys',['../p_5.html#p_5_5',1,'']]],
   ['5_206_20tapdance_20keys_5',['5.6 TapDance Keys',['../p_5.html#p_5_6',1,'']]],
   ['5_207_20sticky_20keys_6',['5.7 Sticky Keys',['../p_5.html#p_5_7',1,'']]],
-  ['5_208_20vim_20keys_7',['5.8 VIM Keys',['../p_5.html#p_5_8',1,'']]],
-  ['5_20keys_8',['5 Keys',['../p_5.html',1,'']]],
-  ['5_5fkeys_2emd_9',['5_Keys.md',['../5__Keys_8md.html',1,'']]]
+  ['5_208_201_20normal_20mode_7',['5.8.1 Normal Mode',['../p_5.html#p_5_8_1',1,'']]],
+  ['5_208_202_20edit_20mode_8',['5.8.2 Edit Mode',['../p_5.html#p_5_8_2',1,'']]],
+  ['5_208_203_20visual_20mode_9',['5.8.3 Visual Mode',['../p_5.html#p_5_8_3',1,'']]],
+  ['5_208_204_20vim_20layout_10',['5.8.4 Vim Layout',['../p_5.html#p_5_8_4',1,'']]],
+  ['5_208_20vim_20keys_11',['5.8 VIM Keys',['../p_5.html#p_5_8',1,'']]],
+  ['5_20keys_12',['5 Keys',['../p_5.html',1,'']]],
+  ['5_5fkeys_2emd_13',['5_Keys.md',['../5__Keys_8md.html',1,'']]]
 ];

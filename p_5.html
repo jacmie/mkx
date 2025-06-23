@@ -114,7 +114,12 @@ $(document).ready(function(){initNavTree('p_5.html',''); initResizable(); });
 <li class="level1"><a href="#p_5_5">5.5 HoldTap Keys</a></li>
 <li class="level1"><a href="#p_5_6">5.6 TapDance Keys</a></li>
 <li class="level1"><a href="#p_5_7">5.7 Sticky Keys</a></li>
-<li class="level1"><a href="#p_5_8">5.8 VIM Keys</a></li>
+<li class="level1"><a href="#p_5_8">5.8 VIM Keys</a><ul><li class="level2"><a href="#p_5_8_1">5.8.1 Normal Mode</a></li>
+<li class="level2"><a href="#p_5_8_2">5.8.2 Edit Mode</a></li>
+<li class="level2"><a href="#p_5_8_3">5.8.3 Visual Mode</a></li>
+<li class="level2"><a href="#p_5_8_4">5.8.4 Vim Layout</a></li>
+</ul>
+</li>
 </ul>
 </div>
 <div class="textblock"><h1><a class="anchor" id="p_5_1"></a>
@@ -380,6 +385,129 @@ $(document).ready(function(){initNavTree('p_5.html',''); initResizable(); });
 5.7 Sticky Keys</h1>
 <h1><a class="anchor" id="p_5_8"></a>
 5.8 VIM Keys</h1>
+<p>"Hardeare Vim" keys allow to mimic basic behavior of the Vim editor. <br  />
+ Even if you are not a fan of Vim you may find selected keys usefull. <br  />
+ The main idea is to use sequences of standard and modifier keys to emulate Vim functionality. <br  />
+</p>
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadNone">Key   </th><th class="markdownTableHeadNone">Aliases   </th><th class="markdownTableHeadNone">Description    </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">VI_HW   </td><td class="markdownTableBodyNone">VI_HI_WO, VI_HIGLIGHT_WORD   </td><td class="markdownTableBodyNone">Higlght the word under the curcor    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">VI_HL   </td><td class="markdownTableBodyNone">VI_HI_LI, VI_HIGLIGHT_LINE   </td><td class="markdownTableBodyNone">Higlght the line under the curcor    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">VI_YW   </td><td class="markdownTableBodyNone">VI_Y_WO, VI_YANK_WORD   </td><td class="markdownTableBodyNone">Yank/Copy the word under the curcor    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">VI_YL   </td><td class="markdownTableBodyNone">VI_Y_LI, VI_YANK_LINE   </td><td class="markdownTableBodyNone">Yank/Copy the line under the curcor    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">VI_CW   </td><td class="markdownTableBodyNone">VI_CUT_WO, VI_CUT_WORD   </td><td class="markdownTableBodyNone">Cut the word under the curcor    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">VI_CL   </td><td class="markdownTableBodyNone">VI_CUT_LI, VI_CUT_LINE   </td><td class="markdownTableBodyNone">Cut the line under the curcor    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">VI_PRVL   </td><td class="markdownTableBodyNone">VI_MINS, VI_PREV_LINE   </td><td class="markdownTableBodyNone">Go to the beginning of the previous line    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">VI_NXTL   </td><td class="markdownTableBodyNone">VI_PLUS, VI_NEXT_LINE   </td><td class="markdownTableBodyNone">Go to the beginning of the next line    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">VI_NXTW   </td><td class="markdownTableBodyNone">VI_W, VI_NEXT_WORD   </td><td class="markdownTableBodyNone">Go to the beginning of the previous word    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">VI_PRVW   </td><td class="markdownTableBodyNone">VI_E, VI_PREV_WORD   </td><td class="markdownTableBodyNone">Go to the beginning of the next word    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">VI_REPL.L(nr)   </td><td class="markdownTableBodyNone">VI_R.L(nr), VI_REPLACE.L(nr)   </td><td class="markdownTableBodyNone">Switch to Replace Mode on the Layer <em>nr</em>    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">VI_R_ESC.L(nr)   </td><td class="markdownTableBodyNone"></td><td class="markdownTableBodyNone">Switch back from the Replace Mode to the Normal Mode on the Layer <em>nr</em>    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">VI_YANK   </td><td class="markdownTableBodyNone">VI_Y, VI_YANK   </td><td class="markdownTableBodyNone">Yank/Copy, on double tap copy whole line    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">VI_UNDO   </td><td class="markdownTableBodyNone">VI_U, VI_UNDO   </td><td class="markdownTableBodyNone">Undo    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">VI_INS.L(nr)   </td><td class="markdownTableBodyNone">VI_I.L(nr), VI_INSERT.L(nr)   </td><td class="markdownTableBodyNone">Switch to Edit Mode on the Layer <em>nr</em>    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">VI_OPEN.L(nr)   </td><td class="markdownTableBodyNone">VI_O.L(nr), VI_OPEN.L(nr)   </td><td class="markdownTableBodyNone">Switch to Edit Mode in new line on the Layer <em>nr</em>    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">VI_PAST   </td><td class="markdownTableBodyNone">VI_P, VI_PAST, VI_PASTE   </td><td class="markdownTableBodyNone">Paste    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">VI_APND.L(nr)   </td><td class="markdownTableBodyNone">VI_A.L(nr), VI_APPEND.L(nr)   </td><td class="markdownTableBodyNone">Switch to Edit Mode on the Layer <em>nr</em>    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">VI_SUBS.L(nr)   </td><td class="markdownTableBodyNone">VI_S.L(nr), VI_SUBSTITUTE.L(nr)   </td><td class="markdownTableBodyNone">Cut line and switch to Edit Mode on the Layer <em>nr</em>    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">VI_DEL   </td><td class="markdownTableBodyNone">VI_D, VI_DELATE   </td><td class="markdownTableBodyNone">Delete, on double tap cut whole line    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">VI_FIND   </td><td class="markdownTableBodyNone">VI_F   </td><td class="markdownTableBodyNone">Find    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">VI_VIS.L(nr)   </td><td class="markdownTableBodyNone">VI_V.L(nr), VI_VISUAL.L(nr)   </td><td class="markdownTableBodyNone">Switch to Visual Mode on the Layer <em>nr</em>    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">VI_V_ESC.L(nr)   </td><td class="markdownTableBodyNone"></td><td class="markdownTableBodyNone">Switch back from the Visual Mode to the Normal Mode on the Layer <em>nr</em>   </td></tr>
+</table>
+<h2><a class="anchor" id="p_5_8_1"></a>
+5.8.1 Normal Mode</h2>
+<p>Utilizes most of the standard Vim keys for navigation and specific Vim functionality.</p>
+<h2><a class="anchor" id="p_5_8_2"></a>
+5.8.2 Edit Mode</h2>
+<p>Classic editing mode using layer with standard keys.</p>
+<h2><a class="anchor" id="p_5_8_3"></a>
+5.8.3 Visual Mode</h2>
+<p>Highlighting mode where the <b>VI_VIS.L(nr)</b> key holds the <b>Shift</b> key and switches to a selected layer with movement keys. <br  />
+ Use the <b>VI_V_ESC.L(nr)</b> key to release <b>Shift</b> and return to the Normal mode layer.</p>
+<h2><a class="anchor" id="p_5_8_3"></a>
+5.8.3 Visual Mode</h2>
+<p>Replace mode where the <b>VI_REPL.L(nr)</b> key presses the standard <b>Insert</b> key and switches to a selected layer with movement keys. <br  />
+ Use the <b>VI_R_ESC.L(nr)</b> key to press <b>Insert</b> again and return to the Normal mode layer.</p>
+<h2><a class="anchor" id="p_5_8_4"></a>
+5.8.4 Vim Layout</h2>
+<p>The table below provides an example of how to mimic the classical Vim layout.</p>
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadNone" colspan="11">VIM Basic Keymap    </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone" colspan="11"><b>Normal Mode</b>    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">ESC   </td><td class="markdownTableBodyNone">F1   </td><td class="markdownTableBodyNone">F2   </td><td class="markdownTableBodyNone">F3   </td><td class="markdownTableBodyNone">F4   </td><td class="markdownTableBodyNone">F5   </td><td class="markdownTableBodyNone">F6   </td><td class="markdownTableBodyNone">F7   </td><td class="markdownTableBodyNone">F8   </td><td class="markdownTableBodyNone">F9   </td><td class="markdownTableBodyNone">F10    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">None   </td><td class="markdownTableBodyNone">None   </td><td class="markdownTableBodyNone">None   </td><td class="markdownTableBodyNone">None   </td><td class="markdownTableBodyNone">END   </td><td class="markdownTableBodyNone">None   </td><td class="markdownTableBodyNone">HOME   </td><td class="markdownTableBodyNone">None   </td><td class="markdownTableBodyNone">None   </td><td class="markdownTableBodyNone">None   </td><td class="markdownTableBodyNone">HOME    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">None   </td><td class="markdownTableBodyNone">None   </td><td class="markdownTableBodyNone">VI_NXTW   </td><td class="markdownTableBodyNone">VI_NXTW   </td><td class="markdownTableBodyNone">VI_REPL.L(3)   </td><td class="markdownTableBodyNone">None   </td><td class="markdownTableBodyNone">VI_YANK   </td><td class="markdownTableBodyNone">VI_UNDO   </td><td class="markdownTableBodyNone">VI_INS.L(1)   </td><td class="markdownTableBodyNone">VI_OPEN.L(1)   </td><td class="markdownTableBodyNone">VI_PAST    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">None   </td><td class="markdownTableBodyNone">VI_APND.L(1)   </td><td class="markdownTableBodyNone">VI_SUBS.L(1)   </td><td class="markdownTableBodyNone">VI_DEL   </td><td class="markdownTableBodyNone">VI_FIND   </td><td class="markdownTableBodyNone">None   </td><td class="markdownTableBodyNone">LEFT   </td><td class="markdownTableBodyNone">DOWN   </td><td class="markdownTableBodyNone">UP   </td><td class="markdownTableBodyNone">RIGHT   </td><td class="markdownTableBodyNone">None    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">None   </td><td class="markdownTableBodyNone">None   </td><td class="markdownTableBodyNone">DEL   </td><td class="markdownTableBodyNone">None   </td><td class="markdownTableBodyNone">VI_VIS.L(2)   </td><td class="markdownTableBodyNone">VI_PRVW   </td><td class="markdownTableBodyNone">F3   </td><td class="markdownTableBodyNone">None   </td><td class="markdownTableBodyNone">None   </td><td class="markdownTableBodyNone">TAB   </td><td class="markdownTableBodyNone">VI_FIND    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone" colspan="11"><b>Edit Mode</b>    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">TO(0)   </td><td class="markdownTableBodyNone">F1   </td><td class="markdownTableBodyNone">F2   </td><td class="markdownTableBodyNone">F3   </td><td class="markdownTableBodyNone">F4   </td><td class="markdownTableBodyNone">F5   </td><td class="markdownTableBodyNone">F6   </td><td class="markdownTableBodyNone">F7   </td><td class="markdownTableBodyNone">F8   </td><td class="markdownTableBodyNone">F9   </td><td class="markdownTableBodyNone">F10    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">None   </td><td class="markdownTableBodyNone">N1   </td><td class="markdownTableBodyNone">N2   </td><td class="markdownTableBodyNone">N3   </td><td class="markdownTableBodyNone">N4   </td><td class="markdownTableBodyNone">N5   </td><td class="markdownTableBodyNone">N6   </td><td class="markdownTableBodyNone">N7   </td><td class="markdownTableBodyNone">N8   </td><td class="markdownTableBodyNone">N9   </td><td class="markdownTableBodyNone">N0    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">None   </td><td class="markdownTableBodyNone">Q   </td><td class="markdownTableBodyNone">W   </td><td class="markdownTableBodyNone">E   </td><td class="markdownTableBodyNone">R   </td><td class="markdownTableBodyNone">T   </td><td class="markdownTableBodyNone">Y   </td><td class="markdownTableBodyNone">U   </td><td class="markdownTableBodyNone">I   </td><td class="markdownTableBodyNone">O   </td><td class="markdownTableBodyNone">P    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">None   </td><td class="markdownTableBodyNone">A   </td><td class="markdownTableBodyNone">S   </td><td class="markdownTableBodyNone">D   </td><td class="markdownTableBodyNone">F   </td><td class="markdownTableBodyNone">G   </td><td class="markdownTableBodyNone">H   </td><td class="markdownTableBodyNone">J   </td><td class="markdownTableBodyNone">K   </td><td class="markdownTableBodyNone">L   </td><td class="markdownTableBodyNone">SCLN    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">None   </td><td class="markdownTableBodyNone">Z   </td><td class="markdownTableBodyNone">X   </td><td class="markdownTableBodyNone">C   </td><td class="markdownTableBodyNone">V   </td><td class="markdownTableBodyNone">B   </td><td class="markdownTableBodyNone">N   </td><td class="markdownTableBodyNone">M   </td><td class="markdownTableBodyNone">COMM   </td><td class="markdownTableBodyNone">DOT   </td><td class="markdownTableBodyNone">SLSH    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone" colspan="11"><b>Visual Mode</b>    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">VI_V_ESC.L(0)   </td><td class="markdownTableBodyNone">F1   </td><td class="markdownTableBodyNone">F2   </td><td class="markdownTableBodyNone">F3   </td><td class="markdownTableBodyNone">F4   </td><td class="markdownTableBodyNone">F5   </td><td class="markdownTableBodyNone">F6   </td><td class="markdownTableBodyNone">F7   </td><td class="markdownTableBodyNone">F8   </td><td class="markdownTableBodyNone">F9   </td><td class="markdownTableBodyNone">F10    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">None   </td><td class="markdownTableBodyNone">None   </td><td class="markdownTableBodyNone">None   </td><td class="markdownTableBodyNone">None   </td><td class="markdownTableBodyNone">None   </td><td class="markdownTableBodyNone">None   </td><td class="markdownTableBodyNone">None   </td><td class="markdownTableBodyNone">None   </td><td class="markdownTableBodyNone">None   </td><td class="markdownTableBodyNone">None   </td><td class="markdownTableBodyNone">HOME    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">None   </td><td class="markdownTableBodyNone">None   </td><td class="markdownTableBodyNone">VI_NXTW   </td><td class="markdownTableBodyNone">VI_NXTW   </td><td class="markdownTableBodyNone">None   </td><td class="markdownTableBodyNone">None   </td><td class="markdownTableBodyNone">VI_YANK   </td><td class="markdownTableBodyNone">VI_UNDO   </td><td class="markdownTableBodyNone">None   </td><td class="markdownTableBodyNone">None   </td><td class="markdownTableBodyNone">VI_PAST    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">None   </td><td class="markdownTableBodyNone">None   </td><td class="markdownTableBodyNone">None   </td><td class="markdownTableBodyNone">VI_DEL   </td><td class="markdownTableBodyNone">None   </td><td class="markdownTableBodyNone">None   </td><td class="markdownTableBodyNone">LEFT   </td><td class="markdownTableBodyNone">DOWN   </td><td class="markdownTableBodyNone">UP   </td><td class="markdownTableBodyNone">RIGHT   </td><td class="markdownTableBodyNone">None    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">None   </td><td class="markdownTableBodyNone">None   </td><td class="markdownTableBodyNone">DEL   </td><td class="markdownTableBodyNone">None   </td><td class="markdownTableBodyNone">None   </td><td class="markdownTableBodyNone">VI_PRVW   </td><td class="markdownTableBodyNone">None   </td><td class="markdownTableBodyNone">M   </td><td class="markdownTableBodyNone">None   </td><td class="markdownTableBodyNone">None   </td><td class="markdownTableBodyNone">None    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone" colspan="11"><b>Replace Mode</b>    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">VI_R_ESC.L(0)   </td><td class="markdownTableBodyNone">F1   </td><td class="markdownTableBodyNone">F2   </td><td class="markdownTableBodyNone">F3   </td><td class="markdownTableBodyNone">F4   </td><td class="markdownTableBodyNone">F5   </td><td class="markdownTableBodyNone">F6   </td><td class="markdownTableBodyNone">F7   </td><td class="markdownTableBodyNone">F8   </td><td class="markdownTableBodyNone">F9   </td><td class="markdownTableBodyNone">F10    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">None   </td><td class="markdownTableBodyNone">None   </td><td class="markdownTableBodyNone">None   </td><td class="markdownTableBodyNone">None   </td><td class="markdownTableBodyNone">None   </td><td class="markdownTableBodyNone">None   </td><td class="markdownTableBodyNone">None   </td><td class="markdownTableBodyNone">None   </td><td class="markdownTableBodyNone">None   </td><td class="markdownTableBodyNone">None   </td><td class="markdownTableBodyNone">HOME    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">None   </td><td class="markdownTableBodyNone">None   </td><td class="markdownTableBodyNone">VI_NXTW   </td><td class="markdownTableBodyNone">VI_NXTW   </td><td class="markdownTableBodyNone">None   </td><td class="markdownTableBodyNone">None   </td><td class="markdownTableBodyNone">VI_YANK   </td><td class="markdownTableBodyNone">VI_UNDO   </td><td class="markdownTableBodyNone">None   </td><td class="markdownTableBodyNone">None   </td><td class="markdownTableBodyNone">VI_PAST    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">None   </td><td class="markdownTableBodyNone">None   </td><td class="markdownTableBodyNone">None   </td><td class="markdownTableBodyNone">VI_DEL   </td><td class="markdownTableBodyNone">None   </td><td class="markdownTableBodyNone">None   </td><td class="markdownTableBodyNone">LEFT   </td><td class="markdownTableBodyNone">DOWN   </td><td class="markdownTableBodyNone">UP   </td><td class="markdownTableBodyNone">RIGHT   </td><td class="markdownTableBodyNone">None    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">None   </td><td class="markdownTableBodyNone">None   </td><td class="markdownTableBodyNone">DEL   </td><td class="markdownTableBodyNone">None   </td><td class="markdownTableBodyNone">None   </td><td class="markdownTableBodyNone">VI_PRVW   </td><td class="markdownTableBodyNone">None   </td><td class="markdownTableBodyNone">M   </td><td class="markdownTableBodyNone">None   </td><td class="markdownTableBodyNone">None   </td><td class="markdownTableBodyNone">None   </td></tr>
+</table>
 </div></div><!-- contents -->
 </div><!-- PageDoc -->
 </div><!-- doc-content -->

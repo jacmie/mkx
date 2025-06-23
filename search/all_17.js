@@ -1,5 +1,6 @@
 var searchData=
 [
-  ['repository_20with_20the_20circuitpy_20drive_0',['2.4.1 Synchronize Github repository with the CIRCUITPY drive',['../p_2.html#p_2_4_1',1,'']]],
-  ['rules_1',['Code rules',['../p_6.html#autotoc_md2',1,'']]]
+  ['periphery_0',['1.2 Periphery',['../p_1.html#p_1_2',1,'']]],
+  ['python_1',['2.1 Install Circuit Python',['../p_2.html#p_2_1',1,'']]],
+  ['python_20environment_20optional_2',['2.2 Set Python environment (optional)',['../p_2.html#p_2_2',1,'']]]
 ];
