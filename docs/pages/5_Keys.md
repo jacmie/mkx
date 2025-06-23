@@ -142,3 +142,82 @@ Stavdard keys derived from the **adafruit_hid.keycode** library.
 @section p_5_7 5.7 Sticky Keys
 
 @section p_5_8 5.8 VIM Keys
+
+"Hardeare Vim" keys allow to mimic basic behavior of the Vim editor.  
+Even if you are not a fan of Vim you may find selected keys usefull.  
+The main idea is to use sequences of standard and modifier keys to emulate Vim functionality.  
+
+|Key             |Aliases                                             |Description                                                              |
+|----------------|----------------------------------------------------|-------------------------------------------------------------------------|
+| VI_HW          | VI_HI_WO, VI_HIGLIGHT_WORD                         | Higlght the word under the curcor                                       |
+| VI_HL          | VI_HI_LI, VI_HIGLIGHT_LINE                         | Higlght the line under the curcor                                       |
+| VI_YW          | VI_Y_WO, VI_YANK_WORD                              | Yank/Copy the word under the curcor                                     |
+| VI_YL          | VI_Y_LI, VI_YANK_LINE                              | Yank/Copy the line under the curcor                                     |
+| VI_CW          | VI_CUT_WO, VI_CUT_WORD                             | Cut the word under the curcor                                           |
+| VI_CL          | VI_CUT_LI, VI_CUT_LINE                             | Cut the line under the curcor                                           |
+| VI_PRVL        | VI_MINS, VI_PREV_LINE                              | Go to the beginning of the previous line                                |
+| VI_NXTL        | VI_PLUS, VI_NEXT_LINE                              | Go to the beginning of the next line                                    |
+| VI_NXTW        | VI_W, VI_NEXT_WORD                                 | Go to the beginning of the previous word                                |
+| VI_PRVW        | VI_E, VI_PREV_WORD                                 | Go to the beginning of the next word                                    |
+| VI_REPL.L(nr)  | VI_R.L(nr), VI_REPLACE.L(nr)                       | Switch to Replace Mode on the Layer *nr*                                |
+| VI_R_ESC.L(nr) |                                                    | Switch back from the Replace Mode to the Normal Mode on the Layer *nr*  |
+| VI_YANK        | VI_Y, VI_YANK                                      | Yank/Copy, on double tap copy whole line                                |
+| VI_UNDO        | VI_U, VI_UNDO                                      | Undo                                                                    |
+| VI_INS.L(nr)   | VI_I.L(nr), VI_INSERT.L(nr)                        | Switch to Edit Mode on the Layer *nr*                                   |
+| VI_OPEN.L(nr)  | VI_O.L(nr), VI_OPEN.L(nr)                          | Switch to Edit Mode in new line on the Layer *nr*                       |
+| VI_PAST        | VI_P, VI_PAST, VI_PASTE                            | Paste                                                                   |
+| VI_APND.L(nr)  | VI_A.L(nr), VI_APPEND.L(nr)                        | Switch to Edit Mode on the Layer *nr*                                   |
+| VI_SUBS.L(nr)  | VI_S.L(nr), VI_SUBSTITUTE.L(nr)                    | Cut line and switch to Edit Mode on the Layer *nr*                      |
+| VI_DEL         | VI_D, VI_DELATE                                    | Delete, on double tap cut whole line                                    |
+| VI_FIND        | VI_F                                               | Find                                                                    |
+| VI_VIS.L(nr)   | VI_V.L(nr), VI_VISUAL.L(nr)                        | Switch to Visual Mode on the Layer *nr*                                 |
+| VI_V_ESC.L(nr) |                                                    | Switch back from the Visual Mode to the Normal Mode on the Layer *nr*   |
+
+@subsection p_5_8_1 5.8.1 Normal Mode
+
+Utilizes most of the standard Vim keys for navigation and specific Vim functionality.
+
+@subsection p_5_8_2 5.8.2 Edit Mode
+
+Classic editing mode using layer with standard keys.
+
+@subsection p_5_8_3 5.8.3 Visual Mode
+
+Highlighting mode where the **VI_VIS.L(nr)** key holds the **Shift** key and switches to a selected layer with movement keys.  
+Use the **VI_V_ESC.L(nr)** key to release **Shift** and return to the Normal mode layer.
+
+@subsection p_5_8_3 5.8.3 Replace Mode
+
+Replace mode where the **VI_REPL.L(nr)** key presses the standard **Insert** key and switches to a selected layer with movement keys.  
+Use the **VI_R_ESC.L(nr)** key to press **Insert** again and return to the Normal mode layer.
+
+@subsection p_5_8_4 5.8.4 Vim Layout
+
+The table below provides an example of how to mimic the classical Vim layout.
+
+| VIM Basic Keymap      |||||||||||
+|--------|--------------|--------------|-----------|--------------|---------|-----------|-----------|---------------|---------------|-----------|
+| **Normal Mode**       |||||||||||
+|ESC     |F1            |F2            |F3         |F4            |F5       |F6         |F7         |F8             |F9             |F10        |
+|None    |None          |None          |None       |END           |None     |HOME       |None       |None           |None           |HOME       |
+|None    |None          |VI_NXTW       |VI_NXTW    |VI_REPL.L(3)  |None     |VI_YANK    |VI_UNDO    |VI_INS.L(1)    |VI_OPEN.L(1)   |VI_PAST    |
+|None    |VI_APND.L(1)  |VI_SUBS.L(1)  |VI_DEL     |VI_FIND       |None     |LEFT       |DOWN       |UP             |RIGHT          |None       |
+|None    |None          |DEL           |None       |VI_VIS.L(2)   |VI_PRVW  |F3         |None       |None           |TAB            |VI_FIND    |
+| **Edit Mode**         |||||||||||
+|TO(0)   |F1            |F2            |F3         |F4            |F5       |F6         |F7         |F8             |F9             |F10        |
+|None    |N1            |N2            |N3         |N4            |N5       |N6         |N7         |N8             |N9             |N0         |
+|None    |Q             |W             |E          |R             |T        |Y          |U          |I              |O              |P          |
+|None    |A             |S             |D          |F             |G        |H          |J          |K              |L              |SCLN       |
+|None    |Z             |X             |C          |V             |B        |N          |M          |COMM           |DOT            |SLSH       |
+| **Visual Mode**       |||||||||||
+|VI_V_ESC.L(0)     |F1  |F2            |F3         |F4            |F5       |F6         |F7         |F8             |F9             |F10        |
+|None    |None          |None          |None       |None          |None     |None       |None       |None           |None           |HOME       |
+|None    |None          |VI_NXTW       |VI_NXTW    |None          |None     |VI_YANK    |VI_UNDO    |None           |None           |VI_PAST    |
+|None    |None          |None          |VI_DEL     |None          |None     |LEFT       |DOWN       |UP             |RIGHT          |None       |
+|None    |None          |DEL           |None       |None          |VI_PRVW  |None       |M          |None           |None           |None       |
+| **Replace Mode**      |||||||||||
+|VI_R_ESC.L(0)     |F1  |F2            |F3         |F4            |F5       |F6         |F7         |F8             |F9             |F10        |
+|None    |None          |None          |None       |None          |None     |None       |None       |None           |None           |HOME       |
+|None    |None          |VI_NXTW       |VI_NXTW    |None          |None     |VI_YANK    |VI_UNDO    |None           |None           |VI_PAST    |
+|None    |None          |None          |VI_DEL     |None          |None     |LEFT       |DOWN       |UP             |RIGHT          |None       |
+|None    |None          |DEL           |None       |None          |VI_PRVW  |None       |M          |None           |None           |None       |
