@@ -1,8 +1,5 @@
 var searchData=
 [
-  ['central_0',['1.1 Central',['../p_1.html#p_1_1',1,'']]],
-  ['circuit_20python_1',['2.1 Install Circuit Python',['../p_2.html#p_2_1',1,'']]],
-  ['circuitpy_20drive_2',['2.4.1 Synchronize Github repository with the CIRCUITPY drive',['../p_2.html#p_2_4_1',1,'']]],
-  ['code_20rules_3',['Code rules',['../p_6.html#autotoc_md2',1,'']]],
-  ['concepts_4',['1 Main Concepts',['../p_1.html',1,'']]]
+  ['adafruit_20bundles_0',['2.3 Install Adafruit Bundles',['../p_2.html#p_2_3',1,'']]],
+  ['api_1',['4 MKX API',['../p_4.html',1,'']]]
 ];

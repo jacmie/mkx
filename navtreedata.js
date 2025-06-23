@@ -42,7 +42,14 @@ var NAVTREE =
     [ "3 Get Started", "p_3.html", null ],
     [ "4 MKX API", "p_4.html", null ],
     [ "5 Keys", "p_5.html", [
-      [ "Dev", "p_5.html#p_5_1", null ]
+      [ "5.1 Standard Keys", "p_5.html#p_5_1", null ],
+      [ "5.2 Modifiers Keys", "p_5.html#p_5_2", null ],
+      [ "5.3 Layers Keys", "p_5.html#p_5_3", null ],
+      [ "5.4 Sequence Keys", "p_5.html#p_5_4", null ],
+      [ "5.5 HoldTap Keys", "p_5.html#p_5_5", null ],
+      [ "5.6 TapDance Keys", "p_5.html#p_5_6", null ],
+      [ "5.7 Sticky Keys", "p_5.html#p_5_7", null ],
+      [ "5.8 VIM Keys", "p_5.html#p_5_8", null ]
     ] ],
     [ "6 Development", "p_6.html", [
       [ "Dev", "p_6.html#p_6_1", null ],
