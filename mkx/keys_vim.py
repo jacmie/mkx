@@ -68,37 +68,37 @@ class VIM_VIS(KeysAbstract):
 
 # fmt: off
 
-VI_HI_WO = VI_HIGLIGHT_WORD = VIM([
+VI_HW = VI_HI_WO = VI_HIGLIGHT_WORD = VIM([
     M_LCTL(LEFT),
     M_LCTL(M_LSFT(RIGHT))
 ], "HIGL_W")
 
-VI_HI_LI = VI_HIGLIGHT_LINE = VIM([
+VI_HL = VI_HI_LI = VI_HIGLIGHT_LINE = VIM([
     HOME,
     M_LSFT(END)
 ], "HIGL_L")
 
-VI_Y_WO = VI_YANK_WORD = SEQ([
+VI_YE = VI_Y_WO = VI_YANK_WORD = SEQ([
     M_LCTL(LEFT),
     M_LCTL(M_LSFT(RIGHT)),
     M_LCTL(C),
     RIGHT
 ])
 
-VI_Y_LI = VI_YANK_LINE = SEQ([
+VI_YL = VI_Y_LI = VI_YANK_LINE = SEQ([
     HOME,
     M_LSFT(END),
     M_LCTL(C),
     RIGHT
 ])
 
-VI_CUT_WO = VI_CUT_WORD = SEQ([
+VI_CW = VI_CUT_WO = VI_CUT_WORD = SEQ([
     VI_HI_WO,
     M_LCTL(X),
     RIGHT
 ])
 
-VI_CUT_LI = VI_CUT_LINE = SEQ([
+VI_CL = VI_CUT_LI = VI_CUT_LINE = SEQ([
     VI_HI_LI,
     M_LCTL(X)#,
     # RIGHT
@@ -172,12 +172,12 @@ VI_V_ESC = VIM_VIS(False, "VI_V_ESC")
 __all__ = [
     "VIM", "VIM_L", "VIM_TD", "VIM_VIS",
 
-    "VI_HI_WO", "VI_HIGLIGHT_WORD",
-    "VI_HI_LI", "VI_HIGLIGHT_LINE",
-    "VI_Y_WO", "VI_YANK_WORD",
-    "VI_Y_LI", "VI_YANK_LINE",
-    "VI_CUT_WO", "VI_CUT_WORD",
-    "VI_CUT_LI", "VI_CUT_LINE",
+    "VI_HW", "VI_HI_WO", "VI_HIGLIGHT_WORD",
+    "VI_HL", "VI_HI_LI", "VI_HIGLIGHT_LINE",
+    "VI_YW", "VI_Y_WO", "VI_YANK_WORD",
+    "VI_YL", "VI_Y_LI", "VI_YANK_LINE",
+    "VI_CW", "VI_CUT_WO", "VI_CUT_WORD",
+    "VI_CL", "VI_CUT_LI", "VI_CUT_LINE",
 
 
     "VI_MINS", "VI_PRVL", "VI_PREV_LINE",
