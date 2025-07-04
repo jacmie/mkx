@@ -9,6 +9,7 @@ from mkx.interphace_abstract import InterfahceAbstract
 from mkx.communication_message import sync_messages, debounce
 
 from mkx.timed_keys import TimedKeys, TimedKeysManager
+from mkx.layer_status_led_abstract import LayerStatusLedAbstract
 from mkx.manager_layers import LayersManager
 
 from mkx.keys_sticky import SK, StickyKeyManager
@@ -47,6 +48,9 @@ class MKX_Central:
         self.timed_keys_manager = TimedKeysManager()
         self.sticky_key_manager = StickyKeyManager()
         self.layers_manager = LayersManager(default_layer=0)
+
+    def add_layer_status_led(self, status_led: LayerStatusLedAbstract):
+        self.layers_manager.add_layer_status_led(status_led)
 
     def add_interface(self, interface: InterfahceAbstract):
         self.interfaces.append(interface)
