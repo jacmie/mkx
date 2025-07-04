@@ -131,6 +131,19 @@ Stavdard keys derived from the **adafruit_hid.keycode** library.
 
 @section p_5_2 5.2 Modifiers Keys
 
+Keys pressed with modifier key active.
+
+|Key          |Description                           |
+|-------------|--------------------------------------|
+|LCTL(kc)     |Hold Left Control and press kc        |
+|LSFT(kc)     |Hold Left Shift and press kc          |
+|LALT(kc)     |Hold Left Alt and press kc            |
+|LGUI(kc)     |Hold Left GUI and press kc            |
+|RCTL(kc)     |Hold Right Control and press kc       |
+|RSFT(kc)     |Hold Right Shift and press kc         |
+|RALT(kc)     |Hold Right Alt and press kc           |
+|RGUI(kc)     |Hold Right GUI and press kc           |
+
 @section p_5_3 5.3 Layers Keys
 
 @section p_5_4 5.4 Sequence Keys
