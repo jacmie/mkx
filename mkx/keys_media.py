@@ -1,101 +1,150 @@
-from adafruit_hid.keyboard import Keyboard
-from adafruit_hid.keycode import Keycode
+from adafruit_hid.consumer_control import ConsumerControl
+from adafruit_hid.consumer_control_code import ConsumerControlCode
 
 from mkx.keys_abstract import KeysAbstract
 
 
 class KeysMedia(KeysAbstract):
     """
-    A Media key that sends a HID keycode using Adafruit HID library.
+    A media key that sends a Consumer Control code using Adafruit HID library.
     """
 
-    def __init__(self, key_code: Keycode, key_name: str):
+    def __init__(self, media_code: ConsumerControlCode, key_name: str):
         super().__init__()
-        self.key_code = key_code
+        self.media_code = media_code
         self.key_name = key_name
+        self._cc = None  # Lazy init
 
-    def on_press(self, _, keyboard: Keyboard, __):
-        keyboard.press(self.key_code)
+    def _ensure_cc(self):
+        if self._cc is None:
+            import usb_hid
 
-    def on_release(self, _, keyboard: Keyboard, __):
-        keyboard.release(self.key_code)
+            self._cc = ConsumerControl(usb_hid.devices)
+
+    def on_press(self, _, __, ___):
+        self._ensure_cc()
+        self._cc.send(self.media_code)
+
+    def on_release(self, _, __, ___):
+        pass
 
 
 # Media key definitions
 
-MUTE = KeysMedia(0xE2, "MUTE")
+PLAY_PAUSE = KeysMedia(ConsumerControlCode.PLAY_PAUSE, "PLAY/PAUSE")
+STOP = KeysMedia(ConsumerControlCode.STOP, "STOP")
+
+MUTE = KeysMedia(ConsumerControlCode.MUTE, "MUTE")
 """``MUTE``"""
-AUDIO_MUTE = KeysMedia(0xE2, "AUDIO_MUTE")
+AUDIO_MUTE = KeysMedia(ConsumerControlCode.MUTE, "AUDIO_MUTE")
 """``AUDIO_MUTE``"""
 
-VOLU = KeysMedia(0xE9, "VOLU")
+VOLU = KeysMedia(ConsumerControlCode.VOLUME_INCREMENT, "VOLU")
 """``VOLU``"""
-AUDIO_VOL_UP = KeysMedia(0xE9, "AUDIO_VOL_UP")
+AUDIO_VOL_UP = KeysMedia(ConsumerControlCode.VOLUME_INCREMENT, "AUDIO_VOL_UP")
 """``AUDIO_VOL_UP``"""
+VOLUME_INCREMENT = KeysMedia(ConsumerControlCode.VOLUME_INCREMENT, "VOLUME_INCREMENT")
+"""``VOLUME_INCREMENT``"""
 
-VOLD = KeysMedia(0xEA, "VOLD")
+VOLD = KeysMedia(ConsumerControlCode.VOLUME_DECREMENT, "VOLD")
 """``VOLD``"""
-AUDIO_VOL_DOWN = KeysMedia(0xEA, "AUDIO_VOL_DOWN")
+AUDIO_VOL_DOWN = KeysMedia(ConsumerControlCode.VOLUME_DECREMENT, "AUDIO_VOL_DOWN")
 """``AUDIO_VOL_DOWN``"""
+VOLUME_DECREMENT = KeysMedia(ConsumerControlCode.VOLUME_DECREMENT, "VOLUME_DECREMENT")
+"""``VOLUME_DECREMENT``"""
 
-BRIU = KeysMedia(0x6F, "BRIU")
+BRIU = KeysMedia(ConsumerControlCode.BRIGHTNESS_INCREMENT, "BRIU")
 """``BRIU``"""
-BRIGHTNESS_UP = KeysMedia(0x6F, "BRIGHTNESS_UP")
+BRIGHTNESS_UP = KeysMedia(ConsumerControlCode.BRIGHTNESS_INCREMENT, "BRIGHTNESS_UP")
 """``BRIGHTNESS_UP``"""
+BRIGHTNESS_INCREMENT = KeysMedia(
+    ConsumerControlCode.BRIGHTNESS_INCREMENT, "BRIGHTNESS_INCREMENT"
+)
+"""``BRIGHTNESS_INCREMENT``"""
 
-BRID = KeysMedia(0x70, "BRID")
+BRID = KeysMedia(ConsumerControlCode.BRIGHTNESS_DECREMENT, "BRID")
 """``BRID``"""
-BRIGHTNESS_DOWN = KeysMedia(0x70, "BRIGHTNESS_DOWN")
+BRIGHTNESS_DOWN = KeysMedia(ConsumerControlCode.BRIGHTNESS_DECREMENT, "BRIGHTNESS_DOWN")
 """``BRIGHTNESS_DOWN``"""
+BRIGHTNESS_DECREMENT = KeysMedia(
+    ConsumerControlCode.BRIGHTNESS_DECREMENT, "BRIGHTNESS_DECREMENT"
+)
+"""``BRIGHTNESS_DECREMENT``"""
 
-MNXT = KeysMedia(0xB5, "MNXT")
+MNXT = KeysMedia(ConsumerControlCode.SCAN_NEXT_TRACK, "MNXT")
 """``MNXT``"""
-MEDIA_NEXT_TRACK = KeysMedia(0xB5, "MEDIA_NEXT_TRACK")
+MEDIA_NEXT_TRACK = KeysMedia(ConsumerControlCode.SCAN_NEXT_TRACK, "MEDIA_NEXT_TRACK")
 """``MEDIA_NEXT_TRACK``"""
+SCAN_NEXT_TRACK = KeysMedia(ConsumerControlCode.SCAN_NEXT_TRACK, "SCAN_NEXT_TRACK")
+"""``SCAN_NEXT_TRACK``"""
 
-MPRV = KeysMedia(0xB6, "MPRV")
+MPRV = KeysMedia(ConsumerControlCode.SCAN_PREVIOUS_TRACK, "MPRV")
 """``MPRV``"""
-MEDIA_PREV_TRACK = KeysMedia(0xB6, "MEDIA_PREV_TRACK")
+MEDIA_PREV_TRACK = KeysMedia(
+    ConsumerControlCode.SCAN_PREVIOUS_TRACK, "MEDIA_PREV_TRACK"
+)
 """``MEDIA_PREV_TRACK``"""
+SCAN_PREVIOUS_TRACK = KeysMedia(
+    ConsumerControlCode.SCAN_PREVIOUS_TRACK, "SCAN_PREVIOUS_TRACK"
+)
+"""``SCAN_PREVIOUS_TRACK``"""
 
-MSTP = KeysMedia(0xB7, "MSTP")
+MSTP = KeysMedia(ConsumerControlCode.STOP, "MSTP")
 """``MSTP``"""
-MEDIA_STOP = KeysMedia(0xB7, "MEDIA_STOP")
+MEDIA_STOP = KeysMedia(ConsumerControlCode.STOP, "MEDIA_STOP")
 """``MEDIA_STOP``"""
+STOP = KeysMedia(ConsumerControlCode.STOP, "STOP")
+"""``STOP``"""
 
-MPLY = KeysMedia(0xCD, "MPLY")
+MPLY = KeysMedia(ConsumerControlCode.PLAY_PAUSE, "MPLY")
 """``MPLY``"""
-MEDIA_PLAY_PAUSE = KeysMedia(0xCD, "MEDIA_PLAY_PAUSE")
+MEDIA_PLAY_PAUSE = KeysMedia(ConsumerControlCode.PLAY_PAUSE, "MEDIA_PLAY_PAUSE")
 """``MEDIA_PLAY_PAUSE``"""
+PLAY_PAUSE = KeysMedia(ConsumerControlCode.PLAY_PAUSE, "PLAY_PAUSE")
+"""``PLAY_PAUSE``"""
 
-EJCT = KeysMedia(0xB8, "EJCT")
+EJCT = KeysMedia(ConsumerControlCode.EJECT, "EJCT")
 """``EJCT``"""
-MEDIA_EJECT = KeysMedia(0xB8, "MEDIA_EJECT")
+MEDIA_EJECT = KeysMedia(ConsumerControlCode.EJECT, "MEDIA_EJECT")
 """``MEDIA_EJECT``"""
+EJECT = KeysMedia(ConsumerControlCode.EJECT, "EJECT")
+"""``EJECT``"""
 
-MFFD = KeysMedia(0xB3, "MFFD")
+MFFD = KeysMedia(ConsumerControlCode.FAST_FORWARD, "MFFD")
 """``MFFD``"""
-MEDIA_FAST_FORWARD = KeysMedia(0xB3, "MEDIA_FAST_FORWARD")
+MEDIA_FAST_FORWARD = KeysMedia(ConsumerControlCode.FAST_FORWARD, "MEDIA_FAST_FORWARD")
 """``MEDIA_FAST_FORWARD``"""
+FAST_FORWARD = KeysMedia(ConsumerControlCode.FAST_FORWARD, "FAST_FORWARD")
+"""``FAST_FORWARD``"""
 
-MRWD = KeysMedia(0xB4, "MRWD")
+MRWD = KeysMedia(ConsumerControlCode.REWIND, "MRWD")
 """``MRWD``"""
-MEDIA_REWIND = KeysMedia(0xB4, "MEDIA_REWIND")
+MEDIA_REWIND = KeysMedia(ConsumerControlCode.REWIND, "MEDIA_REWIND")
 """``MEDIA_REWIND``"""
+REWIND = KeysMedia(ConsumerControlCode.REWIND, "REWIND")
+"""``REWIND``"""
+
+MREC = KeysMedia(ConsumerControlCode.RECORD, "MREC")
+"""``MRWD``"""
+MEDIA_RECORD = KeysMedia(ConsumerControlCode.RECORD, "MEDIA_RECORD")
+"""``MEDIA_RECORD``"""
+RECORD = KeysMedia(ConsumerControlCode.RECORD, "RECORD")
+"""``RECORD``"""
 
 # fmt: off
 __all__ = [
     "AUDIO_MUTE", "MUTE",
-    "AUDIO_VOL_UP", "VOLU",
-    "AUDIO_VOL_DOWN", "VOLD",
-    "BRIGHTNESS_UP", "BRIU",
-    "BRIGHTNESS_DOWN", "BRID",
-    "MEDIA_NEXT_TRACK", "MNXT",
-    "MEDIA_PREV_TRACK", "MPRV",
-    "MEDIA_STOP", "MSTP",
-    "MEDIA_PLAY_PAUSE", "MPLY",
-    "MEDIA_EJECT", "EJCT",
-    "MEDIA_FAST_FORWARD", "MFFD",
-    "MEDIA_REWIND", "MRWD",
+    "AUDIO_VOL_UP", "VOLU", "VOLUME_INCREMENT",
+    "AUDIO_VOL_DOWN", "VOLD", "VOLUME_DECREMENT",
+    "BRIGHTNESS_UP", "BRIU", "BRIGHTNESS_INCREMENT",
+    "BRIGHTNESS_DOWN", "BRID", "BRIGHTNESS_DECREMENT",
+    "MEDIA_NEXT_TRACK", "MNXT", "SCAN_NEXT_TRACK",
+    "MEDIA_PREV_TRACK", "MPRV", "SCAN_PREVIOUS_TRACK",
+    "MEDIA_STOP", "MSTP", "STOP",
+    "MEDIA_PLAY_PAUSE", "MPLY", "PLAY_PAUSE",
+    "MEDIA_EJECT", "EJCT", "EJECT",
+    "MEDIA_FAST_FORWARD", "MFFD", "FAST_FORWARD",
+    "MEDIA_REWIND", "MRWD", "REWIND",
+    "MEDIA_RECORD", "MREC", "RECORD",
 ]
 # fmt: on
