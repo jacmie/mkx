@@ -13,10 +13,13 @@ class HT(KeysAbstract, TimedKeys):
         self._tap_key = tap_key
         self._hold_key = hold_key
         self._timeout = timeout
-        self._hold = False
+
+        self._held_past_timeout = False
+        self._hold_sent = False
 
     def on_press(self, _, __, timestamp: int):
-        self._hold = False
+        self._held_past_timeout = False
+        self._hold_sent = False
         self.start_timer(timestamp)
 
     def on_release(
@@ -28,17 +31,18 @@ class HT(KeysAbstract, TimedKeys):
 
         duration = timestamp - self._pressed_time
 
-        if self._hold:
-            # Hold - release the hold key
-            self._hold_key.on_release(layer_manager, keyboard, timestamp)
-        elif duration < self._timeout:
-            # Tap - do everything on release
-            self._tap_key.on_press(layer_manager, keyboard, timestamp)
-            self._tap_key.on_release(layer_manager, keyboard, timestamp)
+        if self._held_past_timeout:
+            if self._hold_sent:
+                self._hold_key.on_release(layer_manager, keyboard, timestamp)
+            else:
+                print("HT: hold timeout passed but hold was not sent!")
         else:
-            # Late release after timeout - fallback to hold
-            self._hold_key.on_press(layer_manager, keyboard, timestamp)
-            self._hold_key.on_release(layer_manager, keyboard, timestamp)
+            duration = timestamp - self._pressed_time
+            if duration < self._timeout:
+                self._tap_key.on_press(layer_manager, keyboard, timestamp)
+                self._tap_key.on_release(layer_manager, keyboard, timestamp)
+            else:
+                print("HT: tap too late, ignoring!")
 
         self.stop_timer()
 
@@ -48,9 +52,12 @@ class HT(KeysAbstract, TimedKeys):
         if self._pressed_time is None:
             return
 
-        if not self._hold and (timestamp - self._pressed_time >= self._timeout):
+        if not self._held_past_timeout and (
+            timestamp - self._pressed_time >= self._timeout
+        ):
             self._hold_key.on_press(layer_manager, keyboard, timestamp)
-            self._hold = True
+            self._held_past_timeout = True
+            self._hold_sent = True
 
 
 # HT_ESC_CTRL = HT(Keycode.ESCAPE, Keycode.LEFT_CONTROL)
