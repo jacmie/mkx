@@ -4,7 +4,7 @@ from mkx.layer_status_led_abstract import LayerStatusLedAbstract
 
 
 class LayerStatusLedRgbNeoPixel(LayerStatusLedAbstract):
-    def __init__(self, status_led_pin, brightness=0.3, auto_write=True):
+    def __init__(self, status_led_pin, brightness=0.1, auto_write=True):
         self.pixel = neopixel.NeoPixel(
             status_led_pin, 1, brightness=brightness, auto_write=auto_write
         )
