@@ -100,8 +100,7 @@ VI_CW = VI_CUT_WO = VI_CUT_WORD = SEQ([
 
 VI_CL = VI_CUT_LI = VI_CUT_LINE = SEQ([
     VI_HI_LI,
-    M_LCTL(X)#,
-    # RIGHT
+    M_LCTL(X)
 ])
 
 ####
@@ -110,6 +109,34 @@ VI_MINS = VI_PRVL = VI_PREV_LINE = VIM([
     UP,
     HOME,
 ], "VI_PRVL")
+
+VI_MVLU = VI_MV_LINE_UP = VIM([
+    END,
+    M_LSFT(HOME),
+    M_LSFT(HOME),
+    M_LCTL(X),
+    BACKSPACE,
+    HOME,
+    HOME,
+    ENTER,
+    UP,
+    M_LCTL(V),
+], "VI_MVLU")
+
+VI_MVLD = VI_MV_LINE_DOWN = VIM([
+    END,
+    M_LSFT(HOME),
+    M_LSFT(HOME),
+    M_LCTL(X),
+    BACKSPACE,
+    DOWN,
+    DOWN,
+    HOME,
+    HOME,
+    ENTER,
+    UP,
+    M_LCTL(V),
+], "VI_MVLD")
 
 VI_PLUS = VI_NXTL = VI_NEXT_LINE = VIM([
     DOWN,
@@ -182,6 +209,8 @@ __all__ = [
 
     "VI_MINS", "VI_PRVL", "VI_PREV_LINE",
     "VI_PLUS", "VI_NXTL", "VI_NEXT_LINE",
+    "VI_MVLU", "VI_MV_LINE_UP",
+    "VI_MVLD", "VI_MV_LINE_DOWN",
 
     "VI_W", "VI_NXTW", "VI_NEXT_WORD",
     "VI_E", "VI_PRVW", "VI_PREV_WORD",
