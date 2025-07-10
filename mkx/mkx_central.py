@@ -18,11 +18,6 @@ from mkx.keys_layers import KeysLayer, LT, TT
 from mkx.check import check
 
 FRAME_INTERVAL_MS = 5
-SYNC_INTERVAL_MS = 5000
-PERIPHERAL_TIMEOUT_MS = 1000
-DEBOUNCE_MS = 5
-
-last_frame_time = time.monotonic_ns() // 1_000_000
 
 
 class MKX_Central:
@@ -32,8 +27,6 @@ class MKX_Central:
         self.row_size = 0
         self.keymap = keymap if keymap is not None else []
         self.coord_mapping = coord_mapping
-        self.hid_mode = None
-        self.hids = []
         self.interfaces = []  # List of interface to peripheries
         self.central_periphery = None
 
@@ -71,15 +64,9 @@ class MKX_Central:
         else:
             print(f"[{device_id}] not connected, can't send")
 
-    def broadcast(self, msg_type: str, data: dict):
-        for adapter in self.adapters.values():
-            if adapter.is_connected():
-                adapter.send(msg_type, data)
-
     def central_periphery_send(self):
         if self.central_periphery:
             signal = self.central_periphery.get_key_events()
-            # print("dd", signal)
             for col, row, pressed in signal:
                 self.central_periphery.send(
                     "key_event",
@@ -87,7 +74,6 @@ class MKX_Central:
                         [("col", col), ("row", row), ("pressed", pressed)],
                     ),
                     verbose=False,
-                    # "key_event", {"row": 1, "col": 2, "pressed": True}
                 )
 
     def process_key_event(self, event_json):
@@ -201,7 +187,6 @@ class MKX_Central:
                         all_messages.extend(data)
 
                 time.sleep(0.001)  # Keep CPU usage low
-                # time.sleep(1)  # Keep CPU usage low
 
             sync_msg = sync_messages(
                 all_messages, time.monotonic_ns() // 1_000_000, verbose=True
