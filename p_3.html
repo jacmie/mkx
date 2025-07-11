@@ -106,28 +106,78 @@ $(document).ready(function(){initNavTree('p_3.html',''); initResizable(); });
   <div class="headertitle"><div class="title">3 Get Started</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><div class="fragment"><div class="line"><span class="keyword">import</span> board</div>
+<div class="toc"><h3>Table of Contents</h3>
+<ul><li class="level1"><a href="#p_3_1">3.1 Hardware Keypass</a></li>
+<li class="level1"><a href="#p_3_2">3.2 Booster Keyboard</a></li>
+<li class="level1"><a href="#p_3_3">3.3 Square Keyboard</a></li>
+</ul>
+</div>
+<div class="textblock"><h1><a class="anchor" id="p_3_1"></a>
+3.1 Hardware Keypass</h1>
+<div style="margin-left: 100px;"> <img src="../images/KeyPass_keyboard.jpg" alt="" width="800" class="inline"/> </div><div class="fragment"><div class="line"><span class="comment"># code.py</span></div>
+<div class="line"> </div>
+<div class="line"><span class="keyword">import</span> board</div>
 <div class="line"> </div>
 <div class="line"><span class="keyword">from</span> mkx.mkx_central <span class="keyword">import</span> MKX_Central</div>
-<div class="line"><span class="keyword">from</span> mkx.hid_usb <span class="keyword">import</span> HID_USB</div>
 <div class="line"> </div>
-<div class="line"><span class="comment"># from mkx.hid_ble import HID_BLE</span></div>
 <div class="line"><span class="keyword">from</span> mkx.keys_standard <span class="keyword">import</span> *</div>
-<div class="line"><span class="keyword">from</span> mkx.keys_holdtap <span class="keyword">import</span> HT</div>
-<div class="line"><span class="keyword">from</span> mkx.keys_sticky <span class="keyword">import</span> SK</div>
-<div class="line"><span class="keyword">from</span> mkx.keys_tapdance <span class="keyword">import</span> TD</div>
-<div class="line"><span class="keyword">from</span> mkx.keys_layers <span class="keyword">import</span> DF, MO, LT, TG, TO, TT</div>
+<div class="line"><span class="keyword">from</span> mkx.keys_modifiers <span class="keyword">import</span> M_LSFT</div>
+<div class="line"><span class="keyword">from</span> mkx.keys_sequence <span class="keyword">import</span> SEQ</div>
+<div class="line"> </div>
+<div class="line"><span class="keyword">from</span> mkx.periphery_central <span class="keyword">import</span> PeripheryCentral</div>
+<div class="line"><span class="keyword">from</span> mkx.interphace_central <span class="keyword">import</span> InterphaceCentral</div>
+<div class="line"> </div>
+<div class="line">keyboard = MKX_Central()</div>
+<div class="line"> </div>
+<div class="line">col_pins = (board.D5,)</div>
+<div class="line">row_pins = (board.D6,)</div>
+<div class="line">hardware_keypass_peryphery = PeripheryCentral(<span class="stringliteral">&quot;hardware_keypass&quot;</span>, col_pins, row_pins)</div>
+<div class="line">keyboard.central_periphery = hardware_keypass_peryphery</div>
+<div class="line"> </div>
+<div class="line">interphace_central = InterphaceCentral(hardware_keypass_peryphery, 0, 0, 0, 0)</div>
+<div class="line">keyboard.add_interface(interphace_central)</div>
+<div class="line"> </div>
+<div class="line"><span class="comment"># fmt: off</span></div>
+<div class="line"> </div>
+<div class="line">HK = SEQ([M_LSFT(H), E, L, L, O, SPACE, </div>
+<div class="line">          M_LSFT(W), O, R, L, D, SPACE, </div>
+<div class="line">          M_LSFT(M), M_LSFT(K), M_LSFT(X), M_LSFT(N1), ENTER])</div>
+<div class="line"> </div>
+<div class="line">keymap = [</div>
+<div class="line">    [</div>
+<div class="line">        HK,</div>
+<div class="line">    ],</div>
+<div class="line">]</div>
+<div class="line"> </div>
+<div class="line"><span class="comment"># fmt: on</span></div>
+<div class="line"> </div>
+<div class="line">keyboard.add_keymap(keymap, 1, 1)</div>
+<div class="line">keyboard.run_forever()</div>
+</div><!-- fragment --><h1><a class="anchor" id="p_3_2"></a>
+3.2 Booster Keyboard</h1>
+<div style="margin-left: 100px;"> <img src="../images/BOOSTER_keyboard.jpg" alt="" width="800" class="inline"/> </div><p><b>Left Keyboard Part (Central)</b> </p><div class="fragment"><div class="line"><span class="comment"># code.py</span></div>
+<div class="line"> </div>
+<div class="line"><span class="keyword">import</span> board</div>
+<div class="line"> </div>
+<div class="line"><span class="keyword">from</span> mkx.mkx_central <span class="keyword">import</span> MKX_Central</div>
 <div class="line"> </div>
 <div class="line"><span class="keyword">from</span> mkx.periphery_central <span class="keyword">import</span> PeripheryCentral</div>
 <div class="line"><span class="keyword">from</span> mkx.interphace_central <span class="keyword">import</span> InterphaceCentral</div>
 <div class="line"><span class="keyword">from</span> mkx.interphace_uart <span class="keyword">import</span> InterphaceUART</div>
-<div class="line"><span class="keyword">from</span> mkx.switch_hid_mode <span class="keyword">import</span> SwitchHIDmode</div>
+<div class="line"><span class="keyword">from</span> mkx.layer_status_led_rgb_neopixel <span class="keyword">import</span> LayerStatusLedRgbNeoPixel</div>
+<div class="line"> </div>
+<div class="line"><span class="keyword">from</span> mkx.keys_standard <span class="keyword">import</span> *</div>
+<div class="line"><span class="keyword">from</span> mkx.keys_modifiers <span class="keyword">import</span> M_LGUI</div>
+<div class="line"><span class="keyword">from</span> mkx.keys_holdtap <span class="keyword">import</span> HT</div>
+<div class="line"><span class="keyword">from</span> mkx.keys_layers <span class="keyword">import</span> MO, TO</div>
+<div class="line"><span class="keyword">from</span> mkx.keys_media <span class="keyword">import</span> VOLU, VOLD</div>
 <div class="line"> </div>
 <div class="line">keyboard = MKX_Central()</div>
 <div class="line"> </div>
 <div class="line">col_pins = (board.GP9, board.GP7, board.GP5, board.GP4, board.GP3, board.GP2)</div>
 <div class="line">row_pins = (board.GP10, board.GP11, board.GP13, board.GP15, board.GP17)</div>
-<div class="line">central_peryphery = PeripheryCentral(<span class="stringliteral">&quot;central&quot;</span>, col_pins, row_pins)</div>
+<div class="line"> </div>
+<div class="line">central_peryphery = PeripheryCentral(<span class="stringliteral">&quot;booster_l&quot;</span>, col_pins, row_pins)</div>
 <div class="line">keyboard.central_periphery = central_peryphery</div>
 <div class="line"> </div>
 <div class="line">interphace_central = InterphaceCentral(central_peryphery, 0, 0, 5, 4)</div>
@@ -136,51 +186,192 @@ $(document).ready(function(){initNavTree('p_3.html',''); initResizable(); });
 <div class="line">interphace_right = InterphaceUART(<span class="stringliteral">&quot;booster_r&quot;</span>, <span class="keywordtype">None</span>, board.GP1, 11, 0, 6, 4)</div>
 <div class="line">keyboard.add_interface(interphace_right)</div>
 <div class="line"> </div>
+<div class="line">status_led = LayerStatusLedRgbNeoPixel(board.GP23, brightness=0.015)</div>
+<div class="line">status_led.add_layer(0, (0, 255, 0))  <span class="comment"># Green</span></div>
+<div class="line">status_led.add_layer(1, (0, 0, 255))  <span class="comment"># Blue</span></div>
+<div class="line">keyboard.add_layer_status_led(status_led)</div>
+<div class="line"> </div>
+<div class="line"><span class="comment"># Shortcuts</span></div>
+<div class="line">DESKTOP = M_LGUI(D)</div>
+<div class="line">LOCK = M_LGUI(L)</div>
+<div class="line"> </div>
+<div class="line"><span class="comment"># Hold Tap</span></div>
+<div class="line">LAY1 = HT(TO(1), MO(1))</div>
+<div class="line">LAY0 = HT(TO(0), MO(0))</div>
+<div class="line"> </div>
+<div class="line">LCTL_TAB = HT(TAB, LCTRL)</div>
 <div class="line">LSFT_SPC = HT(SPC, LSFT)</div>
-<div class="line"> </div>
-<div class="line"><span class="comment"># Normal sticky</span></div>
-<div class="line">SK_C = SK(LSFT)</div>
-<div class="line"> </div>
-<div class="line"><span class="comment"># Defer release sticky (hold until all keys released)</span></div>
-<div class="line">SK_S = SK(N2, defer_release=<span class="keyword">True</span>)</div>
-<div class="line"> </div>
-<div class="line"><span class="comment"># Sticky that doesn’t cancel on repeat tap</span></div>
-<div class="line">SK_NO = SK(N3, retap_cancel=<span class="keyword">False</span>)</div>
-<div class="line"> </div>
-<div class="line">TD_D = TD(D, DEL)</div>
-<div class="line"> </div>
-<div class="line"> </div>
-<div class="line">LT_NAV_ESC = DF(0)</div>
+<div class="line">RALT_BSPC = HT(BSPC, RALT)</div>
+<div class="line">LALT_BSPC = HT(BSPC, LALT)</div>
 <div class="line"> </div>
 <div class="line"><span class="comment"># fmt: off</span></div>
+<div class="line"> </div>
 <div class="line">keymap = [</div>
 <div class="line">    [</div>
-<div class="line">        SK_C,  N1,      N2,      N3,      N4,      N5,      N6,      N7,      N8,       N9,      N0,      A,</div>
-<div class="line">        SK_S,  Q,       TD_D,    R,       W,       DF(1),   J,       F,       U,        P,       A,       A,</div>
-<div class="line">        SK_NO, A,       S,       H,       T,       MO(1, SHIFT),   Y,       N,       E,        O,       I,       A,</div>
-<div class="line">        LCTL,  Z,       X,       C,       TT(1),   TG(1),       K,       M,       A,        A,       A,       A,</div>
-<div class="line">        <span class="keywordtype">None</span>,  <span class="keywordtype">None</span>,    <span class="keywordtype">None</span>,    <span class="keywordtype">None</span>,    LSFT_SPC,LT(1, B),       ENTER,   A,       <span class="keywordtype">None</span>,     <span class="keywordtype">None</span>,    <span class="keywordtype">None</span>,    <span class="keywordtype">None</span>,</div>
+<div class="line">        GRV,        N1,         N2,         N3,         N4,         N5,         N6,         N7,         N8,         N9,         N0,         BSLS,</div>
+<div class="line">        EQL,        Q,          D,          R,          W,          L,          J,          F,          U,          P,          SCLN,       LBRC,</div>
+<div class="line">        MINS,       A,          S,          H,          T,          G,          Y,          N,          E,          O,          I,          QUOT,</div>
+<div class="line">        LCTL_TAB,   Z,          X,          C,          V,          B,          K,          M,          COMM,       DOT,        SLSH,       RBRC,</div>
+<div class="line">        <span class="keywordtype">None</span>,       <span class="keywordtype">None</span>,       <span class="keywordtype">None</span>,       <span class="keywordtype">None</span>,       LSFT_SPC,   ENTER,      LAY1,       RALT_BSPC,  <span class="keywordtype">None</span>,       <span class="keywordtype">None</span>,       <span class="keywordtype">None</span>,       <span class="keywordtype">None</span>,</div>
 <div class="line">    ],</div>
 <div class="line">    [</div>
-<div class="line">        A,     N1,      N2,      N3,      N4,      N5,      N6,      N7,      N8,       N9,      N0,      A,</div>
-<div class="line">        A,     N1,      D,       R,       W,       DF(0),   J,       F,       U,        P,       A,       A,</div>
-<div class="line">        A,     N2,      S,       H,       TO(0),   G,       Y,       N,       E,        O,       I,       A,</div>
-<div class="line">        A,     N3,      X,       C,       V,       TG(1),   K,       M,       A,        A,       A,       A,</div>
-<div class="line">        <span class="keywordtype">None</span>,  <span class="keywordtype">None</span>,    <span class="keywordtype">None</span>,    <span class="keywordtype">None</span>,    SPACE ,  A,       ENTER,   A,       <span class="keywordtype">None</span>,     <span class="keywordtype">None</span>,    <span class="keywordtype">None</span>,    <span class="keywordtype">None</span>,</div>
+<div class="line">        ESC,        F1,         F2,         F3,         F4,         F5,         F6,         F7,         F8,         F9,         F10,        F11,</div>
+<div class="line">        <span class="keywordtype">None</span>,       <span class="keywordtype">None</span>,       DESKTOP,    PAGE_UP,    <span class="keywordtype">None</span>,       LOCK,       <span class="keywordtype">None</span>,       BSPC,       UP,         DEL,        <span class="keywordtype">None</span>,       F12,</div>
+<div class="line">        <span class="keywordtype">None</span>,       <span class="keywordtype">None</span>,       HOME,       PAGE_DOWN,  END,        <span class="keywordtype">None</span>,       <span class="keywordtype">None</span>,       LEFT,       DOWN,       RIGHT,      <span class="keywordtype">None</span>,       <span class="keywordtype">None</span>,</div>
+<div class="line">        LCTL_TAB,   Z,          X,          C,          V,          <span class="keywordtype">None</span>,       <span class="keywordtype">None</span>,       VOLD,       <span class="keywordtype">None</span>,       VOLU,       <span class="keywordtype">None</span>,       <span class="keywordtype">None</span>,</div>
+<div class="line">        <span class="keywordtype">None</span>,       <span class="keywordtype">None</span>,       <span class="keywordtype">None</span>,       <span class="keywordtype">None</span>,       LSFT_SPC,   ENTER,      LAY0,       LALT_BSPC,  <span class="keywordtype">None</span>,       <span class="keywordtype">None</span>,       <span class="keywordtype">None</span>,       <span class="keywordtype">None</span>,</div>
 <div class="line">    ]</div>
 <div class="line">]</div>
+<div class="line"> </div>
 <div class="line"><span class="comment"># fmt: on</span></div>
+<div class="line"> </div>
 <div class="line">keyboard.add_keymap(keymap, 12, 5)</div>
+<div class="line">keyboard.run_forever()</div>
+</div><!-- fragment --><p><b>Right Keyboard Part</b></p>
+<div class="fragment"><div class="line"><span class="comment"># code.py</span></div>
 <div class="line"> </div>
-<div class="line">usb = HID_USB()</div>
-<div class="line"><span class="comment"># ble = HID_BLE()</span></div>
-<div class="line">hids = [usb]</div>
-<div class="line">keyboard.hids = hids</div>
+<div class="line"><span class="keyword">import</span> board</div>
 <div class="line"> </div>
-<div class="line"><span class="comment"># hid_mode = SwitchHIDmode(usb_output=usb, ble_output=ble, switch_func=&quot;usb&quot;)</span></div>
-<div class="line">keyboard.hid_mode = <span class="stringliteral">&quot;usb&quot;</span></div>
+<div class="line"><span class="keyword">from</span> mkx.mkx_periphery <span class="keyword">import</span> MKX_Periphery</div>
+<div class="line"><span class="keyword">from</span> mkx.periphery_uart <span class="keyword">import</span> PeripheryUART</div>
 <div class="line"> </div>
-<div class="line"><span class="comment"># keyboard.run_once()</span></div>
+<div class="line"> </div>
+<div class="line">col_pins = (board.GP9, board.GP7, board.GP5, board.GP4, board.GP3, board.GP2)</div>
+<div class="line">row_pins = (board.GP10, board.GP11, board.GP13, board.GP15, board.GP17)</div>
+<div class="line"> </div>
+<div class="line">peryphery = PeripheryUART(<span class="stringliteral">&quot;booster_r&quot;</span>, col_pins, row_pins, board.GP0, board.GP1)</div>
+<div class="line"> </div>
+<div class="line">keyboard = MKX_Periphery(peryphery, debug=<span class="keyword">True</span>)</div>
+<div class="line">keyboard.run_forever()</div>
+</div><!-- fragment --><h1><a class="anchor" id="p_3_3"></a>
+3.3 Square Keyboard</h1>
+<div style="margin-left: 100px;"> <img src="../images/SQ_keyboard.jpg" alt="" class="inline"/> </div><p><b>Left Keyboard Part (Central)</b></p>
+<div class="fragment"><div class="line"><span class="comment"># boot.py</span></div>
+<div class="line"> </div>
+<div class="line"><span class="keyword">import</span> board</div>
+<div class="line"> </div>
+<div class="line"><span class="keyword">from</span> mkx.boot_config <span class="keyword">import</span> boot_cfg</div>
+<div class="line"> </div>
+<div class="line">boot_cfg(</div>
+<div class="line">    sense=board.D13,  <span class="comment"># column</span></div>
+<div class="line">    source=board.D5,  <span class="comment"># row</span></div>
+<div class="line">    autoreload=<span class="keyword">False</span>,</div>
+<div class="line">    storage=<span class="keyword">False</span>,</div>
+<div class="line">    usb_id=(<span class="stringliteral">&quot;MKX Device&quot;</span>, <span class="stringliteral">&quot;Sq Keyboard&quot;</span>),</div>
+<div class="line">)</div>
+</div><!-- fragment --><div class="fragment"><div class="line"><span class="comment"># code.py</span></div>
+<div class="line"> </div>
+<div class="line"><span class="keyword">import</span> board</div>
+<div class="line"> </div>
+<div class="line"><span class="keyword">from</span> mkx.mkx_central <span class="keyword">import</span> MKX_Central</div>
+<div class="line"><span class="keyword">from</span> mkx.layer_status_led_rgb_neopixel <span class="keyword">import</span> LayerStatusLedRgbNeoPixel</div>
+<div class="line"> </div>
+<div class="line"><span class="keyword">from</span> mkx.keys_standard <span class="keyword">import</span> *</div>
+<div class="line"><span class="keyword">from</span> mkx.keys_modifiers <span class="keyword">import</span> M_LCTL, M_LGUI</div>
+<div class="line"><span class="keyword">from</span> mkx.keys_media <span class="keyword">import</span> VOLU, VOLD</div>
+<div class="line"><span class="keyword">from</span> mkx.keys_holdtap <span class="keyword">import</span> HT</div>
+<div class="line"><span class="keyword">from</span> mkx.keys_layers <span class="keyword">import</span> TO</div>
+<div class="line"><span class="keyword">from</span> mkx.keys_vim <span class="keyword">import</span> *</div>
+<div class="line"> </div>
+<div class="line"><span class="keyword">from</span> mkx.periphery_central <span class="keyword">import</span> PeripheryCentral</div>
+<div class="line"><span class="keyword">from</span> mkx.interphace_central <span class="keyword">import</span> InterphaceCentral</div>
+<div class="line"><span class="keyword">from</span> mkx.interphace_uart <span class="keyword">import</span> InterphaceUART</div>
+<div class="line"> </div>
+<div class="line">keyboard = MKX_Central()</div>
+<div class="line"> </div>
+<div class="line">col_pins = (board.D13, board.D12, board.D11, board.A1, board.A4, board.A3)</div>
+<div class="line">row_pins = (board.A2, board.MISO, board.D10, board.D9, board.D6, board.D5)</div>
+<div class="line">central_peryphery = PeripheryCentral(<span class="stringliteral">&quot;sq_l&quot;</span>, col_pins, row_pins)</div>
+<div class="line">keyboard.central_periphery = central_peryphery</div>
+<div class="line"> </div>
+<div class="line">interphace_central = InterphaceCentral(central_peryphery, 0, 0, 5, 5)</div>
+<div class="line">keyboard.add_interface(interphace_central)</div>
+<div class="line"> </div>
+<div class="line">interphace_right = InterphaceUART(<span class="stringliteral">&quot;sq_r&quot;</span>, board.TX, board.RX, 6, 0, 11, 5)</div>
+<div class="line">keyboard.add_interface(interphace_right)</div>
+<div class="line"> </div>
+<div class="line">status_led = LayerStatusLedRgbNeoPixel(board.SCK)</div>
+<div class="line">status_led.add_layer(0, (0, 0, 255))  <span class="comment"># Blue</span></div>
+<div class="line">status_led.add_layer(1, (0, 255, 0))  <span class="comment"># Green</span></div>
+<div class="line">status_led.add_layer(2, (255, 255, 255))  <span class="comment"># Write</span></div>
+<div class="line">status_led.add_layer(3, (255, 0, 0))  <span class="comment"># Red</span></div>
+<div class="line">keyboard.add_layer_status_led(status_led)</div>
+<div class="line"> </div>
+<div class="line">OPEN = M_LCTL(O)</div>
+<div class="line">CLOSE = M_LCTL(W)</div>
+<div class="line">SAVE = M_LCTL(S)</div>
+<div class="line">TABS = M_LCTL(J)</div>
+<div class="line">TOOLS = M_LCTL(B)</div>
+<div class="line">DESKTOP = M_LGUI(D)</div>
+<div class="line">LOCK = M_LGUI(L)</div>
+<div class="line">PTAB = M_LCTL(PGUP)</div>
+<div class="line">NTAB = M_LCTL(PGDN)</div>
+<div class="line"> </div>
+<div class="line">RALT_DEL = HT(DEL, RALT)</div>
+<div class="line">LALT_DEL = HT(DEL, LALT)</div>
+<div class="line">LSFT_SPC = HT(SPC, LSFT)</div>
+<div class="line"> </div>
+<div class="line"><span class="comment"># fmt: off</span></div>
+<div class="line"> </div>
+<div class="line">keymap = [</div>
+<div class="line">    <span class="comment"># Normal</span></div>
+<div class="line">    [</div>
+<div class="line">        ESC,        F1,             F2,             F3,         F4,             F5,         F6,         F7,         F8,         F9,             F10,        F11,</div>
+<div class="line">        GRV,        N1,             N2,             N3,         N4,             N5,         N6,         N7,         N8,         N9,             N0,         F12,</div>
+<div class="line">        VI_MVLU,    <span class="keywordtype">None</span>,           VI_DEL,         VI_REPL.L(3), SAVE,         LOCK,       TABS,       VI_FIND,    VI_UNDO,    VI_PAST,        <span class="keywordtype">None</span>,       VOLU,</div>
+<div class="line">        VI_MVLD,    VI_APND.L(1),   VI_SUBS.L(1),   HOME,       TOOLS,          DESKTOP,    VI_YANK,    VI_NXTW,    END,        OPEN,           VI_INS.L(1),VOLD,</div>
+<div class="line">        TAB,        <span class="keywordtype">None</span>,           DEL,            CLOSE,      VI_VIS.L(2),    VI_PRVW,    <span class="keywordtype">None</span>,       <span class="keywordtype">None</span>,       PTAB,       NTAB,           <span class="keywordtype">None</span>,       <span class="keywordtype">None</span>,</div>
+<div class="line">        LCTRL,      LCTRL,          ENT,            ENT,        LSFT_SPC,       LSFT_SPC,   BSPC,       LALT_DEL,   LEFT,       UP,             DOWN,       RIGHT,</div>
+<div class="line">    ],</div>
+<div class="line">    </div>
+<div class="line">    <span class="comment"># Edit </span></div>
+<div class="line">    [</div>
+<div class="line">        TO(0),      F1,             F2,             F3,         F4,             F5,         F6,         F7,         F8,         F9,             F10,        F11,</div>
+<div class="line">        GRV,        N1,             N2,             N3,         N4,             N5,         N6,         N7,         N8,         N9,             N0,         BSLS,</div>
+<div class="line">        EQL,        Q,              D,              R,          W,              L,          J,          F,          U,          P,              SCLN,       LBRC,</div>
+<div class="line">        MINS,       A,              S,              H,          T,              G,          Y,          N,          E,          O,              I,          QUOT,</div>
+<div class="line">        TAB,        Z,              X,              C,          V,              B,          K,          M,          COMM,       DOT,            SLSH,       RBRC,</div>
+<div class="line">        LCTRL,      LCTRL,          ENT,            ENT,        LSFT_SPC,       LSFT_SPC,   BSPC,       RALT_DEL,   LEFT,       UP,             DOWN,       RIGHT,</div>
+<div class="line">    ],</div>
+<div class="line"> </div>
+<div class="line">    <span class="comment"># Visual</span></div>
+<div class="line">    [</div>
+<div class="line">        VI_V_ESC.L(0), F1,          F2,             F3,         F4,             F5,         F6,         F7,         F8,         F9,             F10,        F11,</div>
+<div class="line">        GRV,        N1,             N2,             N3,         N4,             N5,         N6,         N7,         N8,         N9,             N0,         F12,</div>
+<div class="line">        VI_NXTL,    <span class="keywordtype">None</span>,           VI_DEL,         VI_REPL.L(3), SAVE,         LOCK,       TABS,       VI_FIND,    VI_UNDO,    VI_PAST,        <span class="keywordtype">None</span>,       <span class="keywordtype">None</span>,</div>
+<div class="line">        VI_PRVL,    VI_APND.L(1),   VI_SUBS.L(1),   HOME,       TOOLS,          DESKTOP,    VI_YANK,    VI_NXTW,    END,        OPEN,           VI_INS.L(1),<span class="keywordtype">None</span>,</div>
+<div class="line">        TAB,        <span class="keywordtype">None</span>,           DEL,            CLOSE,      VI_VIS.L(2),    VI_PRVW,    <span class="keywordtype">None</span>,       <span class="keywordtype">None</span>,       PTAB,       NTAB,           <span class="keywordtype">None</span>,       <span class="keywordtype">None</span>,</div>
+<div class="line">        LCTRL,      LCTRL,          ENT,            ENT,        LSFT_SPC,       LSFT_SPC,   BSPC,       LALT_DEL,   LEFT,       UP,             DOWN,       RIGHT,</div>
+<div class="line">    ],</div>
+<div class="line"> </div>
+<div class="line">    <span class="comment"># Replace </span></div>
+<div class="line">    [</div>
+<div class="line">        VI_R_ESC.L(0), F1,          F2,             F3,         F4,             F5,         F6,         F7,         F8,         F9,             F10,        F11,</div>
+<div class="line">        GRV,        N1,             N2,             N3,         N4,             N5,         N6,         N7,         N8,         N9,             N0,         BSLS,</div>
+<div class="line">        EQL,        Q,              D,              R,          W,              L,          J,          F,          U,          P,              SCLN,       LBRC,</div>
+<div class="line">        MINS,       A,              S,              H,          T,              G,          Y,          N,          E,          O,              I,          QUOT,</div>
+<div class="line">        TAB,        Z,              X,              C,          V,              B,          K,          M,          COMM,       DOT,            SLSH,       RBRC,</div>
+<div class="line">        LCTRL,      LCTRL,          ENT,            ENT,        LSFT_SPC,       LSFT_SPC,   BSPC,       RALT_DEL,   LEFT,       UP,             DOWN,       RIGHT,</div>
+<div class="line">    ],</div>
+<div class="line">]</div>
+<div class="line"> </div>
+<div class="line"><span class="comment"># fmt: on</span></div>
+<div class="line"> </div>
+<div class="line">keyboard.add_keymap(keymap, 12, 6)</div>
+<div class="line">keyboard.run_forever()</div>
+</div><!-- fragment --><p><b>Right Keyboard Part</b> </p><div class="fragment"><div class="line"><span class="comment"># code.py</span></div>
+<div class="line"> </div>
+<div class="line"><span class="keyword">import</span> board</div>
+<div class="line"> </div>
+<div class="line"><span class="keyword">from</span> mkx.mkx_periphery <span class="keyword">import</span> MKX_Periphery</div>
+<div class="line"><span class="keyword">from</span> mkx.periphery_uart <span class="keyword">import</span> PeripheryUART</div>
+<div class="line"> </div>
+<div class="line">col_pins = (board.D13, board.D12, board.D11, board.A1, board.A4, board.A3)</div>
+<div class="line">row_pins = (board.A2, board.MISO, board.D10, board.D9, board.D6, board.D5)</div>
+<div class="line"> </div>
+<div class="line">peryphery = PeripheryUART(<span class="stringliteral">&quot;sq_r&quot;</span>, col_pins, row_pins, board.TX, board.RX)</div>
+<div class="line"> </div>
+<div class="line">keyboard = MKX_Periphery(peryphery, debug=<span class="keyword">True</span>)</div>
 <div class="line">keyboard.run_forever()</div>
 </div><!-- fragment --> </div></div><!-- contents -->
 </div><!-- PageDoc -->

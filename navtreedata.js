@@ -39,7 +39,11 @@ var NAVTREE =
         [ "2.4.1 Synchronize Github repository with the CIRCUITPY drive", "p_2.html#p_2_4_1", null ]
       ] ]
     ] ],
-    [ "3 Get Started", "p_3.html", null ],
+    [ "3 Get Started", "p_3.html", [
+      [ "3.1 Hardware Keypass", "p_3.html#p_3_1", null ],
+      [ "3.2 Booster Keyboard", "p_3.html#p_3_2", null ],
+      [ "3.3 Square Keyboard", "p_3.html#p_3_3", null ]
+    ] ],
     [ "4 MKX API", "p_4.html", null ],
     [ "5 Keys", "p_5.html", [
       [ "5.1 Standard Keys", "p_5.html#p_5_1", null ],
