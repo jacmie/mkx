@@ -7,6 +7,10 @@
 
 Next Generation Mechanical Keyboard Firmware
 
+<div style="margin-left: 100px;">
+  <img width=600 src="docs/images/IntroPic.jpg">
+</div>
+
 ## Features
 
 :white_check_mark: HID device with USB and BLE connection  

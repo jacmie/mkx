@@ -3,6 +3,10 @@
 
 @section p_3_1  3.1 Hardware Keypass
 
+<div style="margin-left: 100px;">
+  <img width=800 src="../images/KeyPass_keyboard.jpg">
+</div>
+
 ``` {.py}
 # code.py
 
@@ -46,6 +50,10 @@ keyboard.run_forever()
 ```
 
 @section p_3_2  3.2 Booster Keyboard
+
+<div style="margin-left: 100px;">
+  <img width=800 src="../images/BOOSTER_keyboard.jpg">
+</div>
 
 **Left Keyboard Part (Central)**
 ``` {.py}
@@ -144,6 +152,10 @@ keyboard.run_forever()
 ```
 
 @section p_3_3  3.3 Square Keyboard
+
+<div style="margin-left: 100px;">
+  <img src="../images/SQ_keyboard.jpg">
+</div>
 
 **Left Keyboard Part (Central)**
 
