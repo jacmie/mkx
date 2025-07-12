@@ -17,6 +17,8 @@ from mkx.keys_layers import KeysLayer, LT, TT
 
 from mkx.check import check
 
+from mkx.backlight_abstract import BacklightAbstract
+
 FRAME_INTERVAL_MS = 5
 
 
@@ -41,6 +43,7 @@ class MKX_Central:
         self.timed_keys_manager = TimedKeysManager()
         self.sticky_key_manager = StickyKeyManager()
         self.layers_manager = LayersManager(default_layer=0)
+        self.backlight = None
 
     def add_layer_status_led(self, status_led: LayerStatusLedAbstract):
         self.layers_manager.add_layer_status_led(status_led)
@@ -56,6 +59,9 @@ class MKX_Central:
         if not all(len(row) == col_size * row_size for row in keymap):
             print("Keymap layers must be rectangular and match given size!")
             sys.exit(1)
+
+    def add_backlight(self, backlight: BacklightAbstract):
+        self.backlight = backlight
 
     def send_to(self, device_id: str, msg_type: str, data: dict):
         adapter = self.adapters.get(device_id)
@@ -207,6 +213,9 @@ class MKX_Central:
             for key_event in debounced_msg:
                 self.process_key_event(key_event)
                 print("")
+
+            if self.backlight:
+                self.backlight.shine()
 
             self.last_frame_time = frame_end
 

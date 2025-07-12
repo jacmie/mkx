@@ -40,7 +40,7 @@ Later on, you may want to intentionally rename the drive — this is often the c
 Install the Adafruit libraries:
 
 ```
-circup install adafruit_ble adafruit_hid
+circup install adafruit_ble adafruit_hid adafruit_neopixel
 ```
 <br>
 
