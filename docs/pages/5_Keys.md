@@ -162,15 +162,19 @@ The main idea is to use sequences of standard and modifier keys to emulate Vim f
 
 |Key             |Aliases                                             |Description                                                              |
 |----------------|----------------------------------------------------|-------------------------------------------------------------------------|
-| VI_HW          | VI_HI_WO, VI_HIGLIGHT_WORD                         | Higlght the word under the curcor                                       |
-| VI_HL          | VI_HI_LI, VI_HIGLIGHT_LINE                         | Higlght the line under the curcor                                       |
-| VI_YW          | VI_Y_WO, VI_YANK_WORD                              | Yank/Copy the word under the curcor                                     |
-| VI_YL          | VI_Y_LI, VI_YANK_LINE                              | Yank/Copy the line under the curcor                                     |
-| VI_CW          | VI_CUT_WO, VI_CUT_WORD                             | Cut the word under the curcor                                           |
-| VI_CL          | VI_CUT_LI, VI_CUT_LINE                             | Cut the line under the curcor                                           |
+| VI_HW          | VI_HI_WO, VI_HIGLIGHT_WORD                         | Higlight the word under the cursor                                      |
+| VI_HL          | VI_HI_LI, VI_HIGLIGHT_LINE                         | Higlight the line under the cursor                                      |
+| VI_YW          | VI_Y_WO, VI_YANK_WORD                              | Yank/Copy the word under the cursor                                     |
+| VI_YL          | VI_Y_LI, VI_YANK_LINE                              | Yank/Copy the line under the cursor                                     |
+| VI_CW          | VI_CUT_WO, VI_CUT_WORD                             | Cut the word under the cursor                                           |
+| VI_CL          | VI_CUT_LI, VI_CUT_LINE                             | Cut the line under the cursor                                           |
+| VI_DW          | VI_DEL_WO, VI_DEL_WORD                             | Delete the word under the cursor                                        |
+| VI_DL          | VI_DEL_LI, VI_DEL_LINE                             | Delete the line under the cursor                                        |
 | VI_PRVL        | VI_MINS, VI_PREV_LINE                              | Go to the beginning of the previous line                                |
 | VI_NXTL        | VI_PLUS, VI_NEXT_LINE                              | Go to the beginning of the next line                                    |
 | VI_NXTW        | VI_W, VI_NEXT_WORD                                 | Go to the beginning of the previous word                                |
+| VI_MVLU        | VI_MV_LINE_UP                                      | Move the line under the cursor up                                       |
+| VI_MVLD        | VI_MV_LINE_DOWN                                    | Move the line under the cursor down                                     |
 | VI_PRVW        | VI_E, VI_PREV_WORD                                 | Go to the beginning of the next word                                    |
 | VI_REPL.L(nr)  | VI_R.L(nr), VI_REPLACE.L(nr)                       | Switch to Replace Mode on the Layer *nr*                                |
 | VI_R_ESC.L(nr) |                                                    | Switch back from the Replace Mode to the Normal Mode on the Layer *nr*  |
@@ -181,7 +185,8 @@ The main idea is to use sequences of standard and modifier keys to emulate Vim f
 | VI_PAST        | VI_P, VI_PAST, VI_PASTE                            | Paste                                                                   |
 | VI_APND.L(nr)  | VI_A.L(nr), VI_APPEND.L(nr)                        | Switch to Edit Mode on the Layer *nr*                                   |
 | VI_SUBS.L(nr)  | VI_S.L(nr), VI_SUBSTITUTE.L(nr)                    | Cut line and switch to Edit Mode on the Layer *nr*                      |
-| VI_DEL         | VI_D, VI_DELATE                                    | Delete, on double tap cut whole line                                    |
+| VI_DEL         | VI_D, VI_DELATE                                    | Delete, on double tap delete whole line                                 |
+| VI_CUT         | VI_X                                               | Cut, on double tap cut whole line                                       |
 | VI_FIND        | VI_F                                               | Find                                                                    |
 | VI_VIS.L(nr)   | VI_V.L(nr), VI_VISUAL.L(nr)                        | Switch to Visual Mode on the Layer *nr*                                 |
 | VI_V_ESC.L(nr) |                                                    | Switch back from the Visual Mode to the Normal Mode on the Layer *nr*   |

@@ -75,6 +75,7 @@ VI_HW = VI_HI_WO = VI_HIGLIGHT_WORD = VIM([
 
 VI_HL = VI_HI_LI = VI_HIGLIGHT_LINE = VIM([
     HOME,
+    HOME,
     M_LSFT(END)
 ], "HIGL_L")
 
@@ -100,7 +101,20 @@ VI_CW = VI_CUT_WO = VI_CUT_WORD = SEQ([
 
 VI_CL = VI_CUT_LI = VI_CUT_LINE = SEQ([
     VI_HI_LI,
-    M_LCTL(X)
+    M_LCTL(X),
+    BSPACE
+])
+
+VI_DW = VI_DEL_WO = VI_DEL_WORD = SEQ([
+    VI_HI_WO,
+    BSPACE,
+    RIGHT
+])
+
+VI_DL = VI_DEL_LI = VI_DEL_LINE = SEQ([
+    VI_HI_LI,
+    BSPACE,
+    BSPACE
 ])
 
 ####
@@ -186,11 +200,13 @@ VI_S = VI_SUBS = VI_SUBSTITUTE = VIM_L([
     VI_CUT_LI,
 ], "VI_SUBS")
 
-VI_D = VI_DEL = VI_DELATE = VIM_TD(DEL, VI_CUT_LINE, key_name="VI_DEL")
+VI_D = VI_DEL = VI_DELATE = VIM_TD(DEL, VI_DEL_LINE, key_name="VI_DEL")
 
 VI_F = VI_FIND = VIM([
     M_LCTL(F),
 ], "VI_FIND")
+
+VI_X = VI_CUT = VIM_TD(M_LCTL(X), VI_CUT_LINE, key_name="VI_CUT")
 
 VI_V = VI_VIS = VI_VISUAL = VIM_VIS(True, "VI_VIS")
 
@@ -205,7 +221,8 @@ __all__ = [
     "VI_YL", "VI_Y_LI", "VI_YANK_LINE",
     "VI_CW", "VI_CUT_WO", "VI_CUT_WORD",
     "VI_CL", "VI_CUT_LI", "VI_CUT_LINE",
-
+    "VI_DW", "VI_DEL_WO", "VI_DEL_WORD",
+    "VI_DL", "VI_DEL_LI", "VI_DEL_LINE",
 
     "VI_MINS", "VI_PRVL", "VI_PREV_LINE",
     "VI_PLUS", "VI_NXTL", "VI_NEXT_LINE",
@@ -227,6 +244,7 @@ __all__ = [
     "VI_A", "VI_APND", "VI_APPEND",
     "VI_S", "VI_SUBS", "VI_SUBSTITUTE",
     "VI_D", "VI_DEL", "VI_DELATE",
+    "VI_X", "VI_CUT",
     "VI_F", "VI_FIND",
 
     "VI_V", "VI_VIS", "VI_VISUAL",

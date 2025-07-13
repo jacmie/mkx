@@ -237,7 +237,7 @@ keymap = [
         GRV,        N1,             N2,             N3,         N4,             N5,         N6,         N7,         N8,         N9,             N0,         F12,
         VI_MVLU,    None,           VI_DEL,         VI_REPL.L(3), SAVE,         LOCK,       TABS,       VI_FIND,    VI_UNDO,    VI_PAST,        None,       VOLU,
         VI_MVLD,    VI_APND.L(1),   VI_SUBS.L(1),   HOME,       TOOLS,          DESKTOP,    VI_YANK,    VI_NXTW,    END,        OPEN,           VI_INS.L(1),VOLD,
-        TAB,        None,           DEL,            CLOSE,      VI_VIS.L(2),    VI_PRVW,    None,       None,       PTAB,       NTAB,           None,       None,
+        TAB,        None,           VI_CUT,         CLOSE,      VI_VIS.L(2),    VI_PRVW,    None,       None,       PTAB,       NTAB,           None,       None,
         LCTRL,      LCTRL,          ENT,            ENT,        LSFT_SPC,       LSFT_SPC,   BSPC,       LALT_DEL,   LEFT,       UP,             DOWN,       RIGHT,
     ],
     
@@ -257,7 +257,7 @@ keymap = [
         GRV,        N1,             N2,             N3,         N4,             N5,         N6,         N7,         N8,         N9,             N0,         F12,
         VI_NXTL,    None,           VI_DEL,         VI_REPL.L(3), SAVE,         LOCK,       TABS,       VI_FIND,    VI_UNDO,    VI_PAST,        None,       None,
         VI_PRVL,    VI_APND.L(1),   VI_SUBS.L(1),   HOME,       TOOLS,          DESKTOP,    VI_YANK,    VI_NXTW,    END,        OPEN,           VI_INS.L(1),None,
-        TAB,        None,           DEL,            CLOSE,      VI_VIS.L(2),    VI_PRVW,    None,       None,       PTAB,       NTAB,           None,       None,
+        TAB,        None,           VI_CUT,         CLOSE,      VI_VIS.L(2),    VI_PRVW,    None,       None,       PTAB,       NTAB,           None,       None,
         LCTRL,      LCTRL,          ENT,            ENT,        LSFT_SPC,       LSFT_SPC,   BSPC,       LALT_DEL,   LEFT,       UP,             DOWN,       RIGHT,
     ],
 
