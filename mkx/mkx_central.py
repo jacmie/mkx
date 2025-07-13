@@ -45,6 +45,9 @@ class MKX_Central:
         self.layers_manager = LayersManager(default_layer=0)
         self.backlight = None
 
+    def add_central_periphery(self, central_periphery):
+        self.central_periphery = central_periphery
+
     def add_layer_status_led(self, status_led: LayerStatusLedAbstract):
         self.layers_manager.add_layer_status_led(status_led)
 
