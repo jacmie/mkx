@@ -3,7 +3,7 @@
 Next Generation Mechanical Keyboard Firmware  
 
 <div style="margin-left: 200px;">
-  <img width=600 src="../images/IntroPic.jpg">
+  <img width=600 src="IntroPic.jpg">
 </div>
 
 ## Features

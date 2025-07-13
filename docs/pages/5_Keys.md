@@ -201,12 +201,12 @@ Classic editing mode using layer with standard keys.
 
 Highlighting mode where the mevement keys hold the **Shift**.
 
-@subsection p_5_8_3 5.8.3 Replace Mode
+@subsection p_5_8_4 5.8.4 Replace Mode
 
 Replace mode where the **VI_REPL.L(nr)** key presses the standard **Insert** key and switches to a selected layer with movement keys.  
 Use the **VI_R_ESC.L(nr)** key to press **Insert** again and return to the Normal mode layer.
 
-@subsection p_5_8_4 5.8.4 Vim Layout
+@subsection p_5_8_5 5.8.5 Vim Layout
 
 The table below provides an example of how to mimic the classical Vim layout.
 

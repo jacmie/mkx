@@ -4,7 +4,7 @@
 @section p_3_1  3.1 Hardware Keypass
 
 <div style="margin-left: 100px;">
-  <img width=800 src="../images/KeyPass_keyboard.jpg">
+  <img width=800 src="KeyPass_keyboard.jpg">
 </div>
 
 ``` {.py}
@@ -52,7 +52,7 @@ keyboard.run_forever()
 @section p_3_2  3.2 Booster Keyboard
 
 <div style="margin-left: 100px;">
-  <img width=800 src="../images/BOOSTER_keyboard.jpg">
+  <img width=800 src="BOOSTER_keyboard.jpg">
 </div>
 
 **Left Keyboard Part (Central)**
@@ -154,7 +154,7 @@ keyboard.run_forever()
 @section p_3_3  3.3 Square Keyboard
 
 <div style="margin-left: 100px;">
-  <img src="../images/SQ_keyboard.jpg">
+  <img src="SQ_keyboard.jpg">
 </div>
 
 **Left Keyboard Part (Central)**
