@@ -188,8 +188,6 @@ The main idea is to use sequences of standard and modifier keys to emulate Vim f
 | VI_DEL         | VI_D, VI_DELATE                                    | Delete, on double tap delete whole line                                 |
 | VI_CUT         | VI_X                                               | Cut, on double tap cut whole line                                       |
 | VI_FIND        | VI_F                                               | Find                                                                    |
-| VI_VIS.L(nr)   | VI_V.L(nr), VI_VISUAL.L(nr)                        | Switch to Visual Mode on the Layer *nr*                                 |
-| VI_V_ESC.L(nr) |                                                    | Switch back from the Visual Mode to the Normal Mode on the Layer *nr*   |
 
 @subsection p_5_8_1 5.8.1 Normal Mode
 
@@ -201,8 +199,7 @@ Classic editing mode using layer with standard keys.
 
 @subsection p_5_8_3 5.8.3 Visual Mode
 
-Highlighting mode where the **VI_VIS.L(nr)** key holds the **Shift** key and switches to a selected layer with movement keys.  
-Use the **VI_V_ESC.L(nr)** key to release **Shift** and return to the Normal mode layer.
+Highlighting mode where the mevement keys hold the **Shift**.
 
 @subsection p_5_8_3 5.8.3 Replace Mode
 
@@ -214,28 +211,28 @@ Use the **VI_R_ESC.L(nr)** key to press **Insert** again and return to the Norma
 The table below provides an example of how to mimic the classical Vim layout.
 
 | VIM Basic Keymap      |||||||||||
-|--------|--------------|--------------|-----------|--------------|---------|-----------|-----------|---------------|---------------|-----------|
+|--------|--------------|---------------|---------------|--------------|----------------|---------------|---------------|---------------|---------------|-----------|
 | **Normal Mode**       |||||||||||
-|ESC     |F1            |F2            |F3         |F4            |F5       |F6         |F7         |F8             |F9             |F10        |
-|None    |None          |None          |None       |END           |None     |HOME       |None       |None           |None           |HOME       |
-|None    |None          |VI_NXTW       |VI_NXTW    |VI_REPL.L(3)  |None     |VI_YANK    |VI_UNDO    |VI_INS.L(1)    |VI_OPEN.L(1)   |VI_PAST    |
-|None    |VI_APND.L(1)  |VI_SUBS.L(1)  |VI_DEL     |VI_FIND       |None     |LEFT       |DOWN       |UP             |RIGHT          |None       |
-|None    |None          |DEL           |None       |VI_VIS.L(2)   |VI_PRVW  |F3         |None       |None           |TAB            |VI_FIND    |
+|ESC     |F1            |F2             |F3             |F4            |F5              |F6             |F7             |F8             |F9             |F10        |
+|None    |None          |None           |None           |END           |None            |HOME           |None           |None           |None           |HOME       |
+|None    |None          |VI_NXTW        |VI_NXTW        |VI_REPL.L(3)  |None            |VI_YANK        |VI_UNDO        |VI_INS.L(1)    |VI_OPEN.L(1)   |VI_PAST    |
+|None    |VI_APND.L(1)  |VI_SUBS.L(1)   |VI_DEL         |VI_FIND       |None            |LEFT           |DOWN           |UP             |RIGHT          |None       |
+|None    |None          |DEL            |None           |TO(2)         |VI_PRVW         |F3             |None           |None           |TAB            |VI_FIND    |
 | **Edit Mode**         |||||||||||
-|TO(0)   |F1            |F2            |F3         |F4            |F5       |F6         |F7         |F8             |F9             |F10        |
-|None    |N1            |N2            |N3         |N4            |N5       |N6         |N7         |N8             |N9             |N0         |
-|None    |Q             |W             |E          |R             |T        |Y          |U          |I              |O              |P          |
-|None    |A             |S             |D          |F             |G        |H          |J          |K              |L              |SCLN       |
-|None    |Z             |X             |C          |V             |B        |N          |M          |COMM           |DOT            |SLSH       |
+|TO(0)   |F1            |F2             |F3             |F4            |F5              |F6             |F7             |F8             |F9             |F10        |
+|None    |N1            |N2             |N3             |N4            |N5              |N6             |N7             |N8             |N9             |N0         |
+|None    |Q             |W              |E              |R             |T               |Y              |U              |I              |O              |P          |
+|None    |A             |S              |D              |F             |G               |H              |J              |K              |L              |SCLN       |
+|None    |Z             |X              |C              |V             |B               |N              |M              |COMM           |DOT            |SLSH       |
 | **Visual Mode**       |||||||||||
-|VI_V_ESC.L(0)     |F1  |F2            |F3         |F4            |F5       |F6         |F7         |F8             |F9             |F10        |
-|None    |None          |None          |None       |None          |None     |None       |None       |None           |None           |HOME       |
-|None    |None          |VI_NXTW       |VI_NXTW    |None          |None     |VI_YANK    |VI_UNDO    |None           |None           |VI_PAST    |
-|None    |None          |None          |VI_DEL     |None          |None     |LEFT       |DOWN       |UP             |RIGHT          |None       |
-|None    |None          |DEL           |None       |None          |VI_PRVW  |None       |M          |None           |None           |None       |
+|TO(0)   |F1            |F2             |F3             |F4            |F5              |F6             |F7             |F8             |F9             |F10        |
+|None    |None          |None           |None           |None          |None            |None           |None           |None           |None           |M_LSFT(HOME)|
+|None    |None          |M_LSFT(VI_NXTW)|M_LSFT(VI_NXTW)|None          |None            |VI_YANK        |VI_UNDO        |None           |None           |VI_PAST    |
+|None    |None          |None           |VI_DEL         |None          |None            |M_LSFT(LEFT)   |M_LSFT(DOWN)   |M_LSFT(UP)     |M_LSFT(RIGHT)  |None       |
+|None    |None          |DEL            |None           |None          |M_LSFT(VI_PRVW) |None           |M              |None           |None           |None       |
 | **Replace Mode**      |||||||||||
-|VI_R_ESC.L(0)     |F1  |F2            |F3         |F4            |F5       |F6         |F7         |F8             |F9             |F10        |
-|None    |None          |None          |None       |None          |None     |None       |None       |None           |None           |HOME       |
-|None    |None          |VI_NXTW       |VI_NXTW    |None          |None     |VI_YANK    |VI_UNDO    |None           |None           |VI_PAST    |
-|None    |None          |None          |VI_DEL     |None          |None     |LEFT       |DOWN       |UP             |RIGHT          |None       |
-|None    |None          |DEL           |None       |None          |VI_PRVW  |None       |M          |None           |None           |None       |
+|VI_R_ESC.L(0)     |F1  |F2             |F3             |F4            |F5              |F6             |F7             |F8             |F9             |F10        |
+|None    |None          |None           |None           |None          |None            |None           |None           |None           |None           |HOME       |
+|None    |None          |VI_NXTW        |VI_NXTW        |None          |None            |VI_YANK        |VI_UNDO        |None           |None           |VI_PAST    |
+|None    |None          |None           |VI_DEL         |None          |None            |LEFT           |DOWN           |UP             |RIGHT          |None       |
+|None    |None          |DEL            |None           |None          |VI_PRVW         |None           |M              |None           |None           |None       |

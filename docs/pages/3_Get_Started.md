@@ -26,7 +26,7 @@ keyboard = MKX_Central()
 col_pins = (board.D5,)
 row_pins = (board.D6,)
 hardware_keypass_peryphery = PeripheryCentral("hardware_keypass", col_pins, row_pins)
-keyboard.central_periphery = hardware_keypass_peryphery
+keyboard.add_central_periphery(hardware_keypass_peryphery)
 
 interphace_central = InterphaceCentral(hardware_keypass_peryphery, 0, 0, 0, 0)
 keyboard.add_interface(interphace_central)
@@ -80,7 +80,7 @@ col_pins = (board.GP9, board.GP7, board.GP5, board.GP4, board.GP3, board.GP2)
 row_pins = (board.GP10, board.GP11, board.GP13, board.GP15, board.GP17)
 
 central_peryphery = PeripheryCentral("booster_l", col_pins, row_pins)
-keyboard.central_periphery = central_peryphery
+keyboard.add_central_periphery(central_peryphery)
 
 interphace_central = InterphaceCentral(central_peryphery, 0, 0, 5, 4)
 keyboard.add_interface(interphace_central)
@@ -182,9 +182,10 @@ import board
 
 from mkx.mkx_central import MKX_Central
 from mkx.layer_status_led_rgb_neopixel import LayerStatusLedRgbNeoPixel
+from mkx.backlight_neopixel_rainbow import BacklightNeopixelRainbow
 
 from mkx.keys_standard import *
-from mkx.keys_modifiers import M_LCTL, M_LGUI
+from mkx.keys_modifiers import M_LCTL, M_LSFT, M_LGUI
 from mkx.keys_media import VOLU, VOLD
 from mkx.keys_holdtap import HT
 from mkx.keys_layers import TO
@@ -199,7 +200,7 @@ keyboard = MKX_Central()
 col_pins = (board.D13, board.D12, board.D11, board.A1, board.A4, board.A3)
 row_pins = (board.A2, board.MISO, board.D10, board.D9, board.D6, board.D5)
 central_peryphery = PeripheryCentral("sq_l", col_pins, row_pins)
-keyboard.central_periphery = central_peryphery
+keyboard.add_central_periphery(central_peryphery)
 
 interphace_central = InterphaceCentral(central_peryphery, 0, 0, 5, 5)
 keyboard.add_interface(interphace_central)
@@ -214,6 +215,11 @@ status_led.add_layer(2, (255, 255, 255))  # Write
 status_led.add_layer(3, (255, 0, 0))  # Red
 keyboard.add_layer_status_led(status_led)
 
+backlight = BacklightNeopixelRainbow(board.A0, num_pixels=72, brightness=0.4)
+backlight.slower(2)
+backlight.set_swirl(True)
+keyboard.add_backlight(backlight)
+
 OPEN = M_LCTL(O)
 CLOSE = M_LCTL(W)
 SAVE = M_LCTL(S)
@@ -223,13 +229,13 @@ DESKTOP = M_LGUI(D)
 LOCK = M_LGUI(L)
 PTAB = M_LCTL(PGUP)
 NTAB = M_LCTL(PGDN)
+COMMENT = M_LCTL(SLSH)
 
 RALT_DEL = HT(DEL, RALT)
 LALT_DEL = HT(DEL, LALT)
 LSFT_SPC = HT(SPC, LSFT)
 
 # fmt: off
-
 keymap = [
     # Normal
     [
@@ -237,7 +243,7 @@ keymap = [
         GRV,        N1,             N2,             N3,         N4,             N5,         N6,         N7,         N8,         N9,             N0,         F12,
         VI_MVLU,    None,           VI_DEL,         VI_REPL.L(3), SAVE,         LOCK,       TABS,       VI_FIND,    VI_UNDO,    VI_PAST,        None,       VOLU,
         VI_MVLD,    VI_APND.L(1),   VI_SUBS.L(1),   HOME,       TOOLS,          DESKTOP,    VI_YANK,    VI_NXTW,    END,        OPEN,           VI_INS.L(1),VOLD,
-        TAB,        None,           VI_CUT,         CLOSE,      VI_VIS.L(2),    VI_PRVW,    None,       None,       PTAB,       NTAB,           None,       None,
+        TAB,        None,           VI_CUT,         CLOSE,      TO(2),          VI_PRVW,    None,       None,       PTAB,       NTAB,           COMMENT,    None,
         LCTRL,      LCTRL,          ENT,            ENT,        LSFT_SPC,       LSFT_SPC,   BSPC,       LALT_DEL,   LEFT,       UP,             DOWN,       RIGHT,
     ],
     
@@ -253,12 +259,12 @@ keymap = [
 
     # Visual
     [
-        VI_V_ESC.L(0), F1,          F2,             F3,         F4,             F5,         F6,         F7,         F8,         F9,             F10,        F11,
-        GRV,        N1,             N2,             N3,         N4,             N5,         N6,         N7,         N8,         N9,             N0,         F12,
-        VI_NXTL,    None,           VI_DEL,         VI_REPL.L(3), SAVE,         LOCK,       TABS,       VI_FIND,    VI_UNDO,    VI_PAST,        None,       None,
-        VI_PRVL,    VI_APND.L(1),   VI_SUBS.L(1),   HOME,       TOOLS,          DESKTOP,    VI_YANK,    VI_NXTW,    END,        OPEN,           VI_INS.L(1),None,
-        TAB,        None,           VI_CUT,         CLOSE,      VI_VIS.L(2),    VI_PRVW,    None,       None,       PTAB,       NTAB,           None,       None,
-        LCTRL,      LCTRL,          ENT,            ENT,        LSFT_SPC,       LSFT_SPC,   BSPC,       LALT_DEL,   LEFT,       UP,             DOWN,       RIGHT,
+        TO(0),              F1,             F2,             F3,             F4,         F5,             F6,         F7,             F8,             F9,         F10,            F11,
+        GRV,                N1,             N2,             N3,             N4,         N5,             N6,         N7,             N8,             N9,         N0,             F12,
+        M_LSFT(VI_NXTL),    None,           VI_DEL,         VI_REPL.L(3),   SAVE,       LOCK,           TABS,       VI_FIND,        VI_UNDO,        VI_PAST,    None,           None,
+        M_LSFT(VI_PRVL),    VI_APND.L(1),   VI_SUBS.L(1),   M_LSFT(HOME),   TOOLS,      DESKTOP,        VI_YANK,    M_LSFT(VI_NXTW),M_LSFT(END),    OPEN,       VI_INS.L(1),    None,
+        TAB,                None,           VI_CUT,         CLOSE,          None,       M_LSFT(VI_PRVW),None,       None,           PTAB,           NTAB,       COMMENT,        None,
+        LCTRL,              LCTRL,          ENT,            ENT,            LSFT_SPC,   LSFT_SPC,       BSPC,       LALT_DEL,       M_LSFT(LEFT),   M_LSFT(UP), M_LSFT(DOWN),   M_LSFT(RIGHT),
     ],
 
     # Replace 

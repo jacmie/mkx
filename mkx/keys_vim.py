@@ -1,12 +1,9 @@
-from adafruit_hid.keyboard import Keyboard
-
 from mkx.keys_abstract import KeysAbstract
 from mkx.keys_standard import *
 from mkx.keys_modifiers import M_LCTL, M_LSFT
 from mkx.keys_sequence import SEQ
 from mkx.keys_layers import TO
 from mkx.keys_tapdance import TD
-from mkx.manager_layers import LayersManager
 
 
 class VIM(SEQ):
@@ -35,35 +32,6 @@ class VIM_TD(TD):
     def T(self, timeout):
         self._timeout = timeout
         return self
-
-
-class VIM_VIS(KeysAbstract):
-    def __init__(self, press: bool, key_name: str):
-        super().__init__()
-        self.press = press
-        self.key_name = key_name
-        self.key_layer = None
-
-    def L(self, layer):
-        if layer is not None:
-            self.key_layer = TO(layer)
-        return self
-
-    def on_press(
-        self, layer_manager: LayersManager, keyboard: Keyboard, timestamp: int
-    ):
-        if self.key_layer is not None:
-            self.key_layer.on_press(layer_manager, keyboard, timestamp)
-        else:
-            return
-
-        if self.press:
-            LSHIFT.on_press(layer_manager, keyboard, timestamp)
-        else:
-            LSHIFT.on_release(layer_manager, keyboard, timestamp)
-
-    def on_release(self, _, __, ___):
-        pass
 
 
 # fmt: off
@@ -208,10 +176,6 @@ VI_F = VI_FIND = VIM([
 
 VI_X = VI_CUT = VIM_TD(M_LCTL(X), VI_CUT_LINE, key_name="VI_CUT")
 
-VI_V = VI_VIS = VI_VISUAL = VIM_VIS(True, "VI_VIS")
-
-VI_V_ESC = VIM_VIS(False, "VI_V_ESC")
-
 __all__ = [
     "VIM", "VIM_L", "VIM_TD", "VIM_VIS",
 
@@ -246,9 +210,6 @@ __all__ = [
     "VI_D", "VI_DEL", "VI_DELATE",
     "VI_X", "VI_CUT",
     "VI_F", "VI_FIND",
-
-    "VI_V", "VI_VIS", "VI_VISUAL",
-    "VI_V_ESC",
 ]
 
 # fmt: on
