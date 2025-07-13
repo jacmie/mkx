@@ -414,23 +414,31 @@ $(document).ready(function(){initNavTree('p_5.html',''); initResizable(); });
 <tr class="markdownTableHead">
 <th class="markdownTableHeadNone">Key   </th><th class="markdownTableHeadNone">Aliases   </th><th class="markdownTableHeadNone">Description    </th></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone">VI_HW   </td><td class="markdownTableBodyNone">VI_HI_WO, VI_HIGLIGHT_WORD   </td><td class="markdownTableBodyNone">Higlght the word under the curcor    </td></tr>
+<td class="markdownTableBodyNone">VI_HW   </td><td class="markdownTableBodyNone">VI_HI_WO, VI_HIGLIGHT_WORD   </td><td class="markdownTableBodyNone">Higlight the word under the cursor    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone">VI_HL   </td><td class="markdownTableBodyNone">VI_HI_LI, VI_HIGLIGHT_LINE   </td><td class="markdownTableBodyNone">Higlght the line under the curcor    </td></tr>
+<td class="markdownTableBodyNone">VI_HL   </td><td class="markdownTableBodyNone">VI_HI_LI, VI_HIGLIGHT_LINE   </td><td class="markdownTableBodyNone">Higlight the line under the cursor    </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone">VI_YW   </td><td class="markdownTableBodyNone">VI_Y_WO, VI_YANK_WORD   </td><td class="markdownTableBodyNone">Yank/Copy the word under the curcor    </td></tr>
+<td class="markdownTableBodyNone">VI_YW   </td><td class="markdownTableBodyNone">VI_Y_WO, VI_YANK_WORD   </td><td class="markdownTableBodyNone">Yank/Copy the word under the cursor    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone">VI_YL   </td><td class="markdownTableBodyNone">VI_Y_LI, VI_YANK_LINE   </td><td class="markdownTableBodyNone">Yank/Copy the line under the curcor    </td></tr>
+<td class="markdownTableBodyNone">VI_YL   </td><td class="markdownTableBodyNone">VI_Y_LI, VI_YANK_LINE   </td><td class="markdownTableBodyNone">Yank/Copy the line under the cursor    </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone">VI_CW   </td><td class="markdownTableBodyNone">VI_CUT_WO, VI_CUT_WORD   </td><td class="markdownTableBodyNone">Cut the word under the curcor    </td></tr>
+<td class="markdownTableBodyNone">VI_CW   </td><td class="markdownTableBodyNone">VI_CUT_WO, VI_CUT_WORD   </td><td class="markdownTableBodyNone">Cut the word under the cursor    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone">VI_CL   </td><td class="markdownTableBodyNone">VI_CUT_LI, VI_CUT_LINE   </td><td class="markdownTableBodyNone">Cut the line under the curcor    </td></tr>
+<td class="markdownTableBodyNone">VI_CL   </td><td class="markdownTableBodyNone">VI_CUT_LI, VI_CUT_LINE   </td><td class="markdownTableBodyNone">Cut the line under the cursor    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">VI_DW   </td><td class="markdownTableBodyNone">VI_DEL_WO, VI_DEL_WORD   </td><td class="markdownTableBodyNone">Delete the word under the cursor    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">VI_DL   </td><td class="markdownTableBodyNone">VI_DEL_LI, VI_DEL_LINE   </td><td class="markdownTableBodyNone">Delete the line under the cursor    </td></tr>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone">VI_PRVL   </td><td class="markdownTableBodyNone">VI_MINS, VI_PREV_LINE   </td><td class="markdownTableBodyNone">Go to the beginning of the previous line    </td></tr>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone">VI_NXTL   </td><td class="markdownTableBodyNone">VI_PLUS, VI_NEXT_LINE   </td><td class="markdownTableBodyNone">Go to the beginning of the next line    </td></tr>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone">VI_NXTW   </td><td class="markdownTableBodyNone">VI_W, VI_NEXT_WORD   </td><td class="markdownTableBodyNone">Go to the beginning of the previous word    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">VI_MVLU   </td><td class="markdownTableBodyNone">VI_MV_LINE_UP   </td><td class="markdownTableBodyNone">Move the line under the cursor up    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">VI_MVLD   </td><td class="markdownTableBodyNone">VI_MV_LINE_DOWN   </td><td class="markdownTableBodyNone">Move the line under the cursor down    </td></tr>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone">VI_PRVW   </td><td class="markdownTableBodyNone">VI_E, VI_PREV_WORD   </td><td class="markdownTableBodyNone">Go to the beginning of the next word    </td></tr>
 <tr class="markdownTableRowOdd">
@@ -452,13 +460,11 @@ $(document).ready(function(){initNavTree('p_5.html',''); initResizable(); });
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone">VI_SUBS.L(nr)   </td><td class="markdownTableBodyNone">VI_S.L(nr), VI_SUBSTITUTE.L(nr)   </td><td class="markdownTableBodyNone">Cut line and switch to Edit Mode on the Layer <em>nr</em>    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone">VI_DEL   </td><td class="markdownTableBodyNone">VI_D, VI_DELATE   </td><td class="markdownTableBodyNone">Delete, on double tap cut whole line    </td></tr>
+<td class="markdownTableBodyNone">VI_DEL   </td><td class="markdownTableBodyNone">VI_D, VI_DELATE   </td><td class="markdownTableBodyNone">Delete, on double tap delete whole line    </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone">VI_FIND   </td><td class="markdownTableBodyNone">VI_F   </td><td class="markdownTableBodyNone">Find    </td></tr>
+<td class="markdownTableBodyNone">VI_CUT   </td><td class="markdownTableBodyNone">VI_X   </td><td class="markdownTableBodyNone">Cut, on double tap cut whole line    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone">VI_VIS.L(nr)   </td><td class="markdownTableBodyNone">VI_V.L(nr), VI_VISUAL.L(nr)   </td><td class="markdownTableBodyNone">Switch to Visual Mode on the Layer <em>nr</em>    </td></tr>
-<tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone">VI_V_ESC.L(nr)   </td><td class="markdownTableBodyNone"></td><td class="markdownTableBodyNone">Switch back from the Visual Mode to the Normal Mode on the Layer <em>nr</em>   </td></tr>
+<td class="markdownTableBodyNone">VI_FIND   </td><td class="markdownTableBodyNone">VI_F   </td><td class="markdownTableBodyNone">Find   </td></tr>
 </table>
 <h2><a class="anchor" id="p_5_8_1"></a>
 5.8.1 Normal Mode</h2>
@@ -468,8 +474,7 @@ $(document).ready(function(){initNavTree('p_5.html',''); initResizable(); });
 <p>Classic editing mode using layer with standard keys.</p>
 <h2><a class="anchor" id="p_5_8_3"></a>
 5.8.3 Visual Mode</h2>
-<p>Highlighting mode where the <b>VI_VIS.L(nr)</b> key holds the <b>Shift</b> key and switches to a selected layer with movement keys. <br  />
- Use the <b>VI_V_ESC.L(nr)</b> key to release <b>Shift</b> and return to the Normal mode layer.</p>
+<p>Highlighting mode where the mevement keys hold the <b>Shift</b>.</p>
 <h2><a class="anchor" id="p_5_8_3"></a>
 5.8.3 Visual Mode</h2>
 <p>Replace mode where the <b>VI_REPL.L(nr)</b> key presses the standard <b>Insert</b> key and switches to a selected layer with movement keys. <br  />
@@ -491,7 +496,7 @@ $(document).ready(function(){initNavTree('p_5.html',''); initResizable(); });
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone">None   </td><td class="markdownTableBodyNone">VI_APND.L(1)   </td><td class="markdownTableBodyNone">VI_SUBS.L(1)   </td><td class="markdownTableBodyNone">VI_DEL   </td><td class="markdownTableBodyNone">VI_FIND   </td><td class="markdownTableBodyNone">None   </td><td class="markdownTableBodyNone">LEFT   </td><td class="markdownTableBodyNone">DOWN   </td><td class="markdownTableBodyNone">UP   </td><td class="markdownTableBodyNone">RIGHT   </td><td class="markdownTableBodyNone">None    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone">None   </td><td class="markdownTableBodyNone">None   </td><td class="markdownTableBodyNone">DEL   </td><td class="markdownTableBodyNone">None   </td><td class="markdownTableBodyNone">VI_VIS.L(2)   </td><td class="markdownTableBodyNone">VI_PRVW   </td><td class="markdownTableBodyNone">F3   </td><td class="markdownTableBodyNone">None   </td><td class="markdownTableBodyNone">None   </td><td class="markdownTableBodyNone">TAB   </td><td class="markdownTableBodyNone">VI_FIND    </td></tr>
+<td class="markdownTableBodyNone">None   </td><td class="markdownTableBodyNone">None   </td><td class="markdownTableBodyNone">DEL   </td><td class="markdownTableBodyNone">None   </td><td class="markdownTableBodyNone">TO(2)   </td><td class="markdownTableBodyNone">VI_PRVW   </td><td class="markdownTableBodyNone">F3   </td><td class="markdownTableBodyNone">None   </td><td class="markdownTableBodyNone">None   </td><td class="markdownTableBodyNone">TAB   </td><td class="markdownTableBodyNone">VI_FIND    </td></tr>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone" colspan="11"><b>Edit Mode</b>    </td></tr>
 <tr class="markdownTableRowEven">
@@ -507,15 +512,15 @@ $(document).ready(function(){initNavTree('p_5.html',''); initResizable(); });
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone" colspan="11"><b>Visual Mode</b>    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone">VI_V_ESC.L(0)   </td><td class="markdownTableBodyNone">F1   </td><td class="markdownTableBodyNone">F2   </td><td class="markdownTableBodyNone">F3   </td><td class="markdownTableBodyNone">F4   </td><td class="markdownTableBodyNone">F5   </td><td class="markdownTableBodyNone">F6   </td><td class="markdownTableBodyNone">F7   </td><td class="markdownTableBodyNone">F8   </td><td class="markdownTableBodyNone">F9   </td><td class="markdownTableBodyNone">F10    </td></tr>
+<td class="markdownTableBodyNone">TO(0)   </td><td class="markdownTableBodyNone">F1   </td><td class="markdownTableBodyNone">F2   </td><td class="markdownTableBodyNone">F3   </td><td class="markdownTableBodyNone">F4   </td><td class="markdownTableBodyNone">F5   </td><td class="markdownTableBodyNone">F6   </td><td class="markdownTableBodyNone">F7   </td><td class="markdownTableBodyNone">F8   </td><td class="markdownTableBodyNone">F9   </td><td class="markdownTableBodyNone">F10    </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone">None   </td><td class="markdownTableBodyNone">None   </td><td class="markdownTableBodyNone">None   </td><td class="markdownTableBodyNone">None   </td><td class="markdownTableBodyNone">None   </td><td class="markdownTableBodyNone">None   </td><td class="markdownTableBodyNone">None   </td><td class="markdownTableBodyNone">None   </td><td class="markdownTableBodyNone">None   </td><td class="markdownTableBodyNone">None   </td><td class="markdownTableBodyNone">HOME    </td></tr>
+<td class="markdownTableBodyNone">None   </td><td class="markdownTableBodyNone">None   </td><td class="markdownTableBodyNone">None   </td><td class="markdownTableBodyNone">None   </td><td class="markdownTableBodyNone">None   </td><td class="markdownTableBodyNone">None   </td><td class="markdownTableBodyNone">None   </td><td class="markdownTableBodyNone">None   </td><td class="markdownTableBodyNone">None   </td><td class="markdownTableBodyNone">None   </td><td class="markdownTableBodyNone">M_LSFT(HOME)    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone">None   </td><td class="markdownTableBodyNone">None   </td><td class="markdownTableBodyNone">VI_NXTW   </td><td class="markdownTableBodyNone">VI_NXTW   </td><td class="markdownTableBodyNone">None   </td><td class="markdownTableBodyNone">None   </td><td class="markdownTableBodyNone">VI_YANK   </td><td class="markdownTableBodyNone">VI_UNDO   </td><td class="markdownTableBodyNone">None   </td><td class="markdownTableBodyNone">None   </td><td class="markdownTableBodyNone">VI_PAST    </td></tr>
+<td class="markdownTableBodyNone">None   </td><td class="markdownTableBodyNone">None   </td><td class="markdownTableBodyNone">M_LSFT(VI_NXTW)   </td><td class="markdownTableBodyNone">M_LSFT(VI_NXTW)   </td><td class="markdownTableBodyNone">None   </td><td class="markdownTableBodyNone">None   </td><td class="markdownTableBodyNone">VI_YANK   </td><td class="markdownTableBodyNone">VI_UNDO   </td><td class="markdownTableBodyNone">None   </td><td class="markdownTableBodyNone">None   </td><td class="markdownTableBodyNone">VI_PAST    </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone">None   </td><td class="markdownTableBodyNone">None   </td><td class="markdownTableBodyNone">None   </td><td class="markdownTableBodyNone">VI_DEL   </td><td class="markdownTableBodyNone">None   </td><td class="markdownTableBodyNone">None   </td><td class="markdownTableBodyNone">LEFT   </td><td class="markdownTableBodyNone">DOWN   </td><td class="markdownTableBodyNone">UP   </td><td class="markdownTableBodyNone">RIGHT   </td><td class="markdownTableBodyNone">None    </td></tr>
+<td class="markdownTableBodyNone">None   </td><td class="markdownTableBodyNone">None   </td><td class="markdownTableBodyNone">None   </td><td class="markdownTableBodyNone">VI_DEL   </td><td class="markdownTableBodyNone">None   </td><td class="markdownTableBodyNone">None   </td><td class="markdownTableBodyNone">M_LSFT(LEFT)   </td><td class="markdownTableBodyNone">M_LSFT(DOWN)   </td><td class="markdownTableBodyNone">M_LSFT(UP)   </td><td class="markdownTableBodyNone">M_LSFT(RIGHT)   </td><td class="markdownTableBodyNone">None    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone">None   </td><td class="markdownTableBodyNone">None   </td><td class="markdownTableBodyNone">DEL   </td><td class="markdownTableBodyNone">None   </td><td class="markdownTableBodyNone">None   </td><td class="markdownTableBodyNone">VI_PRVW   </td><td class="markdownTableBodyNone">None   </td><td class="markdownTableBodyNone">M   </td><td class="markdownTableBodyNone">None   </td><td class="markdownTableBodyNone">None   </td><td class="markdownTableBodyNone">None    </td></tr>
+<td class="markdownTableBodyNone">None   </td><td class="markdownTableBodyNone">None   </td><td class="markdownTableBodyNone">DEL   </td><td class="markdownTableBodyNone">None   </td><td class="markdownTableBodyNone">None   </td><td class="markdownTableBodyNone">M_LSFT(VI_PRVW)   </td><td class="markdownTableBodyNone">None   </td><td class="markdownTableBodyNone">M   </td><td class="markdownTableBodyNone">None   </td><td class="markdownTableBodyNone">None   </td><td class="markdownTableBodyNone">None    </td></tr>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone" colspan="11"><b>Replace Mode</b>    </td></tr>
 <tr class="markdownTableRowEven">

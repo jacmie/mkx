@@ -132,7 +132,7 @@ $(document).ready(function(){initNavTree('p_3.html',''); initResizable(); });
 <div class="line">col_pins = (board.D5,)</div>
 <div class="line">row_pins = (board.D6,)</div>
 <div class="line">hardware_keypass_peryphery = PeripheryCentral(<span class="stringliteral">&quot;hardware_keypass&quot;</span>, col_pins, row_pins)</div>
-<div class="line">keyboard.central_periphery = hardware_keypass_peryphery</div>
+<div class="line">keyboard.add_central_periphery(hardware_keypass_peryphery)</div>
 <div class="line"> </div>
 <div class="line">interphace_central = InterphaceCentral(hardware_keypass_peryphery, 0, 0, 0, 0)</div>
 <div class="line">keyboard.add_interface(interphace_central)</div>
@@ -178,7 +178,7 @@ $(document).ready(function(){initNavTree('p_3.html',''); initResizable(); });
 <div class="line">row_pins = (board.GP10, board.GP11, board.GP13, board.GP15, board.GP17)</div>
 <div class="line"> </div>
 <div class="line">central_peryphery = PeripheryCentral(<span class="stringliteral">&quot;booster_l&quot;</span>, col_pins, row_pins)</div>
-<div class="line">keyboard.central_periphery = central_peryphery</div>
+<div class="line">keyboard.add_central_periphery(central_peryphery)</div>
 <div class="line"> </div>
 <div class="line">interphace_central = InterphaceCentral(central_peryphery, 0, 0, 5, 4)</div>
 <div class="line">keyboard.add_interface(interphace_central)</div>
@@ -265,9 +265,10 @@ $(document).ready(function(){initNavTree('p_3.html',''); initResizable(); });
 <div class="line"> </div>
 <div class="line"><span class="keyword">from</span> mkx.mkx_central <span class="keyword">import</span> MKX_Central</div>
 <div class="line"><span class="keyword">from</span> mkx.layer_status_led_rgb_neopixel <span class="keyword">import</span> LayerStatusLedRgbNeoPixel</div>
+<div class="line"><span class="keyword">from</span> mkx.backlight_neopixel_rainbow <span class="keyword">import</span> BacklightNeopixelRainbow</div>
 <div class="line"> </div>
 <div class="line"><span class="keyword">from</span> mkx.keys_standard <span class="keyword">import</span> *</div>
-<div class="line"><span class="keyword">from</span> mkx.keys_modifiers <span class="keyword">import</span> M_LCTL, M_LGUI</div>
+<div class="line"><span class="keyword">from</span> mkx.keys_modifiers <span class="keyword">import</span> M_LCTL, M_LSFT, M_LGUI</div>
 <div class="line"><span class="keyword">from</span> mkx.keys_media <span class="keyword">import</span> VOLU, VOLD</div>
 <div class="line"><span class="keyword">from</span> mkx.keys_holdtap <span class="keyword">import</span> HT</div>
 <div class="line"><span class="keyword">from</span> mkx.keys_layers <span class="keyword">import</span> TO</div>
@@ -282,7 +283,7 @@ $(document).ready(function(){initNavTree('p_3.html',''); initResizable(); });
 <div class="line">col_pins = (board.D13, board.D12, board.D11, board.A1, board.A4, board.A3)</div>
 <div class="line">row_pins = (board.A2, board.MISO, board.D10, board.D9, board.D6, board.D5)</div>
 <div class="line">central_peryphery = PeripheryCentral(<span class="stringliteral">&quot;sq_l&quot;</span>, col_pins, row_pins)</div>
-<div class="line">keyboard.central_periphery = central_peryphery</div>
+<div class="line">keyboard.add_central_periphery(central_peryphery)</div>
 <div class="line"> </div>
 <div class="line">interphace_central = InterphaceCentral(central_peryphery, 0, 0, 5, 5)</div>
 <div class="line">keyboard.add_interface(interphace_central)</div>
@@ -297,6 +298,11 @@ $(document).ready(function(){initNavTree('p_3.html',''); initResizable(); });
 <div class="line">status_led.add_layer(3, (255, 0, 0))  <span class="comment"># Red</span></div>
 <div class="line">keyboard.add_layer_status_led(status_led)</div>
 <div class="line"> </div>
+<div class="line">backlight = BacklightNeopixelRainbow(board.A0, num_pixels=72, brightness=0.4)</div>
+<div class="line">backlight.slower(2)</div>
+<div class="line">backlight.set_swirl(<span class="keyword">True</span>)</div>
+<div class="line">keyboard.add_backlight(backlight)</div>
+<div class="line"> </div>
 <div class="line">OPEN = M_LCTL(O)</div>
 <div class="line">CLOSE = M_LCTL(W)</div>
 <div class="line">SAVE = M_LCTL(S)</div>
@@ -306,13 +312,13 @@ $(document).ready(function(){initNavTree('p_3.html',''); initResizable(); });
 <div class="line">LOCK = M_LGUI(L)</div>
 <div class="line">PTAB = M_LCTL(PGUP)</div>
 <div class="line">NTAB = M_LCTL(PGDN)</div>
+<div class="line">COMMENT = M_LCTL(SLSH)</div>
 <div class="line"> </div>
 <div class="line">RALT_DEL = HT(DEL, RALT)</div>
 <div class="line">LALT_DEL = HT(DEL, LALT)</div>
 <div class="line">LSFT_SPC = HT(SPC, LSFT)</div>
 <div class="line"> </div>
 <div class="line"><span class="comment"># fmt: off</span></div>
-<div class="line"> </div>
 <div class="line">keymap = [</div>
 <div class="line">    <span class="comment"># Normal</span></div>
 <div class="line">    [</div>
@@ -320,7 +326,7 @@ $(document).ready(function(){initNavTree('p_3.html',''); initResizable(); });
 <div class="line">        GRV,        N1,             N2,             N3,         N4,             N5,         N6,         N7,         N8,         N9,             N0,         F12,</div>
 <div class="line">        VI_MVLU,    <span class="keywordtype">None</span>,           VI_DEL,         VI_REPL.L(3), SAVE,         LOCK,       TABS,       VI_FIND,    VI_UNDO,    VI_PAST,        <span class="keywordtype">None</span>,       VOLU,</div>
 <div class="line">        VI_MVLD,    VI_APND.L(1),   VI_SUBS.L(1),   HOME,       TOOLS,          DESKTOP,    VI_YANK,    VI_NXTW,    END,        OPEN,           VI_INS.L(1),VOLD,</div>
-<div class="line">        TAB,        <span class="keywordtype">None</span>,           DEL,            CLOSE,      VI_VIS.L(2),    VI_PRVW,    <span class="keywordtype">None</span>,       <span class="keywordtype">None</span>,       PTAB,       NTAB,           <span class="keywordtype">None</span>,       <span class="keywordtype">None</span>,</div>
+<div class="line">        TAB,        <span class="keywordtype">None</span>,           VI_CUT,         CLOSE,      TO(2),          VI_PRVW,    <span class="keywordtype">None</span>,       <span class="keywordtype">None</span>,       PTAB,       NTAB,           COMMENT,    <span class="keywordtype">None</span>,</div>
 <div class="line">        LCTRL,      LCTRL,          ENT,            ENT,        LSFT_SPC,       LSFT_SPC,   BSPC,       LALT_DEL,   LEFT,       UP,             DOWN,       RIGHT,</div>
 <div class="line">    ],</div>
 <div class="line">    </div>
@@ -336,12 +342,12 @@ $(document).ready(function(){initNavTree('p_3.html',''); initResizable(); });
 <div class="line"> </div>
 <div class="line">    <span class="comment"># Visual</span></div>
 <div class="line">    [</div>
-<div class="line">        VI_V_ESC.L(0), F1,          F2,             F3,         F4,             F5,         F6,         F7,         F8,         F9,             F10,        F11,</div>
-<div class="line">        GRV,        N1,             N2,             N3,         N4,             N5,         N6,         N7,         N8,         N9,             N0,         F12,</div>
-<div class="line">        VI_NXTL,    <span class="keywordtype">None</span>,           VI_DEL,         VI_REPL.L(3), SAVE,         LOCK,       TABS,       VI_FIND,    VI_UNDO,    VI_PAST,        <span class="keywordtype">None</span>,       <span class="keywordtype">None</span>,</div>
-<div class="line">        VI_PRVL,    VI_APND.L(1),   VI_SUBS.L(1),   HOME,       TOOLS,          DESKTOP,    VI_YANK,    VI_NXTW,    END,        OPEN,           VI_INS.L(1),<span class="keywordtype">None</span>,</div>
-<div class="line">        TAB,        <span class="keywordtype">None</span>,           DEL,            CLOSE,      VI_VIS.L(2),    VI_PRVW,    <span class="keywordtype">None</span>,       <span class="keywordtype">None</span>,       PTAB,       NTAB,           <span class="keywordtype">None</span>,       <span class="keywordtype">None</span>,</div>
-<div class="line">        LCTRL,      LCTRL,          ENT,            ENT,        LSFT_SPC,       LSFT_SPC,   BSPC,       LALT_DEL,   LEFT,       UP,             DOWN,       RIGHT,</div>
+<div class="line">        TO(0),              F1,             F2,             F3,             F4,         F5,             F6,         F7,             F8,             F9,         F10,            F11,</div>
+<div class="line">        GRV,                N1,             N2,             N3,             N4,         N5,             N6,         N7,             N8,             N9,         N0,             F12,</div>
+<div class="line">        M_LSFT(VI_NXTL),    <span class="keywordtype">None</span>,           VI_DEL,         VI_REPL.L(3),   SAVE,       LOCK,           TABS,       VI_FIND,        VI_UNDO,        VI_PAST,    <span class="keywordtype">None</span>,           <span class="keywordtype">None</span>,</div>
+<div class="line">        M_LSFT(VI_PRVL),    VI_APND.L(1),   VI_SUBS.L(1),   M_LSFT(HOME),   TOOLS,      DESKTOP,        VI_YANK,    M_LSFT(VI_NXTW),M_LSFT(END),    OPEN,       VI_INS.L(1),    <span class="keywordtype">None</span>,</div>
+<div class="line">        TAB,                <span class="keywordtype">None</span>,           VI_CUT,         CLOSE,          <span class="keywordtype">None</span>,       M_LSFT(VI_PRVW),<span class="keywordtype">None</span>,       <span class="keywordtype">None</span>,           PTAB,           NTAB,       COMMENT,        <span class="keywordtype">None</span>,</div>
+<div class="line">        LCTRL,              LCTRL,          ENT,            ENT,            LSFT_SPC,   LSFT_SPC,       BSPC,       LALT_DEL,       M_LSFT(LEFT),   M_LSFT(UP), M_LSFT(DOWN),   M_LSFT(RIGHT),</div>
 <div class="line">    ],</div>
 <div class="line"> </div>
 <div class="line">    <span class="comment"># Replace </span></div>
