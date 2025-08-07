@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['replace_20mode_0',['5.8.4 Replace Mode',['../p_5.html#p_5_8_4',1,'']]],
-  ['repository_20with_20the_20circuitpy_20drive_1',['2.4.1 Synchronize Github repository with the CIRCUITPY drive',['../p_2.html#p_2_4_1',1,'']]],
-  ['rules_2',['Code rules',['../p_6.html#autotoc_md2',1,'']]]
+  ['periphery_0',['periphery',['../p_1.html#p_1_2',1,'1.2 Periphery'],['../p_4.html#p_4_4',1,'4.4 MKX Periphery']]],
+  ['python_1',['2.1 Install Circuit Python',['../p_2.html#p_2_1',1,'']]],
+  ['python_20environment_20optional_2',['2.2 Set Python environment (optional)',['../p_2.html#p_2_2',1,'']]]
 ];

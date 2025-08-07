@@ -7,8 +7,9 @@ var searchData=
   ['2_204_20install_20mkx_4',['2.4 Install MKX',['../p_2.html#p_2_4',1,'']]],
   ['2_20booster_20keyboard_5',['3.2 Booster Keyboard',['../p_3.html#p_3_2',1,'']]],
   ['2_20edit_20mode_6',['5.8.2 Edit Mode',['../p_5.html#p_5_8_2',1,'']]],
-  ['2_20istallation_7',['2 Istallation',['../p_2.html',1,'']]],
-  ['2_20modifiers_20keys_8',['5.2 Modifiers Keys',['../p_5.html#p_5_2',1,'']]],
-  ['2_20periphery_9',['1.2 Periphery',['../p_1.html#p_1_2',1,'']]],
-  ['2_5fistallation_2emd_10',['2_Istallation.md',['../2__Istallation_8md.html',1,'']]]
+  ['2_20hid_7',['4.2 HID',['../p_4.html#p_4_2',1,'']]],
+  ['2_20istallation_8',['2 Istallation',['../p_2.html',1,'']]],
+  ['2_20modifiers_20keys_9',['5.2 Modifiers Keys',['../p_5.html#p_5_2',1,'']]],
+  ['2_20periphery_10',['1.2 Periphery',['../p_1.html#p_1_2',1,'']]],
+  ['2_5fistallation_2emd_11',['2_Istallation.md',['../2__Istallation_8md.html',1,'']]]
 ];

@@ -114,7 +114,18 @@ $(document).ready(function(){initNavTree('p_3.html',''); initResizable(); });
 </div>
 <div class="textblock"><h1><a class="anchor" id="p_3_1"></a>
 3.1 Hardware Keypass</h1>
-<div style="margin-left: 100px;"> <img src="KeyPass_keyboard.jpg" alt="" width="800" class="inline"/> </div><div class="fragment"><div class="line"><span class="comment"># code.py</span></div>
+<div style="margin-left: 100px;"> <img src="KeyPass_keyboard.jpg" alt="" width="800" class="inline"/> </div><p>This simple setup uses an unmodified <em>Seeed Xiao RP2040</em> connected to a computer via USB. <br  />
+</p>
+<p>To make it more useful and entertaining, we simulate the behavior of a hardware security key. <br  />
+ ⚠️ <b>Warning:</b> <em>This is not intended for real security purposes. Actual hardware keys use encryption and have more advanced mechanisms.</em> <br  />
+</p>
+<p>By bridging pin D5 (sending pin) and pin D6 (receiving pin) with pliers or any other conductive object like a wire, paper clip, etc. predefined key string is sent to the computer.</p>
+<p>This setup uses only one hardware component, which acts as both the signal sender and the central processing unit. <br  />
+ For this reason <b>PeripheryCentral</b> is defined and added to the keyboard object. Each peripheral device also requires an interface, here <b>InterphaceCentral</b> is added to fulfill that role.</p>
+<p>Standard keyboard keys were used, modifier key <b>M_LSFT</b> was applied to produce capital letters and special characters. <br  />
+ All input is grouped under a single key called <b>HK</b>, defined as a sequence <b>SEQ</b> key. <br  />
+ The keymap is simple and consists of only one key: <b>HK</b>.</p>
+<div class="fragment"><div class="line"><span class="comment"># code.py</span></div>
 <div class="line"> </div>
 <div class="line"><span class="keyword">import</span> board</div>
 <div class="line"> </div>
@@ -155,7 +166,28 @@ $(document).ready(function(){initNavTree('p_3.html',''); initResizable(); });
 <div class="line">keyboard.run_forever()</div>
 </div><!-- fragment --><h1><a class="anchor" id="p_3_2"></a>
 3.2 Booster Keyboard</h1>
-<div style="margin-left: 100px;"> <img src="BOOSTER_keyboard.jpg" alt="" width="800" class="inline"/> </div><p><b>Left Keyboard Part (Central)</b> </p><div class="fragment"><div class="line"><span class="comment"># code.py</span></div>
+<div style="margin-left: 100px;"> <img src="BOOSTER_keyboard.jpg" alt="" width="800" class="inline"/> </div><p>Here is a more practical example using a split keyboard called <b>Booster</b>.</p>
+<p>Both halves of the keyboard use the <em>Pimoroni PGA2040</em> board, chosen for its small footprint, numerous available GPIO pins, and minimal onboard extras.</p>
+<p>In the image, you can see:</p><ul>
+<li>hot swap choc keys sockets</li>
+<li>development wiring on the right half, connecting it to USB for programming.</li>
+<li>loop between the sending and receiving pins used for debugging the UART connection.</li>
+<li>USB magnetic connector soldered to the left half, intended for regular usage.</li>
+<li>status RGB LED glowing green, indicating the currently active layer.</li>
+</ul>
+<p>The keyboard runs slightly modified <a href="https://workmanlayout.org/">Workman layout</a> and supports various types of keys, including <b>media keys</b>.</p>
+<p>In terms of architecture:</p><ul>
+<li>The left half functions as the <b>PeripheryCentral</b></li>
+<li>The right half functions as the <b>PeripheryUART</b></li>
+</ul>
+<p>These peripheries are designed solely to send signals to the central processor using a defined protocol.</p>
+<p>The left half also contains the <b>Interphaces</b> for both sides, managing communication between the <b>central</b> unit and each <b>periphery</b>.</p>
+<p>The <b>status LED</b> indicates the active layer:</p><ul>
+<li>Green for Layer 1</li>
+<li>Blue for Layer 2</li>
+</ul>
+<p>Additionally, a few shortcut keys are defined, which are referenced later in the keymap.</p>
+<p><b>Left Keyboard Part (Central)</b> </p><div class="fragment"><div class="line"><span class="comment"># code.py</span></div>
 <div class="line"> </div>
 <div class="line"><span class="keyword">import</span> board</div>
 <div class="line"> </div>
@@ -245,7 +277,27 @@ $(document).ready(function(){initNavTree('p_3.html',''); initResizable(); });
 <div class="line">keyboard.run_forever()</div>
 </div><!-- fragment --><h1><a class="anchor" id="p_3_3"></a>
 3.3 Square Keyboard</h1>
-<div style="margin-left: 100px;"> <img src="SQ_keyboard.jpg" alt="" class="inline"/> </div><p><b>Left Keyboard Part (Central)</b></p>
+<div style="margin-left: 100px;"> <img src="SQ_keyboard.jpg" alt="" class="inline"/> </div><p>Another split keyboard example, called <b>Sq (Square)</b>, is equipped with <em>Feather ESP32-S3</em> boards on both halves. <br  />
+ This board provides several advantages, including potential Bluetooth connectivity, battery support, and onboard charging capabilities.</p>
+<p>Since many parts of the code are shared with the Booster keyboard, this overview will focus only on the key differences.</p>
+<p>The left half, which connects to the computer, includes a new file: <b>boot.py</b>. <br  />
+ This script runs immediately when the board powers on, allowing configuration of USB device properties.</p>
+<p>This includes:</p><ul>
+<li>defining the keyboard's USB type and name</li>
+<li>disabling auto-reload on file save or system glitches, improving stability during everyday use</li>
+<li>preventing the board from appearing as a mass storage device, which is important for cybersecurity policies in some workplaces</li>
+</ul>
+<p>To re-enable the storage device mode, a specific key (wired to source and sense pins) must be held down while powering on the board. <br  />
+ ⚠️ <b>Warning:</b> <em>Always back up your code before disabling the storage feature. Incorrect pin configuration or other errors can make the board unresponsive. <br  />
+ In such cases, a hard reset may be required, which erases all data and necessitates re-uploading your code.</em></p>
+<p>Additional Features:</p><ul>
+<li><b>RGB backlighting</b>: the keyboard has a slowly glowing rainbow effect across its keys</li>
+<li><b>VIM emulation</b>: the keyboard can simulate VIM editor behavior using a custom <b>keys_vim</b> configuration</li>
+</ul>
+<p>Each keyboard layer corresponds to a different <b>VIM mode</b>, indicated by the <b>status LED</b>. <br  />
+ Even if you're not a VIM fan, you may find some picked <em>vim_keys</em> useful in your own keymap. <br  />
+ Theoretically, this behavior can work even in text input fields of a browser 😉</p>
+<p><b>Left Keyboard Part (Central)</b></p>
 <div class="fragment"><div class="line"><span class="comment"># boot.py</span></div>
 <div class="line"> </div>
 <div class="line"><span class="keyword">import</span> board</div>
@@ -294,7 +346,7 @@ $(document).ready(function(){initNavTree('p_3.html',''); initResizable(); });
 <div class="line">status_led = LayerStatusLedRgbNeoPixel(board.SCK)</div>
 <div class="line">status_led.add_layer(0, (0, 0, 255))  <span class="comment"># Blue</span></div>
 <div class="line">status_led.add_layer(1, (0, 255, 0))  <span class="comment"># Green</span></div>
-<div class="line">status_led.add_layer(2, (255, 255, 255))  <span class="comment"># Write</span></div>
+<div class="line">status_led.add_layer(2, (255, 255, 255))  <span class="comment"># White</span></div>
 <div class="line">status_led.add_layer(3, (255, 0, 0))  <span class="comment"># Red</span></div>
 <div class="line">keyboard.add_layer_status_led(status_led)</div>
 <div class="line"> </div>

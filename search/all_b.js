@@ -1,8 +1,8 @@
 var searchData=
 [
-  ['central_0',['1.1 Central',['../p_1.html#p_1_1',1,'']]],
-  ['circuit_20python_1',['2.1 Install Circuit Python',['../p_2.html#p_2_1',1,'']]],
-  ['circuitpy_20drive_2',['2.4.1 Synchronize Github repository with the CIRCUITPY drive',['../p_2.html#p_2_4_1',1,'']]],
-  ['code_20rules_3',['Code rules',['../p_6.html#autotoc_md2',1,'']]],
-  ['concepts_4',['1 Main Concepts',['../p_1.html',1,'']]]
+  ['backlight_0',['4.7 Backlight',['../p_4.html#p_4_7',1,'']]],
+  ['booster_20keyboard_1',['3.2 Booster Keyboard',['../p_3.html#p_3_2',1,'']]],
+  ['boot_20config_2',['4.1 Boot Config',['../p_4.html#p_4_1',1,'']]],
+  ['build_20with_20mpy_3',['Build with mpy',['../p_6.html#p_6_2',1,'']]],
+  ['bundles_4',['2.3 Install Adafruit Bundles',['../p_2.html#p_2_3',1,'']]]
 ];

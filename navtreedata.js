@@ -44,7 +44,15 @@ var NAVTREE =
       [ "3.2 Booster Keyboard", "p_3.html#p_3_2", null ],
       [ "3.3 Square Keyboard", "p_3.html#p_3_3", null ]
     ] ],
-    [ "4 MKX API", "p_4.html", null ],
+    [ "4 MKX API", "p_4.html", [
+      [ "4.1 Boot Config", "p_4.html#p_4_1", null ],
+      [ "4.2 HID", "p_4.html#p_4_2", null ],
+      [ "4.3 MKX Central", "p_4.html#p_4_3", null ],
+      [ "4.4 MKX Periphery", "p_4.html#p_4_4", null ],
+      [ "4.5 Interphace", "p_4.html#p_4_5", null ],
+      [ "4.6 Layer Status LED", "p_4.html#p_4_6", null ],
+      [ "4.7 Backlight", "p_4.html#p_4_7", null ]
+    ] ],
     [ "5 Keys", "p_5.html", [
       [ "5.1 Standard Keys", "p_5.html#p_5_1", null ],
       [ "5.2 Modifiers Keys", "p_5.html#p_5_2", null ],
@@ -59,7 +67,9 @@ var NAVTREE =
         [ "5.8.3 Visual Mode", "p_5.html#p_5_8_3", null ],
         [ "5.8.4 Replace Mode", "p_5.html#p_5_8_4", null ],
         [ "5.8.5 Vim Layout", "p_5.html#p_5_8_5", null ]
-      ] ]
+      ] ],
+      [ "5.9 Media Keys", "p_5.html#p_5_9", null ],
+      [ "5.10 Mouse Keys", "p_5.html#p_5_10", null ]
     ] ],
     [ "6 Development", "p_6.html", [
       [ "Dev", "p_6.html#p_6_1", null ],

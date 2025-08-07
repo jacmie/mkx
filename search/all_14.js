@@ -1,10 +1,7 @@
 var searchData=
 [
-  ['main_20concepts_0',['1 Main Concepts',['../p_1.html',1,'']]],
-  ['mkx_1',['2.4 Install MKX',['../p_2.html#p_2_4',1,'']]],
-  ['mkx_20api_2',['4 MKX API',['../p_4.html',1,'']]],
-  ['mkx_20keyboard_3',['1.3 MKX Keyboard',['../p_1.html#p_1_3',1,'']]],
-  ['mode_4',['mode',['../p_5.html#p_5_8_1',1,'5.8.1 Normal Mode'],['../p_5.html#p_5_8_2',1,'5.8.2 Edit Mode'],['../p_5.html#p_5_8_3',1,'5.8.3 Visual Mode'],['../p_5.html#p_5_8_4',1,'5.8.4 Replace Mode']]],
-  ['modifiers_20keys_5',['5.2 Modifiers Keys',['../p_5.html#p_5_2',1,'']]],
-  ['mpy_6',['Build with mpy',['../p_6.html#p_6_2',1,'']]]
+  ['layer_20status_20led_0',['4.6 Layer Status LED',['../p_4.html#p_4_6',1,'']]],
+  ['layers_20keys_1',['5.3 Layers Keys',['../p_5.html#p_5_3',1,'']]],
+  ['layout_2',['5.8.5 Vim Layout',['../p_5.html#p_5_8_5',1,'']]],
+  ['led_3',['4.6 Layer Status LED',['../p_4.html#p_4_6',1,'']]]
 ];

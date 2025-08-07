@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['optional_0',['2.2 Set Python environment (optional)',['../p_2.html#p_2_2',1,'']]]
+  ['normal_20mode_0',['5.8.1 Normal Mode',['../p_5.html#p_5_8_1',1,'']]]
 ];
