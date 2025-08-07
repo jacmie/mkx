@@ -56,8 +56,16 @@ var NAVTREE =
     [ "5 Keys", "p_5.html", [
       [ "5.1 Standard Keys", "p_5.html#p_5_1", null ],
       [ "5.2 Modifiers Keys", "p_5.html#p_5_2", null ],
-      [ "5.3 Layers Keys", "p_5.html#p_5_3", null ],
-      [ "5.4 Sequence Keys", "p_5.html#p_5_4", null ],
+      [ "5.3 Layers Keys", "p_5.html#p_5_3", [
+        [ "5.3.1 DF - Default Layer", "p_5.html#p_5_3_1", null ],
+        [ "5.3.2 RL - Replace Layer", "p_5.html#p_5_3_2", null ],
+        [ "5.3.3 MO - Momentary Layer", "p_5.html#p_5_3_3", null ],
+        [ "5.3.4 LT - Layer Tap", "p_5.html#p_5_3_4", null ],
+        [ "5.3.5 TG - Toggle Layer", "p_5.html#p_5_3_5", null ],
+        [ "5.3.6 TO - To Layer (Toggle One-Shot Layer)", "p_5.html#p_5_3_6", null ],
+        [ "5.3.7 TT - Tap-Toggle", "p_5.html#p_5_3_7", null ]
+      ] ],
+      [ "5.4 SEQ - Sequence Keys", "p_5.html#p_5_4", null ],
       [ "5.5 HoldTap Keys", "p_5.html#p_5_5", null ],
       [ "5.6 TapDance Keys", "p_5.html#p_5_6", null ],
       [ "5.7 Sticky Keys", "p_5.html#p_5_7", null ],

@@ -9,8 +9,9 @@ var searchData=
   ['4_206_20layer_20status_20led_6',['4.6 Layer Status LED',['../p_4.html#p_4_6',1,'']]],
   ['4_207_20backlight_7',['4.7 Backlight',['../p_4.html#p_4_7',1,'']]],
   ['4_20install_20mkx_8',['2.4 Install MKX',['../p_2.html#p_2_4',1,'']]],
-  ['4_20mkx_20api_9',['4 MKX API',['../p_4.html',1,'']]],
-  ['4_20replace_20mode_10',['5.8.4 Replace Mode',['../p_5.html#p_5_8_4',1,'']]],
-  ['4_20sequence_20keys_11',['5.4 Sequence Keys',['../p_5.html#p_5_4',1,'']]],
-  ['4_5fmkx_5fapi_2emd_12',['4_MKX_API.md',['../4__MKX__API_8md.html',1,'']]]
+  ['4_20lt_20layer_20tap_9',['5.3.4 LT - Layer Tap',['../p_5.html#p_5_3_4',1,'']]],
+  ['4_20mkx_20api_10',['4 MKX API',['../p_4.html',1,'']]],
+  ['4_20replace_20mode_11',['5.8.4 Replace Mode',['../p_5.html#p_5_8_4',1,'']]],
+  ['4_20seq_20sequence_20keys_12',['5.4 SEQ - Sequence Keys',['../p_5.html#p_5_4',1,'']]],
+  ['4_5fmkx_5fapi_2emd_13',['4_MKX_API.md',['../4__MKX__API_8md.html',1,'']]]
 ];
