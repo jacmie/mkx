@@ -146,6 +146,96 @@ Keys pressed with modifier key active.
 
 @section p_5_3 5.3 Layers Keys
 
+@subsection p_5_3_1 5.3.1 DF - Default Layer
+
+Sets the default layer to the given active_layer and optionally jumps to it immediately.
+
+**Example:**
+``` {.py}
+active_layers = [0] # default
+MO(1)               # active_layers = [0, 1]
+MO(2)               # active_layers = [0, 1, 2]
+DF(3, jump=True)    # default layer set to 3 and (if jump=True) active_layers = [3]
+
+If jump=True (default behavior):
+layers = [3]        # default changed and active layers cleared to only new default
+
+If jump=False:
+active_layers = [3, 1, 2]   # default changed but active active_layers stack remains (3 inserted at bottom)
+```
+
+@subsection p_5_3_2 5.3.2 RL - Replace Layer
+
+Replaces the top layer (active layer) with a given layer, without changing the default layer.
+
+**Example:**
+``` {.py}
+active_layers = [0] # default
+MO(1)               # active_layers = [0, 1]
+MO(2)               # active_layers = [0, 1, 2]
+RL(3)               # active_layers = [0, 1, 3]    # replaced layer 2 with 3
+```
+
+@subsection p_5_3_3 5.3.3 MO - Momentary Layer
+
+Temporarily activates the specified layer while the key is held.
+
+**Example:**
+``` {.py}
+active_layers = [0] # default
+MO(1)               # press -> active_layers = [0, 1], release -> active_layers = [0]
+MO(2, SHIFT)        # press -> active_layers = [0, 2], Shift held
+                    # release -> active_layers = [0], Shift released
+```
+
+@subsection p_5_3_4 5.3.4 LT - Layer Tap
+
+Momentarily activates a layer if held, sends a key if tapped.
+
+**Example:**
+``` {.py}
+LT(1, KC.ESC)  # tap = Escape, hold = activate layer 1
+```
+
+@subsection p_5_3_5 5.3.5 TG - Toggle Layer
+
+Activates the layer if it's inactive, deactivates it if it's active.
+
+**Example:**
+``` {.py}
+layers = [0]         # default layer
+TG(1) press          # layers = [0, 1]
+TG(1) press again    # layers = [0]       # layer 1 toggled off
+TG(2)                # layers = [0, 2]
+TG(3)                # layers = [0, 2, 3]
+TG(2)                # layers = [0, 3]     # layer 2 toggled off
+```
+
+@subsection p_5_3_6 5.3.6 TO - To Layer (Toggle One-Shot Layer)
+
+Sets the given layer as the sole active layer.  
+Clears any other currently active layers.
+
+**Example:**
+``` {.py}
+layers = [0]
+TO(2) press   => layers = [2]
+TO(1) press   => layers = [1]
+```
+
+@subsection p_5_3_7 5.3.7 TT - Tap-Toggle
+
+Momentarily activates a layer if held, toggles layer if double-tapped.
+
+- Hold: activates layer while held (like MO)
+- Double-tap: toggles layer on/off
+- Single or >2 taps: no-op
+
+**Example:**
+``` {.py}
+TT(1)  # tap-tap toggles layer 1; hold = momentary
+```
+
 @section p_5_4 5.4 Sequence Keys
 
 @section p_5_5 5.5 HoldTap Keys
