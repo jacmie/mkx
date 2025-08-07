@@ -7,6 +7,22 @@
   <img width=800 src="KeyPass_keyboard.jpg">
 </div>
 
+This simple setup uses an unmodified *Seeed Xiao RP2040* connected to a computer via USB.
+<br>
+
+To make it more useful and entertaining, we simulate the behavior of a hardware security key.  
+⚠️ **Warning:** *This is not intended for real security purposes. Actual hardware keys use encryption and have more advanced mechanisms.*
+<br>
+
+By bridging pin D5 (sending pin) and pin D6 (receiving pin) with pliers or any other conductive object like a wire, paper clip, etc. predefined key string is sent to the computer.
+
+This setup uses only one hardware component, which acts as both the signal sender and the central processing unit.  
+For this reason **PeripheryCentral** is defined and added to the keyboard object. Each peripheral device also requires an interface, here **InterphaceCentral** is added to fulfill that role.
+
+Standard keyboard keys were used, modifier key **M_LSFT** was applied to produce capital letters and special characters.  
+All input is grouped under a single key called **HK**, defined as a sequence **SEQ** key.  
+The keymap is simple and consists of only one key: **HK**.
+
 ``` {.py}
 # code.py
 
@@ -54,6 +70,33 @@ keyboard.run_forever()
 <div style="margin-left: 100px;">
   <img width=800 src="BOOSTER_keyboard.jpg">
 </div>
+
+Here is a more practical example using a split keyboard called **Booster**.
+
+Both halves of the keyboard use the *Pimoroni PGA2040* board, chosen for its small footprint, numerous available GPIO pins, and minimal onboard extras.
+
+In the image, you can see:
+- hot swap choc keys sockets
+- development wiring on the right half, connecting it to USB for programming.
+- loop between the sending and receiving pins used for debugging the UART connection.
+- USB magnetic connector soldered to the left half, intended for regular usage.
+- status RGB LED glowing green, indicating the currently active layer.
+
+The keyboard runs slightly modified [Workman layout](https://workmanlayout.org/) and supports various types of keys, including **media keys**.
+
+In terms of architecture:
+- The left half functions as the **PeripheryCentral**
+- The right half functions as the **PeripheryUART**
+
+These peripheries are designed solely to send signals to the central processor using a defined protocol.
+
+The left half also contains the **Interphaces** for both sides, managing communication between the **central** unit and each **periphery**.
+
+The **status LED** indicates the active layer:
+- Green for Layer 1
+- Blue for Layer 2
+
+Additionally, a few shortcut keys are defined, which are referenced later in the keymap.
 
 **Left Keyboard Part (Central)**
 ``` {.py}
@@ -157,6 +200,31 @@ keyboard.run_forever()
   <img src="SQ_keyboard.jpg">
 </div>
 
+Another split keyboard example, called **Sq (Square)**, is equipped with *Feather ESP32-S3* boards on both halves.  
+This board provides several advantages, including potential Bluetooth connectivity, battery support, and onboard charging capabilities.
+
+Since many parts of the code are shared with the Booster keyboard, this overview will focus only on the key differences.
+
+The left half, which connects to the computer, includes a new file: **boot.py**.  
+This script runs immediately when the board powers on, allowing configuration of USB device properties.
+
+This includes:
+- defining the keyboard's USB type and name
+- disabling auto-reload on file save or system glitches, improving stability during everyday use
+- preventing the board from appearing as a mass storage device, which is important for cybersecurity policies in some workplaces
+
+To re-enable the storage device mode, a specific key (wired to source and sense pins) must be held down while powering on the board.  
+⚠️ **Warning:** *Always back up your code before disabling the storage feature. Incorrect pin configuration or other errors can make the board unresponsive.  
+In such cases, a hard reset may be required, which erases all data and necessitates re-uploading your code.*
+
+Additional Features:
+- **RGB backlighting**: the keyboard has a slowly glowing rainbow effect across its keys
+- **VIM emulation**: the keyboard can simulate VIM editor behavior using a custom **keys_vim** configuration
+
+Each keyboard layer corresponds to a different **VIM mode**, indicated by the **status LED**.  
+Even if you're not a VIM fan, you may find some picked *vim_keys* useful in your own keymap.  
+Theoretically, this behavior can work even in text input fields of a browser 😉
+
 **Left Keyboard Part (Central)**
 
 ``` {.py}
@@ -211,7 +279,7 @@ keyboard.add_interface(interphace_right)
 status_led = LayerStatusLedRgbNeoPixel(board.SCK)
 status_led.add_layer(0, (0, 0, 255))  # Blue
 status_led.add_layer(1, (0, 255, 0))  # Green
-status_led.add_layer(2, (255, 255, 255))  # Write
+status_led.add_layer(2, (255, 255, 255))  # White
 status_led.add_layer(3, (255, 0, 0))  # Red
 keyboard.add_layer_status_led(status_led)
 

@@ -24,6 +24,6 @@ Next Generation Mechanical Keyboard Firmware
 - hold tap  
 - tap dance  
 - sticky  
-- media TO DO  
+- media  
 - keys sequence  
 - vim  

@@ -29,7 +29,7 @@ Next Generation Mechanical Keyboard Firmware
 :white_check_mark: hold tap  
 :white_check_mark: tap dance  
 :white_check_mark: sticky  
-:white_check_mark: media TO DO  
+:white_check_mark: media  
 :white_check_mark: keys sequence  
 :white_check_mark: vim  
 
