@@ -236,3 +236,8 @@ The table below provides an example of how to mimic the classical Vim layout.
 |None    |None          |VI_NXTW        |VI_NXTW        |None          |None            |VI_YANK        |VI_UNDO        |None           |None           |VI_PAST    |
 |None    |None          |None           |VI_DEL         |None          |None            |LEFT           |DOWN           |UP             |RIGHT          |None       |
 |None    |None          |DEL            |None           |None          |VI_PRVW         |None           |M              |None           |None           |None       |
+
+@section p_5_9 5.9 Media Keys
+
+@section p_5_10 5.10 Mouse Keys
+

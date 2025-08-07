@@ -1,4 +1,23 @@
 @page p_4 4 MKX API
 @tableofcontents
 
+@section p_4_1 4.1 Boot Config
+...
+
+@section p_4_2 4.2 HID
+...
+
+@section p_4_3 4.3 MKX Central
+...
+
+@section p_4_4 4.4 MKX Periphery
+...
+
+@section p_4_5 4.5 Interphace
+...
+
+@section p_4_6 4.6 Layer Status LED
+...
+
+@section p_4_7 4.7 Backlight
 ...
