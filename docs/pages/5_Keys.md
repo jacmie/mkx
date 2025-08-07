@@ -152,6 +152,8 @@ Sets the default layer to the given active_layer and optionally jumps to it imme
 
 **Example:**
 ``` {.py}
+from mkx.keys_layers import DF, MO
+
 active_layers = [0] # default
 MO(1)               # active_layers = [0, 1]
 MO(2)               # active_layers = [0, 1, 2]
@@ -170,6 +172,8 @@ Replaces the top layer (active layer) with a given layer, without changing the d
 
 **Example:**
 ``` {.py}
+from mkx.keys_layers import RL, MO
+
 active_layers = [0] # default
 MO(1)               # active_layers = [0, 1]
 MO(2)               # active_layers = [0, 1, 2]
@@ -182,6 +186,8 @@ Temporarily activates the specified layer while the key is held.
 
 **Example:**
 ``` {.py}
+from mkx.keys_layers import MO
+
 active_layers = [0] # default
 MO(1)               # press -> active_layers = [0, 1], release -> active_layers = [0]
 MO(2, SHIFT)        # press -> active_layers = [0, 2], Shift held
@@ -194,6 +200,8 @@ Momentarily activates a layer if held, sends a key if tapped.
 
 **Example:**
 ``` {.py}
+from mkx.keys_layers import LT
+
 LT(1, KC.ESC)  # tap = Escape, hold = activate layer 1
 ```
 
@@ -203,6 +211,8 @@ Activates the layer if it's inactive, deactivates it if it's active.
 
 **Example:**
 ``` {.py}
+from mkx.keys_layers import TG
+
 layers = [0]         # default layer
 TG(1) press          # layers = [0, 1]
 TG(1) press again    # layers = [0]       # layer 1 toggled off
@@ -218,6 +228,8 @@ Clears any other currently active layers.
 
 **Example:**
 ``` {.py}
+from mkx.keys_layers import TO
+
 layers = [0]
 TO(2) press   => layers = [2]
 TO(1) press   => layers = [1]
@@ -233,10 +245,24 @@ Momentarily activates a layer if held, toggles layer if double-tapped.
 
 **Example:**
 ``` {.py}
+from mkx.keys_layers import TT
+
 TT(1)  # tap-tap toggles layer 1; hold = momentary
 ```
 
-@section p_5_4 5.4 Sequence Keys
+@section p_5_4 5.4 SEQ - Sequence Keys
+
+Sending multiple keystrokes.  
+See how it can be used in the section **Get Started - Hardware Keypass**  
+
+**Example:**
+``` {.py}
+from mkx.keys_sequence import SEQ
+
+HK = SEQ([M_LSFT(H), E, L, L, O, SPACE, 
+          M_LSFT(W), O, R, L, D, SPACE, 
+          M_LSFT(M), M_LSFT(K), M_LSFT(X), M_LSFT(N1), ENTER])
+```
 
 @section p_5_5 5.5 HoldTap Keys
 
