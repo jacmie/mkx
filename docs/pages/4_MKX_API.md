@@ -154,12 +154,209 @@ keyboard.set_hid(hid) # TO DO
 
 
 @section p_4_3 4.3 MKX Central
-...
+
+Main **MKX** class that manages keyboard operation and handles communication with the computer.  
+
+
+``` {.py}
+from mkx.mkx_central import MKX_Central
+
+MKX_Central(
+    keymap=None, 
+    coord_mapping=None
+)
+```
+
+**keymap**  
+Add *keymap* object to the **MKX_Central**.
+May be also added later with the **add_keymap()** method.
+
+**coord_mapping**  
+Add custom *coord_mapping* object to the **MKX_Central**.  
+Usualy coord_mapping is defined while **MKX Interpfaces** declaration.  
+May be also added later with the **add_coord_mapping()** method. # TO DO
+
+**Example:**
+``` {.py}
+from mkx.mkx_central import MKX_Central
+
+mkx_central = MKX_Central()
+```
+
+@subsection p_4_3_1 4.3.1 add_central_periphery
+
+Add **PeripheryCentral** to the ***MKX_Central**.  
+
+``` {.py}
+mkx_central.add_central_periphery(
+    central_periphery: PeripheryAbstract
+)
+```
+
+**central_periphery**  
+*PeripheryCentral* object.
+
+**Example:**
+``` {.py}
+from mkx.mkx_central import MKX_Central
+from mkx.periphery_central import PeripheryCentral
+
+mkx_central = MKX_Central()
+
+central_peryphery = PeripheryCentral("central", col_pins, row_pins)
+mkx_central.add_central_periphery(central_peryphery)
+```
+
+@subsection p_4_3_2 4.3.2 add_interface
+
+Add **Interface** of a **Periphery** to the **MKX_Central**.  
+
+``` {.py}
+mkx_central.add_interface(
+    interface: InterfahceAbstract
+)
+```
+
+**interface**  
+*Interface* object.
+
+**Example:**
+``` {.py}
+from mkx.mkx_central import MKX_Central
+from mkx.periphery_central import PeripheryCentral
+from mkx.interphace_central import InterphaceCentral
+from mkx.interphace_uart import InterphaceUART
+
+mkx_central = MKX_Central()
+
+central_peryphery = PeripheryCentral("central", col_pins, row_pins)
+
+interphace_central = InterphaceCentral(central_peryphery, 0, 0, 5, 4)
+keyboard.add_interface(interphace_central)
+ 
+interphace_right = InterphaceUART("right_peryphery", None, board.GP1, 11, 0, 6, 4)
+keyboard.add_interface(interphace_right)
+```
+
+@subsection p_4_3_3 4.3.3 add_layer_status_led
+
+Add **LayerStatusLed** to the **MKX_Central**.  
+
+``` {.py}
+mkx_central.add_layer_status_led(
+    status_led: LayerStatusLedAbstract
+)
+```
+
+**status_led**  
+*LayerStatusLed* object.
+
+**Example:**  
+``` {.py}
+import board
+
+from mkx.mkx_central import MKX_Central
+from mkx.layer_status_led_rgb_neopixel import LayerStatusLedRgbNeoPixel
+
+mkx_central = MKX_Central()
+
+status_led = LayerStatusLedRgbNeoPixel(board.SCK)
+status_led.add_layer(0, (0, 0, 255))  # Blue
+status_led.add_layer(1, (0, 255, 0))  # Green
+status_led.add_layer(2, (255, 255, 255))  # White
+status_led.add_layer(3, (255, 0, 0))  # Red
+mkx_central.add_layer_status_led(status_led)
+```
+
+@subsection p_4_3_4 4.3.4 add_backlight
+
+Add **Backlight** to the **MKX_Central**.  
+
+``` {.py}
+mkx_central.add_backlight(
+    backlight: BacklightAbstract
+)
+```
+
+**backlight**  
+*Backlight* object.
+
+**Example:**  
+``` {.py}
+import board
+
+from mkx.mkx_central import MKX_Central
+from mkx.backlight_neopixel_rainbow import BacklightNeopixelRainbow
+
+mkx_central = MKX_Central()
+
+backlight = BacklightNeopixelRainbow(board.A0, num_pixels=72, brightness=0.4)
+backlight.slower(2)
+backlight.set_swirl(True)
+mkx_central.add_backlight(backlight)
+```
+
+@subsection p_4_3_5 4.3.5 add_keymap
+
+Add **Keymap** to the **MKX_Central**.  
+**Keymap** must have rectangular shape. In custom layouts where certain positions are unused, set them to **None**.
+
+``` {.py}
+mkx_central.add_keymap(
+    keymap, 
+    col_size, 
+    row_size
+)
+```
+
+**keymap**  
+*Keymap* object.
+
+**col_size**  
+Keymap layer max column number.  
+Counting starts from '0'.  
+
+**row_size**  
+Keymap layer max row number.  
+Counting starts from '0'.  
+
+**Example:**  
+``` {.py}
+from mkx.mkx_central import MKX_Centrals
+ 
+from mkx.keys_standard import *
+ 
+mkx_central = MKX_Central()
+ 
+# fmt: off
+
+keymap = [
+    [
+        A,  B,  C,
+        N1, N2, None,
+    ],
+]
+ 
+# fmt: on
+ 
+mkx_central.add_keymap(keymap, 2, 1)
+```
+
+@subsection p_4_3_6 4.3.6 run_forever
+
+Start runninhg keyboard's infinite loop.
+
+
+``` {.py}
+mkx_central.run_forever()
+
+```
+
 
 @section p_4_4 4.4 MKX Periphery
 ...
 
-@section p_4_5 4.5 Interphace
+@section p_4_5 4.5 Interface
 ...
 
 @section p_4_6 4.6 Layer Status LED
