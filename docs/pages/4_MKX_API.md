@@ -124,7 +124,34 @@ boot_cfg(
 ```
 
 @section p_4_2 4.2 HID
-...
+
+Type of HID device to use.  
+Possible options are **HID_USB** for a standard USB HID device or **HID_BLE** for a Bluetooth Low Energy HID device.  
+
+@subsection p_4_2_1  4.2.1 HID_USB
+
+Set USB HID device.
+
+**Example:**
+``` {.py}
+from mkx.hid_usb import HID_USB
+
+hid = HID_USB()
+keyboard.set_hid(hid) # TO DO
+```
+
+@subsection p_4_2_2  4.2.2 HID_BLE
+
+Set BLE HID device.
+
+**Example:**
+``` {.py}
+from mkx.hid_ble import HID_BLE
+
+hid = HID_BLE()
+keyboard.set_hid(hid) # TO DO
+```
+
 
 @section p_4_3 4.3 MKX Central
 ...
