@@ -27,3 +27,8 @@ Next Generation Mechanical Keyboard Firmware
 - media  
 - keys sequence  
 - vim  
+
+## Online Docs
+
+Built online documentation is available at:
+https://jacmie.github.io/mkx/
