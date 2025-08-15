@@ -22,7 +22,8 @@ var searchData=
   ['5_208_205_20vim_20layout_19',['5.8.5 Vim Layout',['../p_5.html#p_5_8_5',1,'']]],
   ['5_208_20vim_20keys_20',['5.8 VIM Keys',['../p_5.html#p_5_8',1,'']]],
   ['5_209_20media_20keys_21',['5.9 Media Keys',['../p_5.html#p_5_9',1,'']]],
-  ['5_20interphace_22',['4.5 Interphace',['../p_4.html#p_4_5',1,'']]],
-  ['5_20keys_23',['5 Keys',['../p_5.html',1,'']]],
-  ['5_5fkeys_2emd_24',['5_Keys.md',['../5__Keys_8md.html',1,'']]]
+  ['5_20add_5fkeymap_22',['4.3.5 add_keymap',['../p_4.html#p_4_3_5',1,'']]],
+  ['5_20interface_23',['4.5 Interface',['../p_4.html#p_4_5',1,'']]],
+  ['5_20keys_24',['5 Keys',['../p_5.html',1,'']]],
+  ['5_5fkeys_2emd_25',['5_Keys.md',['../5__Keys_8md.html',1,'']]]
 ];
