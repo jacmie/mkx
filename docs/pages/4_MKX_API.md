@@ -686,4 +686,125 @@ status_led = LayerStatusLedArray(
 List of pins for LED-s.
 
 @section p_4_7 4.7 Backlight
-...
+
+RGB NeoPixel backlight.
+
+@subsection p_4_7_1 4.7.1 BacklightNeopixelStatic
+
+Static color backlight.
+
+``` {.py}
+from mkx.backlight_neopixel_static import BacklightNeopixelStatic
+
+status_led = BacklightNeopixelStatic(
+    pin, 
+    num_pixels :int, 
+    rgb_color=(0, 0, 255), 
+    brightness :float=1
+)
+```
+
+**pin**  
+Pin for the backlight RGB NeoPixel LED-s.  
+
+**num_pixels**  
+Number of the RGB NeoPixel LED-s.  
+
+**rgb_color**  
+Peaked values of the RGB color.  
+
+**brightness**  
+Brightness of the LED in the range 0-1.  
+
+**Example:**
+``` {.py}
+import board
+ 
+from mkx.mkx_central import MKX_Central
+from mkx.backlight_neopixel_static import BacklightNeopixelStatic
+ 
+mkx_central = MKX_Central()
+ 
+backlight = BacklightNeopixelStatic(board.A0, num_pixels=72, rgb_color=(0, 0, 255), brightness=0.4)
+
+mkx_central.add_backlight(backlight)
+```
+
+@subsection p_4_7_2 4.7.2 BacklightNeopixelRainbow
+
+Rainbow animated color backlight.
+
+``` {.py}
+from mkx.backlight_neopixel_rainbow import BacklightNeopixelRainbow
+
+status_led = BacklightNeopixelRainbow(
+    pin, 
+    num_pixels :int, 
+    rgb_color=(0, 0, 255), 
+    brightness :float=1
+)
+```
+
+**pin**  
+Pin for the backlight RGB NeoPixel LED-s.  
+
+**num_pixels**  
+Number of the RGB NeoPixel LED-s.  
+
+**brightness**  
+Brightness of the LED in the range 0-1.  
+
+@subsection p_4_7_2_1 4.7.2.1 faster()
+
+Hom much faster should be the rainbow animation from the initial one.
+
+``` {.py}
+backlight.faster(
+    value
+)
+```
+
+**value**  
+Increased animation speed up to 20.
+
+@subsection p_4_7_2_2 4.7.2.2 slower()
+
+Hom much slower should be the rainbow animation from the initial one.
+
+``` {.py}
+backlight.slower(
+    value
+)
+```
+
+**value**  
+Decreased animation speed up to 20.
+
+@subsection p_4_7_2_3 4.7.2.3 set_swirl()
+
+Should the LED-s change color independently by swirl or not.
+
+``` {.py}
+backlight.set_swirl(
+    swirl :bool
+)
+```
+
+**swirl**  
+Swirl or not.
+
+**Example:**
+``` {.py}
+import board
+ 
+from mkx.mkx_central import MKX_Central
+from mkx.backlight_neopixel_rainbow import BacklightNeopixelRainbow
+ 
+mkx_central = MKX_Central()
+ 
+backlight = BacklightNeopixelRainbow(board.A0, num_pixels=72, brightness=0.4)
+backlight.slower(2)
+backlight.set_swirl(True)
+
+mkx_central.add_backlight(backlight)
+```
