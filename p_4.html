@@ -120,10 +120,26 @@ $(document).ready(function(){initNavTree('p_4.html',''); initResizable(); });
 <li class="level2"><a href="#p_4_3_6">4.3.6 run_forever</a></li>
 </ul>
 </li>
-<li class="level1"><a href="#p_4_4">4.4 MKX Periphery</a></li>
-<li class="level1"><a href="#p_4_5">4.5 Interface</a></li>
-<li class="level1"><a href="#p_4_6">4.6 Layer Status LED</a></li>
-<li class="level1"><a href="#p_4_7">4.7 Backlight</a></li>
+<li class="level1"><a href="#p_4_4">4.4 MKX Periphery</a><ul><li class="level2"><a href="#p_4_4_1">4.4.1 PeripheryCentral</a></li>
+<li class="level2"><a href="#p_4_4_2">4.4.2 PeripheryUART</a></li>
+</ul>
+</li>
+<li class="level1"><a href="#p_4_5">4.5 Interface</a><ul><li class="level2"><a href="#p_4_5_1">4.5.1 InterphaceCentral</a></li>
+<li class="level2"><a href="#p_4_5_2">4.5.2 InterphaceUART</a></li>
+</ul>
+</li>
+<li class="level1"><a href="#p_4_6">4.6 Layer Status LED</a><ul><li class="level2"><a href="#p_4_6_1">4.6.1 LayerStatusLedRgbNeoPixel</a></li>
+<li class="level2"><a href="#p_4_6_2">4.6.2 LayerStatusLedRgbThreePin</a></li>
+<li class="level2"><a href="#p_4_6_3">4.6.3 LayerStatusLedArray</a></li>
+</ul>
+</li>
+<li class="level1"><a href="#p_4_7">4.7 Backlight</a><ul><li class="level2"><a href="#p_4_7_1">4.7.1 BacklightNeopixelStatic</a></li>
+<li class="level2"><a href="#p_4_7_2">4.7.2 BacklightNeopixelRainbow</a></li>
+<li class="level2"><a href="#p_4_7_2_1">4.7.2.1 faster()</a></li>
+<li class="level2"><a href="#p_4_7_2_2">4.7.2.2 slower()</a></li>
+<li class="level2"><a href="#p_4_7_2_3">4.7.2.3 set_swirl()</a></li>
+</ul>
+</li>
 </ul>
 </div>
 <div class="textblock"><h1><a class="anchor" id="p_4_1"></a>
@@ -385,17 +401,378 @@ $(document).ready(function(){initNavTree('p_4.html',''); initResizable(); });
 <div class="fragment"><div class="line">mkx_central.run_forever()</div>
 </div><!-- fragment --><h1><a class="anchor" id="p_4_4"></a>
 4.4 MKX Periphery</h1>
-<p>...</p>
-<h1><a class="anchor" id="p_4_5"></a>
+<p>The general <b>Periphery</b> captures keystrokes and transmit messages to the <b>MKX_Central</b>. <br  />
+ The <b>MKX_Periphery</b> is a simpler counterpart to the <b>MKX_Central</b>, <br  />
+ operating continuously on hardware separate from the <b>MKX_Central</b>. <br  />
+ Each <b>MKX_Periphery</b> is assigned a general <b>Periphery</b>.</p>
+<p>The general <b>Periphery</b> can be implemented as <b>PeripheryCentral</b>, which operates on the same hardware module as the Central, <br  />
+ or as <b>PeripheryUART</b>, on a separate hardware module and communicates via UART. <br  />
+</p>
+<div class="fragment"><div class="line"><span class="keyword">from</span> mkx.mkx_periphery <span class="keyword">import</span> MKX_Periphery</div>
+<div class="line"> </div>
+<div class="line">mkx_perifery = MKX_Periphery(</div>
+<div class="line">    uart_peryphery: PeripheryAbstract, </div>
+<div class="line">    debug :bool=<span class="keyword">False</span></div>
+<div class="line">)</div>
+</div><!-- fragment --><p><b>uart_peryphery</b> <br  />
+ PeripheryUART object (or other derived from the <em>PeripheryAbstract</em>). <br  />
+</p>
+<p><b>debug</b> <br  />
+ Flag enabling verbose output for the Periphery. <br  />
+</p>
+<h2><a class="anchor" id="p_4_4_1"></a>
+4.4.1 PeripheryCentral</h2>
+<p>Set the PeripheryCentral.</p>
+<div class="fragment"><div class="line"><span class="keyword">from</span> mkx.periphery_central <span class="keyword">import</span> PeripheryCentral</div>
+<div class="line"> </div>
+<div class="line">mkx_perifery = PeripheryCentral(</div>
+<div class="line">    device_id: str, </div>
+<div class="line">    col_pins, </div>
+<div class="line">    row_pins, </div>
+<div class="line">    **kwargs</div>
+<div class="line">)</div>
+</div><!-- fragment --><p><b>device_id</b> <br  />
+ Device id/name. <br  />
+</p>
+<p><b>col_pins</b> <br  />
+ List of column pins. <br  />
+</p>
+<p><b>row_pins</b> <br  />
+ List of row pins. <br  />
+</p>
+<p>** <b>kwargs</b> <br  />
+ Other optional arguments. <br  />
+</p>
+<p><b>Example:</b> </p><div class="fragment"><div class="line"><span class="keyword">import</span> board</div>
+<div class="line"> </div>
+<div class="line"><span class="keyword">from</span> mkx.mkx_central <span class="keyword">import</span> MKX_Central</div>
+<div class="line"><span class="keyword">from</span> mkx.periphery_central <span class="keyword">import</span> PeripheryCentral</div>
+<div class="line"><span class="keyword">from</span> mkx.interphace_central <span class="keyword">import</span> InterphaceCentral</div>
+<div class="line"><span class="keyword">from</span> mkx.interphace_uart <span class="keyword">import</span> InterphaceUART</div>
+<div class="line"> </div>
+<div class="line">mkx_central = MKX_Central()</div>
+<div class="line"> </div>
+<div class="line">col_pins = (board.GP9, board.GP7, board.GP5, board.GP4, board.GP3, board.GP2)</div>
+<div class="line">row_pins = (board.GP10, board.GP11, board.GP13, board.GP15, board.GP17)</div>
+<div class="line"> </div>
+<div class="line">central_peryphery = PeripheryCentral(<span class="stringliteral">&quot;central_peryphery&quot;</span>, col_pins, row_pins)</div>
+<div class="line">mkx_central.add_central_periphery(central_peryphery)</div>
+<div class="line"> </div>
+<div class="line">interphace_central = InterphaceCentral(central_peryphery, 0, 0, 5, 4)</div>
+<div class="line">mkx_central.add_interface(interphace_central)</div>
+<div class="line"> </div>
+<div class="line">interphace_right = InterphaceUART(<span class="stringliteral">&quot;side_perifery&quot;</span>, <span class="keywordtype">None</span>, board.GP1, 11, 0, 6, 4)</div>
+<div class="line">mkx_central.add_interface(interphace_right)</div>
+<div class="line"> </div>
+<div class="line"><span class="comment"># other code ...</span></div>
+<div class="line"> </div>
+<div class="line">mkx_central.run_forever()</div>
+</div><!-- fragment --><h2><a class="anchor" id="p_4_4_2"></a>
+4.4.2 PeripheryUART</h2>
+<p>Set the PeripheryUART.</p>
+<div class="fragment"><div class="line"><span class="keyword">from</span> mkx.periphery_uart <span class="keyword">import</span> PeripheryUART</div>
+<div class="line"> </div>
+<div class="line">mkx_perifery = PeripheryUART(</div>
+<div class="line">    device_id: str, </div>
+<div class="line">    col_pins, </div>
+<div class="line">    row_pins, </div>
+<div class="line">    tx_pin,</div>
+<div class="line">    rx_pin,</div>
+<div class="line">    *,</div>
+<div class="line">    baudrate=9600,</div>
+<div class="line">    **kwargs</div>
+<div class="line">)</div>
+</div><!-- fragment --><p><b>device_id</b> <br  />
+ Device id/name. <br  />
+</p>
+<p><b>col_pins</b> <br  />
+ List of column pins. <br  />
+</p>
+<p><b>row_pins</b> <br  />
+ List of row pins. <br  />
+</p>
+<p><b>tx_pin</b> <br  />
+ TX communication pin. <br  />
+</p>
+<p><b>rx_pin</b> <br  />
+ RX communication pin. <br  />
+</p>
+<p><b>baudrate</b> <br  />
+ UART communication baudrate. <br  />
+</p>
+<p>** <b>kwargs</b> <br  />
+ Other optional arguments. <br  />
+</p>
+<p><b>Example:</b> </p><div class="fragment"><div class="line"><span class="keyword">import</span> board</div>
+<div class="line"> </div>
+<div class="line"><span class="keyword">from</span> mkx.mkx_periphery <span class="keyword">import</span> MKX_Periphery</div>
+<div class="line"><span class="keyword">from</span> mkx.periphery_uart <span class="keyword">import</span> PeripheryUART</div>
+<div class="line"> </div>
+<div class="line"> </div>
+<div class="line">col_pins = (board.GP9, board.GP7, board.GP5, board.GP4, board.GP3, board.GP2)</div>
+<div class="line">row_pins = (board.GP10, board.GP11, board.GP13, board.GP15, board.GP17)</div>
+<div class="line"> </div>
+<div class="line">peryphery = PeripheryUART(<span class="stringliteral">&quot;booster_r&quot;</span>, col_pins, row_pins, board.GP0, board.GP1)</div>
+<div class="line"> </div>
+<div class="line">mkx_perifery = MKX_Periphery(peryphery, debug=<span class="keyword">True</span>)</div>
+<div class="line">mkx_perifery.run_forever()</div>
+</div><!-- fragment --><h1><a class="anchor" id="p_4_5"></a>
 4.5 Interface</h1>
-<p>...</p>
+<p>The <b>Interface</b> connects the <b>Periferies</b> to the <b>MKX_Central</b>. <br  />
+</p>
+<p>Possible options are <b>InterphaceCentral</b> matching the <b>PeriferyCentral</b> and <br  />
+ <b>InterphaceUART</b> matching the <b>PeriferyUART</b>. <br  />
+</p>
+<p><b>Example:</b> </p><div class="fragment"><div class="line"><span class="keyword">import</span> board</div>
+<div class="line"> </div>
+<div class="line"><span class="keyword">from</span> mkx.mkx_central <span class="keyword">import</span> MKX_Central</div>
+<div class="line"><span class="keyword">from</span> mkx.periphery_central <span class="keyword">import</span> PeripheryCentral</div>
+<div class="line"><span class="keyword">from</span> mkx.interphace_central <span class="keyword">import</span> InterphaceCentral</div>
+<div class="line"><span class="keyword">from</span> mkx.interphace_uart <span class="keyword">import</span> InterphaceUART</div>
+<div class="line"> </div>
+<div class="line">mkx_central = MKX_Central()</div>
+<div class="line"> </div>
+<div class="line">col_pins = (board.GP9, board.GP7, board.GP5, board.GP4, board.GP3, board.GP2)</div>
+<div class="line">row_pins = (board.GP10, board.GP11, board.GP13, board.GP15, board.GP17)</div>
+<div class="line"> </div>
+<div class="line">central_peryphery = PeripheryCentral(<span class="stringliteral">&quot;central_peryphery&quot;</span>, col_pins, row_pins)</div>
+<div class="line">mkx_central.add_central_periphery(central_peryphery)</div>
+<div class="line"> </div>
+<div class="line">interphace_central = InterphaceCentral(central_peryphery, 0, 0, 5, 4)</div>
+<div class="line">mkx_central.add_interface(interphace_central)</div>
+<div class="line"> </div>
+<div class="line">interphace_right = InterphaceUART(<span class="stringliteral">&quot;side_perifery&quot;</span>, <span class="keywordtype">None</span>, board.GP1, 11, 0, 6, 4)</div>
+<div class="line">mkx_central.add_interface(interphace_right)</div>
+<div class="line"> </div>
+<div class="line"><span class="comment"># other code ...</span></div>
+<div class="line"> </div>
+<div class="line">mkx_central.run_forever()</div>
+</div><!-- fragment --><h2><a class="anchor" id="p_4_5_1"></a>
+4.5.1 InterphaceCentral</h2>
+<p>Set the InterphaceCentral. <br  />
+</p>
+<p>Min/max column and rows values can be inverted, meaning min value can be bigger than max. <br  />
+ Inverted min/max column and rows values will change the keys mapping. <br  />
+</p>
+<div class="fragment"><div class="line"><span class="keyword">from</span> mkx.interphace_central <span class="keyword">import</span> InterphaceCentral</div>
+<div class="line"> </div>
+<div class="line">interface = InterphaceCentral(</div>
+<div class="line">    central_periphery: InterfahceAbstract, </div>
+<div class="line">    col_min :int, </div>
+<div class="line">    row_min :int, </div>
+<div class="line">    col_max :int, </div>
+<div class="line">    row_max :int</div>
+<div class="line">)</div>
+</div><!-- fragment --><p><b>central_periphery</b> <br  />
+ PeriferyCentral object.</p>
+<p><b>col_min</b> <br  />
+ Minimum column number. Counting start from '0'. <br  />
+</p>
+<p><b>row_min</b> <br  />
+ Minimum row number. Counting start from '0'. <br  />
+</p>
+<p><b>col_max</b> <br  />
+ Maximum column number. Counting start from '0'. <br  />
+</p>
+<p><b>row_max</b> <br  />
+ Maximum row number. Counting start from '0'. <br  />
+</p>
+<h2><a class="anchor" id="p_4_5_2"></a>
+4.5.2 InterphaceUART</h2>
+<p>Set the InterphaceUART.</p>
+<div class="fragment"><div class="line"><span class="keyword">from</span> mkx.interphace_uart <span class="keyword">import</span> InterphaceUART</div>
+<div class="line"> </div>
+<div class="line">mkx_perifery = InterphaceUART(</div>
+<div class="line">    device_id: str, </div>
+<div class="line">    tx_pin,</div>
+<div class="line">    rx_pin,</div>
+<div class="line">    col_min :int,</div>
+<div class="line">    row_min :int,</div>
+<div class="line">    col_max :int,</div>
+<div class="line">    row_max :int,</div>
+<div class="line">    baudrate=9600</div>
+<div class="line">)</div>
+</div><!-- fragment --><p><b>device_id</b> <br  />
+ Device id/name, must match the device_id of the <b>Periphery</b>. <br  />
+</p>
+<p><b>tx_pin</b> <br  />
+ TX communication pin. <br  />
+</p>
+<p><b>rx_pin</b> <br  />
+ RX communication pin. <br  />
+</p>
+<p><b>col_min</b> <br  />
+ Minimum column number. Counting start from '0'. <br  />
+</p>
+<p><b>row_min</b> <br  />
+ Minimum row number. Counting start from '0'. <br  />
+</p>
+<p><b>col_max</b> <br  />
+ Maximum column number. Counting start from '0'. <br  />
+</p>
+<p><b>row_max</b> <br  />
+ Maximum row number. Counting start from '0'. <br  />
+</p>
+<p><b>baudrate</b> <br  />
+ UART communication baudrate. <br  />
+</p>
 <h1><a class="anchor" id="p_4_6"></a>
 4.6 Layer Status LED</h1>
-<p>...</p>
+<p>Status LED used for the indication of the active layer. <br  />
+</p>
+<h2><a class="anchor" id="p_4_6_1"></a>
+4.6.1 LayerStatusLedRgbNeoPixel</h2>
+<p>RGB NeoPixel LED which indicates active layer by color. <br  />
+</p>
+<div class="fragment"><div class="line"><span class="keyword">from</span> mkx.layer_status_led_rgb_neopixel <span class="keyword">import</span> LayerStatusLedRgbNeoPixel</div>
+<div class="line"> </div>
+<div class="line">status_led = LayerStatusLedRgbNeoPixel(</div>
+<div class="line">    status_led_pin, </div>
+<div class="line">    brightness :float=0.1, </div>
+<div class="line">    auto_write :bool=<span class="keyword">True</span></div>
+<div class="line">)</div>
+</div><!-- fragment --><p><b>status_led_pin</b> <br  />
+ Pin for the RGB NeoPixel LED. <br  />
+</p>
+<p><b>brightness</b> <br  />
+ Brightness of the LED in the range 0-1. <br  />
+</p>
+<p><b>auto_write</b> <br  />
+ Flag to update LED color automaticly. <br  />
+</p>
+<p><b>Example:</b> </p><div class="fragment"><div class="line"><span class="keyword">import</span> board</div>
+<div class="line"> </div>
+<div class="line"><span class="keyword">from</span> mkx.mkx_central <span class="keyword">import</span> MKX_Central</div>
+<div class="line"><span class="keyword">from</span> mkx.layer_status_led_rgb_neopixel <span class="keyword">import</span> LayerStatusLedRgbNeoPixel</div>
+<div class="line"> </div>
+<div class="line">mkx_central = MKX_Central()</div>
+<div class="line"> </div>
+<div class="line">status_led = LayerStatusLedRgbNeoPixel(board.GP23, brightness=0.015)</div>
+<div class="line">status_led.add_layer(0, (0, 255, 0))  <span class="comment"># Green</span></div>
+<div class="line">status_led.add_layer(1, (0, 0, 255))  <span class="comment"># Blue</span></div>
+<div class="line"> </div>
+<div class="line">mkx_central.add_layer_status_led(status_led)</div>
+</div><!-- fragment --><h2><a class="anchor" id="p_4_6_2"></a>
+4.6.2 LayerStatusLedRgbThreePin</h2>
+<p>RGB three pin LED which indicates active layer by color. <br  />
+ <em>Untested!</em> due to lack of proper hardware configuration.</p>
+<div class="fragment"><div class="line"><span class="keyword">from</span> mkx.layer_status_led_rgb_threepin <span class="keyword">import</span> LayerStatusLedRgbThreePin</div>
+<div class="line"> </div>
+<div class="line">status_led = LayerStatusLedRgbThreePin(</div>
+<div class="line">    red_pin,</div>
+<div class="line">    green_pin,</div>
+<div class="line">    blue_pin</div>
+<div class="line">)</div>
+</div><!-- fragment --><p> <b>red_pin</b> <br  />
+ Red LED pin.</p>
+<p><b>green_pin</b> <br  />
+ Green LED pin.</p>
+<p><b>blue_pin</b> <br  />
+ Blue LED pin.</p>
+<h2><a class="anchor" id="p_4_6_3"></a>
+4.6.3 LayerStatusLedArray</h2>
+<p>Array of LED which indicates active layer. <br  />
+ <em>Untested!</em> due to lack of proper hardware configuration.</p>
+<div class="fragment"><div class="line"><span class="keyword">from</span> mkx.layer_status_led_array <span class="keyword">import</span> LayerStatusLedArray</div>
+<div class="line"> </div>
+<div class="line">status_led = LayerStatusLedArray(</div>
+<div class="line">    pins</div>
+<div class="line">)</div>
+</div><!-- fragment --><p> <b>pins</b> <br  />
+ List of pins for LED-s.</p>
 <h1><a class="anchor" id="p_4_7"></a>
 4.7 Backlight</h1>
-<p>... </p>
-</div></div><!-- contents -->
+<p>RGB NeoPixel backlight.</p>
+<h2><a class="anchor" id="p_4_7_1"></a>
+4.7.1 BacklightNeopixelStatic</h2>
+<p>Static color backlight.</p>
+<div class="fragment"><div class="line"><span class="keyword">from</span> mkx.backlight_neopixel_static <span class="keyword">import</span> BacklightNeopixelStatic</div>
+<div class="line"> </div>
+<div class="line">status_led = BacklightNeopixelStatic(</div>
+<div class="line">    pin, </div>
+<div class="line">    num_pixels :int, </div>
+<div class="line">    rgb_color=(0, 0, 255), </div>
+<div class="line">    brightness :float=1</div>
+<div class="line">)</div>
+</div><!-- fragment --><p><b>pin</b> <br  />
+ Pin for the backlight RGB NeoPixel LED-s. <br  />
+</p>
+<p><b>num_pixels</b> <br  />
+ Number of the RGB NeoPixel LED-s. <br  />
+</p>
+<p><b>rgb_color</b> <br  />
+ Peaked values of the RGB color. <br  />
+</p>
+<p><b>brightness</b> <br  />
+ Brightness of the LED in the range 0-1. <br  />
+</p>
+<p><b>Example:</b> </p><div class="fragment"><div class="line"><span class="keyword">import</span> board</div>
+<div class="line"> </div>
+<div class="line"><span class="keyword">from</span> mkx.mkx_central <span class="keyword">import</span> MKX_Central</div>
+<div class="line"><span class="keyword">from</span> mkx.backlight_neopixel_static <span class="keyword">import</span> BacklightNeopixelStatic</div>
+<div class="line"> </div>
+<div class="line">mkx_central = MKX_Central()</div>
+<div class="line"> </div>
+<div class="line">backlight = BacklightNeopixelStatic(board.A0, num_pixels=72, rgb_color=(0, 0, 255), brightness=0.4)</div>
+<div class="line"> </div>
+<div class="line">mkx_central.add_backlight(backlight)</div>
+</div><!-- fragment --><h2><a class="anchor" id="p_4_7_2"></a>
+4.7.2 BacklightNeopixelRainbow</h2>
+<p>Rainbow animated color backlight.</p>
+<div class="fragment"><div class="line"><span class="keyword">from</span> mkx.backlight_neopixel_rainbow <span class="keyword">import</span> BacklightNeopixelRainbow</div>
+<div class="line"> </div>
+<div class="line">status_led = BacklightNeopixelRainbow(</div>
+<div class="line">    pin, </div>
+<div class="line">    num_pixels :int, </div>
+<div class="line">    rgb_color=(0, 0, 255), </div>
+<div class="line">    brightness :float=1</div>
+<div class="line">)</div>
+</div><!-- fragment --><p><b>pin</b> <br  />
+ Pin for the backlight RGB NeoPixel LED-s. <br  />
+</p>
+<p><b>num_pixels</b> <br  />
+ Number of the RGB NeoPixel LED-s. <br  />
+</p>
+<p><b>brightness</b> <br  />
+ Brightness of the LED in the range 0-1. <br  />
+</p>
+<h2><a class="anchor" id="p_4_7_2_1"></a>
+4.7.2.1 faster()</h2>
+<p>Hom much faster should be the rainbow animation from the initial one.</p>
+<div class="fragment"><div class="line">backlight.faster(</div>
+<div class="line">    value</div>
+<div class="line">)</div>
+</div><!-- fragment --><p><b>value</b> <br  />
+ Increased animation speed up to 20.</p>
+<h2><a class="anchor" id="p_4_7_2_2"></a>
+4.7.2.2 slower()</h2>
+<p>Hom much slower should be the rainbow animation from the initial one.</p>
+<div class="fragment"><div class="line">backlight.slower(</div>
+<div class="line">    value</div>
+<div class="line">)</div>
+</div><!-- fragment --><p><b>value</b> <br  />
+ Decreased animation speed up to 20.</p>
+<h2><a class="anchor" id="p_4_7_2_3"></a>
+4.7.2.3 set_swirl()</h2>
+<p>Should the LED-s change color independently by swirl or not.</p>
+<div class="fragment"><div class="line">backlight.set_swirl(</div>
+<div class="line">    swirl :bool</div>
+<div class="line">)</div>
+</div><!-- fragment --><p><b>swirl</b> <br  />
+ Swirl or not.</p>
+<p><b>Example:</b> </p><div class="fragment"><div class="line"><span class="keyword">import</span> board</div>
+<div class="line"> </div>
+<div class="line"><span class="keyword">from</span> mkx.mkx_central <span class="keyword">import</span> MKX_Central</div>
+<div class="line"><span class="keyword">from</span> mkx.backlight_neopixel_rainbow <span class="keyword">import</span> BacklightNeopixelRainbow</div>
+<div class="line"> </div>
+<div class="line">mkx_central = MKX_Central()</div>
+<div class="line"> </div>
+<div class="line">backlight = BacklightNeopixelRainbow(board.A0, num_pixels=72, brightness=0.4)</div>
+<div class="line">backlight.slower(2)</div>
+<div class="line">backlight.set_swirl(<span class="keyword">True</span>)</div>
+<div class="line"> </div>
+<div class="line">mkx_central.add_backlight(backlight)</div>
+</div><!-- fragment --> </div></div><!-- contents -->
 </div><!-- PageDoc -->
 </div><!-- doc-content -->
 <!-- start footer part -->

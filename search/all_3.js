@@ -19,8 +19,10 @@ var searchData=
   ['3_20get_20started_16',['3 Get Started',['../p_3.html',1,'']]],
   ['3_20install_20adafruit_20bundles_17',['2.3 Install Adafruit Bundles',['../p_2.html#p_2_3',1,'']]],
   ['3_20layers_20keys_18',['5.3 Layers Keys',['../p_5.html#p_5_3',1,'']]],
-  ['3_20mkx_20central_19',['4.3 MKX Central',['../p_4.html#p_4_3',1,'']]],
-  ['3_20mkx_20keyboard_20',['1.3 MKX Keyboard',['../p_1.html#p_1_3',1,'']]],
-  ['3_20visual_20mode_21',['5.8.3 Visual Mode',['../p_5.html#p_5_8_3',1,'']]],
-  ['3_5fget_5fstarted_2emd_22',['3_Get_Started.md',['../3__Get__Started_8md.html',1,'']]]
+  ['3_20layerstatusledarray_19',['4.6.3 LayerStatusLedArray',['../p_4.html#p_4_6_3',1,'']]],
+  ['3_20mkx_20central_20',['4.3 MKX Central',['../p_4.html#p_4_3',1,'']]],
+  ['3_20mkx_20keyboard_21',['1.3 MKX Keyboard',['../p_1.html#p_1_3',1,'']]],
+  ['3_20set_5fswirl_22',['4.7.2.3 set_swirl()',['../p_4.html#p_4_7_2_3',1,'']]],
+  ['3_20visual_20mode_23',['5.8.3 Visual Mode',['../p_5.html#p_5_8_3',1,'']]],
+  ['3_5fget_5fstarted_2emd_24',['3_Get_Started.md',['../3__Get__Started_8md.html',1,'']]]
 ];

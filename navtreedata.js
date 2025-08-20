@@ -58,10 +58,26 @@ var NAVTREE =
         [ "4.3.5 add_keymap", "p_4.html#p_4_3_5", null ],
         [ "4.3.6 run_forever", "p_4.html#p_4_3_6", null ]
       ] ],
-      [ "4.4 MKX Periphery", "p_4.html#p_4_4", null ],
-      [ "4.5 Interface", "p_4.html#p_4_5", null ],
-      [ "4.6 Layer Status LED", "p_4.html#p_4_6", null ],
-      [ "4.7 Backlight", "p_4.html#p_4_7", null ]
+      [ "4.4 MKX Periphery", "p_4.html#p_4_4", [
+        [ "4.4.1 PeripheryCentral", "p_4.html#p_4_4_1", null ],
+        [ "4.4.2 PeripheryUART", "p_4.html#p_4_4_2", null ]
+      ] ],
+      [ "4.5 Interface", "p_4.html#p_4_5", [
+        [ "4.5.1 InterphaceCentral", "p_4.html#p_4_5_1", null ],
+        [ "4.5.2 InterphaceUART", "p_4.html#p_4_5_2", null ]
+      ] ],
+      [ "4.6 Layer Status LED", "p_4.html#p_4_6", [
+        [ "4.6.1 LayerStatusLedRgbNeoPixel", "p_4.html#p_4_6_1", null ],
+        [ "4.6.2 LayerStatusLedRgbThreePin", "p_4.html#p_4_6_2", null ],
+        [ "4.6.3 LayerStatusLedArray", "p_4.html#p_4_6_3", null ]
+      ] ],
+      [ "4.7 Backlight", "p_4.html#p_4_7", [
+        [ "4.7.1 BacklightNeopixelStatic", "p_4.html#p_4_7_1", null ],
+        [ "4.7.2 BacklightNeopixelRainbow", "p_4.html#p_4_7_2", null ],
+        [ "4.7.2.1 faster()", "p_4.html#p_4_7_2_1", null ],
+        [ "4.7.2.2 slower()", "p_4.html#p_4_7_2_2", null ],
+        [ "4.7.2.3 set_swirl()", "p_4.html#p_4_7_2_3", null ]
+      ] ]
     ] ],
     [ "5 Keys", "p_5.html", [
       [ "5.1 Standard Keys", "p_5.html#p_5_1", null ],

@@ -5,7 +5,10 @@ var searchData=
   ['layer_20tap_2',['5.3.4 LT - Layer Tap',['../p_5.html#p_5_3_4',1,'']]],
   ['layer_20toggle_20one_20shot_20layer_3',['5.3.6 TO - To Layer (Toggle One-Shot Layer)',['../p_5.html#p_5_3_6',1,'']]],
   ['layers_20keys_4',['5.3 Layers Keys',['../p_5.html#p_5_3',1,'']]],
-  ['layout_5',['5.8.5 Vim Layout',['../p_5.html#p_5_8_5',1,'']]],
-  ['led_6',['4.6 Layer Status LED',['../p_4.html#p_4_6',1,'']]],
-  ['lt_20layer_20tap_7',['5.3.4 LT - Layer Tap',['../p_5.html#p_5_3_4',1,'']]]
+  ['layerstatusledarray_5',['4.6.3 LayerStatusLedArray',['../p_4.html#p_4_6_3',1,'']]],
+  ['layerstatusledrgbneopixel_6',['4.6.1 LayerStatusLedRgbNeoPixel',['../p_4.html#p_4_6_1',1,'']]],
+  ['layerstatusledrgbthreepin_7',['4.6.2 LayerStatusLedRgbThreePin',['../p_4.html#p_4_6_2',1,'']]],
+  ['layout_8',['5.8.5 Vim Layout',['../p_5.html#p_5_8_5',1,'']]],
+  ['led_9',['4.6 Layer Status LED',['../p_4.html#p_4_6',1,'']]],
+  ['lt_20layer_20tap_10',['5.3.4 LT - Layer Tap',['../p_5.html#p_5_3_4',1,'']]]
 ];
