@@ -605,7 +605,85 @@ UART communication baudrate.
 
 
 @section p_4_6 4.6 Layer Status LED
-...
+
+Status LED used for the indication of the active layer.  
+
+@subsection p_4_6_1 4.6.1 LayerStatusLedRgbNeoPixel
+
+RGB NeoPixel LED which indicates active layer by color.  
+
+``` {.py}
+from mkx.layer_status_led_rgb_neopixel import LayerStatusLedRgbNeoPixel
+
+status_led = LayerStatusLedRgbNeoPixel(
+    status_led_pin, 
+    brightness :float=0.1, 
+    auto_write :bool=True
+)
+```
+
+**status_led_pin**  
+Pin for the RGB NeoPixel LED.  
+
+**brightness**  
+Brightness of the LED in the range 0-1.  
+
+**auto_write**  
+Flag to update LED color automaticly.  
+
+**Example:**
+``` {.py}
+import board
+ 
+from mkx.mkx_central import MKX_Central
+from mkx.layer_status_led_rgb_neopixel import LayerStatusLedRgbNeoPixel
+ 
+mkx_central = MKX_Central()
+ 
+status_led = LayerStatusLedRgbNeoPixel(board.GP23, brightness=0.015)
+status_led.add_layer(0, (0, 255, 0))  # Green
+status_led.add_layer(1, (0, 0, 255))  # Blue
+
+mkx_central.add_layer_status_led(status_led)
+```
+
+@subsection p_4_6_2 4.6.2 LayerStatusLedRgbThreePin
+
+RGB three pin LED which indicates active layer by color.  
+*Untested!* due to lack of proper hardware configuration.
+
+``` {.py}
+from mkx.layer_status_led_rgb_threepin import LayerStatusLedRgbThreePin
+
+status_led = LayerStatusLedRgbThreePin(
+    red_pin,
+    green_pin,
+    blue_pin
+)
+```
+**red_pin**  
+Red LED pin.
+
+**green_pin**  
+Green LED pin.
+
+**blue_pin**  
+Blue LED pin.
+
+@subsection p_4_6_3 4.6.3 LayerStatusLedArray
+
+Array of LED which indicates active layer.  
+*Untested!* due to lack of proper hardware configuration.
+
+``` {.py}
+from mkx.layer_status_led_array import LayerStatusLedArray
+
+status_led = LayerStatusLedArray(
+    pins
+)
+```
+**pins**  
+List of pins for LED-s.
 
 @section p_4_7 4.7 Backlight
 ...
