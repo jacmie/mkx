@@ -354,7 +354,139 @@ mkx_central.run_forever()
 
 
 @section p_4_4 4.4 MKX Periphery
-...
+
+The general **Periphery** captures keystrokes and transmit messages to the **MKX_Central**.  
+The **MKX_Periphery** is a simpler counterpart to the **MKX_Central**,  
+operating continuously on hardware separate from the **MKX_Central**.  
+Each **MKX_Periphery** is assigned a general **Periphery**.
+
+The general **Periphery** can be implemented as **PeripheryCentral**, which operates on the same hardware module as the Central,  
+or as **PeripheryUART**, on a separate hardware module and communicates via UART.  
+
+``` {.py}
+from mkx.mkx_periphery import MKX_Periphery
+
+mkx_perifery = MKX_Periphery(
+    uart_peryphery: PeripheryAbstract, 
+    debug :bool=False
+)
+```
+
+**uart_peryphery**  
+PeripheryUART object (or other derived from the *PeripheryAbstract*).  
+
+**debug**  
+Flag enabling verbose output for the Periphery.  
+
+@subsection p_4_4_1 4.4.1 PeripheryCentral
+
+Set the PeripheryCentral.
+
+``` {.py}
+from mkx.periphery_central import PeripheryCentral
+
+mkx_perifery = PeripheryCentral(
+    device_id: str, 
+    col_pins, 
+    row_pins, 
+    **kwargs
+)
+```
+
+**device_id**  
+Device id/name.  
+
+**col_pins**  
+List of column pins.  
+
+**row_pins**  
+List of row pins.  
+
+** **kwargs**  
+Other optional arguments.  
+
+**Example:**
+``` {.py}
+import board
+ 
+from mkx.mkx_central import MKX_Central
+from mkx.periphery_central import PeripheryCentral
+ 
+mkx_central = MKX_Central()
+ 
+col_pins = (board.GP9, board.GP7, board.GP5, board.GP4, board.GP3, board.GP2)
+row_pins = (board.GP10, board.GP11, board.GP13, board.GP15, board.GP17)
+ 
+central_peryphery = PeripheryCentral("central_peryphery", col_pins, row_pins)
+mkx_central.add_central_periphery(central_peryphery)
+
+interphace_central = InterphaceCentral(central_peryphery, 0, 0, 5, 4)
+mkx_central.add_interface(interphace_central)
+ 
+interphace_right = InterphaceUART("side_perifery", None, board.GP1, 11, 0, 6, 4)
+mkx_central.add_interface(interphace_right)
+
+# other code ...
+
+mkx_central.run_forever()
+```
+
+@subsection p_4_4_2 4.4.2 PeripheryUART
+
+Set the PeripheryUART.
+
+``` {.py}
+from mkx.periphery_uart import PeripheryUART
+
+mkx_perifery = PeripheryUART(
+    device_id: str, 
+    col_pins, 
+    row_pins, 
+    tx_pin,
+    rx_pin,
+    *,
+    baudrate=9600,
+    **kwargs
+)
+```
+
+**device_id**  
+Device id/name.  
+
+**col_pins**  
+List of column pins.  
+
+**row_pins**  
+List of row pins.  
+
+**tx_pin**  
+TX communication pin.  
+
+**rx_pin**  
+RX communication pin.  
+
+**baudrate**  
+UART communication baudrate.  
+
+** **kwargs**  
+Other optional arguments.  
+
+**Example:**
+``` {.py}
+import board
+ 
+from mkx.mkx_periphery import MKX_Periphery
+from mkx.periphery_uart import PeripheryUART
+ 
+ 
+col_pins = (board.GP9, board.GP7, board.GP5, board.GP4, board.GP3, board.GP2)
+row_pins = (board.GP10, board.GP11, board.GP13, board.GP15, board.GP17)
+ 
+peryphery = PeripheryUART("booster_r", col_pins, row_pins, board.GP0, board.GP1)
+ 
+mkx_perifery = MKX_Periphery(peryphery, debug=True)
+mkx_perifery.run_forever()
+```
 
 @section p_4_5 4.5 Interface
 ...
