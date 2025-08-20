@@ -411,7 +411,9 @@ import board
  
 from mkx.mkx_central import MKX_Central
 from mkx.periphery_central import PeripheryCentral
- 
+from mkx.interphace_central import InterphaceCentral
+from mkx.interphace_uart import InterphaceUART
+
 mkx_central = MKX_Central()
  
 col_pins = (board.GP9, board.GP7, board.GP5, board.GP4, board.GP3, board.GP2)
@@ -489,7 +491,118 @@ mkx_perifery.run_forever()
 ```
 
 @section p_4_5 4.5 Interface
-...
+
+The **Interface** connects the **Periferies** to the **MKX_Central**.  
+
+Possible options are **InterphaceCentral** matching the **PeriferyCentral** and  
+**InterphaceUART** matching the **PeriferyUART**.  
+
+**Example:**
+``` {.py}
+import board
+ 
+from mkx.mkx_central import MKX_Central
+from mkx.periphery_central import PeripheryCentral
+from mkx.interphace_central import InterphaceCentral
+from mkx.interphace_uart import InterphaceUART
+
+mkx_central = MKX_Central()
+ 
+col_pins = (board.GP9, board.GP7, board.GP5, board.GP4, board.GP3, board.GP2)
+row_pins = (board.GP10, board.GP11, board.GP13, board.GP15, board.GP17)
+ 
+central_peryphery = PeripheryCentral("central_peryphery", col_pins, row_pins)
+mkx_central.add_central_periphery(central_peryphery)
+
+interphace_central = InterphaceCentral(central_peryphery, 0, 0, 5, 4)
+mkx_central.add_interface(interphace_central)
+ 
+interphace_right = InterphaceUART("side_perifery", None, board.GP1, 11, 0, 6, 4)
+mkx_central.add_interface(interphace_right)
+
+# other code ...
+
+mkx_central.run_forever()
+```
+
+@subsection p_4_5_1 4.5.1 InterphaceCentral
+
+Set the InterphaceCentral.  
+
+Min/max column and rows values can be inverted, meaning min value can be bigger than max.  
+Inverted min/max column and rows values will change the keys mapping.  
+
+``` {.py}
+from mkx.interphace_central import InterphaceCentral
+
+interface = InterphaceCentral(
+    central_periphery: InterfahceAbstract, 
+    col_min :int, 
+    row_min :int, 
+    col_max :int, 
+    row_max :int
+)
+```
+
+**central_periphery**  
+PeriferyCentral object.
+
+**col_min**  
+Minimum column number. Counting start from '0'.  
+
+**row_min**  
+Minimum row number. Counting start from '0'.  
+
+**col_max**  
+Maximum column number. Counting start from '0'.  
+
+**row_max**  
+Maximum row number. Counting start from '0'.  
+
+
+@subsection p_4_5_2 4.5.2 InterphaceUART
+
+Set the InterphaceUART.
+
+``` {.py}
+from mkx.interphace_uart import InterphaceUART
+
+mkx_perifery = InterphaceUART(
+    device_id: str, 
+    tx_pin,
+    rx_pin,
+    col_min :int,
+    row_min :int,
+    col_max :int,
+    row_max :int,
+    baudrate=9600
+)
+```
+
+**device_id**  
+Device id/name, must match the device_id of the **Periphery**.  
+
+**tx_pin**  
+TX communication pin.  
+
+**rx_pin**  
+RX communication pin.  
+
+**col_min**  
+Minimum column number. Counting start from '0'.  
+
+**row_min**  
+Minimum row number. Counting start from '0'.  
+
+**col_max**  
+Maximum column number. Counting start from '0'.  
+
+**row_max**  
+Maximum row number. Counting start from '0'.  
+
+**baudrate**  
+UART communication baudrate.  
+
 
 @section p_4_6 4.6 Layer Status LED
 ...
