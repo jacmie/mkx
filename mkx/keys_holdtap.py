@@ -58,7 +58,3 @@ class HT(KeysAbstract, TimedKeys):
             self._hold_key.on_press(layer_manager, keyboard, timestamp)
             self._held_past_timeout = True
             self._hold_sent = True
-
-
-# HT_ESC_CTRL = HT(Keycode.ESCAPE, Keycode.LEFT_CONTROL)
-# keymap = [[A, HT_ESC_CTRL, B]]

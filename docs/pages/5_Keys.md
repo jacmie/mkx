@@ -255,6 +255,15 @@ TT(1)  # tap-tap toggles layer 1; hold = momentary
 Sending multiple keystrokes.  
 See how it can be used in the section **Get Started - Hardware Keypass**  
 
+``` {.py}
+SEQ(
+    key_list: list[KeysAbstract]
+)
+```
+
+**key_list**  
+Keys list which generates the sequence.
+
 **Example:**
 ``` {.py}
 from mkx.keys_sequence import SEQ
@@ -264,7 +273,38 @@ HK = SEQ([M_LSFT(H), E, L, L, O, SPACE,
           M_LSFT(M), M_LSFT(K), M_LSFT(X), M_LSFT(N1), ENTER])
 ```
 
-@section p_5_5 5.5 HoldTap Keys
+@section p_5_5 5.5 HT - HoldTap Keys
+
+The HoldTap module allows keys to perform two actions:  
+- tap the key to trigger the tap key  
+- hold it longer than the configurable timeout to trigger the hold key  
+
+HoldTap is commonly paired with modifier keys.  
+For example, *HT(ESCAPE, LCTRL)* configures a key to send Escape when tapped, and Left Control when held.
+
+``` {.py}
+HT(
+    tap_key: KeysAbstract,
+    hold_key: KeysAbstract,
+    timeout=200
+)
+```
+
+**tap_key**  
+Activated key on tap.  
+
+**hold_key**  
+Activated key on hold.  
+
+**timeout**  
+Time threshold (in milliseconds) that distinguishes a tap from a hold.  
+
+**Example:**
+```python
+from mkx.keys_holdtap import HT
+
+HT_ESC_CTRL = HT(ESCAPE, LEFT_CONTROL)
+```
 
 @section p_5_6 5.6 TapDance Keys
 
