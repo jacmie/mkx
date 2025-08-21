@@ -335,7 +335,33 @@ from mkx.keys_tapdance import TD
 TD_D_DEL = TD(D, DEL)
 ```
 
-@section p_5_7 5.7 Sticky Keys
+@section p_5_7 5.7 SK - Sticky Keys
+
+When pressed once, it behaves as if the key were held until the next key is pressed.  
+
+``` {.py}
+SK(
+    key: KeysAbstract, 
+    defer_release=False, 
+    retap_cancel=True
+)
+```
+
+**key**  
+Key that should be sticky.  
+
+**defer_release**  
+Flag whether the wrapped key release event is triggered immediately when let go, or deferred until later.  
+
+**retap_cancel**  
+Flag if retap of the sticky key cancels it.
+
+**Example:**
+```python
+from mkx.keys_stiky import SK
+
+SK_A = SK(A)
+```
 
 @section p_5_8 5.8 VIM Keys
 
