@@ -43,6 +43,3 @@ class TD(KeysAbstract, TimedKeys):
 
             self._tap_count = 0
             self.stop_timer()
-
-
-# TD_D = TD(D, DEL, timeout=150)

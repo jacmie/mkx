@@ -306,7 +306,34 @@ from mkx.keys_holdtap import HT
 HT_ESC_CTRL = HT(ESCAPE, LEFT_CONTROL)
 ```
 
-@section p_5_6 5.6 TapDance Keys
+@section p_5_6 5.6 TD - TapDance Keys
+
+Tap Dance allows a single physical key to act as multiple keys.  
+With basic Tap Dance, different actions are triggered by a series of taps within a set timeout.  
+
+For example, TD(A, B) sends:  
+- "a" when tapped once quickly.  
+- "b" when tapped twice quickly.  
+
+``` {.py}
+TD(
+    *keys: KeysAbstract,
+    timeout=200
+)
+```
+
+**keys**  
+Unlimited number of keys for each tap.  
+
+**timeout**  
+Time threshold (in milliseconds) that distinguishes each tap.  
+
+**Example:**
+```python
+from mkx.keys_tapdance import TD
+
+TD_D_DEL = TD(D, DEL)
+```
 
 @section p_5_7 5.7 Sticky Keys
 
