@@ -448,5 +448,23 @@ The table below provides an example of how to mimic the classical Vim layout.
 
 @section p_5_9 5.9 Media Keys
 
+Media Keys provide shortcuts for common media control functions.
+
+| Key    | Aliases                                         | Description                                  |
+|--------|-------------------------------------------------|----------------------------------------------|
+| MUTE   | AUDIO_MUTE                                      | Mute/unmute system audio                     |
+| VOLU   | AUDIO_VOL_UP, VOLUME_INCREMENT                  | Increase system volume                       |
+| VOLD   | AUDIO_VOL_DOWN, VOLUME_DECREMENT                | Decrease system volume                       |
+| BRIU   | BRIGHTNESS_UP, BRIGHTNESS_INCREMENT             | Increase display brightness                  |
+| BRID   | BRIGHTNESS_DOWN, BRIGHTNESS_DECREMENT           | Decrease display brightness                  |
+| MNXT   | MEDIA_NEXT_TRACK, SCAN_NEXT_TRACK               | Skip to next media track                     |
+| MPRV   | MEDIA_PREV_TRACK, SCAN_PREVIOUS_TRACK           | Return to previous media track               |
+| MSTP   | MEDIA_STOP, STOP                                | Stop media playback                          |
+| MPLY   | MEDIA_PLAY_PAUSE, PLAY_PAUSE                    | Toggle media playback (play/pause)           |
+| EJCT   | MEDIA_EJECT, EJECT                              | Eject removable media                        |
+| MFFD   | MEDIA_FAST_FORWARD, FAST_FORWARD                | Fast-forward through media                   |
+| MRWD   | MEDIA_REWIND, REWIND                            | Rewind through media                         |
+| MREC   | MEDIA_RECORD, RECORD                            | Start or stop recording                      |
+
 @section p_5_10 5.10 Mouse Keys
 
