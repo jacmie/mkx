@@ -468,3 +468,28 @@ Media Keys provide shortcuts for common media control functions.
 
 @section p_5_10 5.10 Mouse Keys
 
+Keys controling mouse functions.
+
+| Key              | Aliases                  | Description                                  |
+|------------------|--------------------------|----------------------------------------------|
+| MB_LC            | LMB, MB_LEFT_CLICK       | Left mouse button click                      |
+| MB_RC            | RMB, MB_RIGHT_CLICK      | Right mouse button click                     |
+| MB_MC            | MMB, MB_MIDDLE_CLICK     | Middle mouse button click                    |
+| MB_BC            | BMB, MB_BACK_CLICK       | Back mouse button click                      |
+| MB_FC            | FMB, MB_FORWARD_CLICK    | Forward mouse button click                   |
+| MB_LP            | MB_LEFT_PRESS            | Press and hold left mouse button             |
+| MB_RP            | MB_RIGHT_PRESS           | Press and hold right mouse button            |
+| MB_MP            | MB_MIDDLE_PRESS          | Press and hold middle mouse button           |
+| MB_BP            | MB_BACK_PRESS            | Press and hold back mouse button             |
+| MB_FP            | MB_FORWARD_PRESS         | Press and hold forward mouse button          |
+| MB_LR            | MB_LEFT_RELEASE          | Release left mouse button                    |
+| MB_RR            | MB_RIGHT_RELEASE         | Release right mouse button                   |
+| MB_R             | MB_MIDDLE_RELEASE        | Release middle mouse button                  |
+| MB_BR            | MB_BACK_RELEASE          | Release back mouse button                    |
+| MB_FR            | MB_FORWARD_RELEASE       | Release forward mouse button                 |
+| MB_MR            | MB_MOVE_RIGHT            | Move mouse right                             |
+| MB_ML            | MB_MOVE_LEFT             | Move mouse left                              |
+| MB_MU            | MB_MOVE_UP               | Move mouse up                                |
+| MB_MD            | MB_MOVE_DOWN             | Move mouse down                              |
+| MB_SU            | MB_SCROLL_UP             | Scroll up                                    |
+| MB_SD            | MB_SCROLL_DOWN           | Scroll down                                  |

@@ -126,8 +126,8 @@ MB_RR = KeysMouse("MB_RR", "release", Mouse.RIGHT_BUTTON)
 MB_RIGHT_RELEASE = KeysMouse("MB_RIGHT_RELEASE", "release", Mouse.RIGHT_BUTTON)
 """``MB_RIGHT_RELEASE``"""
 
-MB_MR = KeysMouse("MB_MR", "release", Mouse.MIDDLE_BUTTON)
-"""``MB_MR``"""
+MB_R = KeysMouse("MB_R", "release", Mouse.MIDDLE_BUTTON)
+"""``MB_R``"""
 MB_MIDDLE_RELEASE = KeysMouse("MB_MIDDLE_RELEASE", "release", Mouse.MIDDLE_BUTTON)
 """``MB_MIDDLE_RELEASE``"""
 
@@ -193,7 +193,7 @@ __all__ = [
     # Release
     "MB_LR", "MB_LEFT_RELEASE",
     "MB_RR", "MB_RIGHT_RELEASE",
-    "MB_MR", "MB_MIDDLE_RELEASE",
+    "MB_R",  "MB_MIDDLE_RELEASE",
     "MB_BR", "MB_BACK_RELEASE",
     "MB_FR", "MB_FORWARD_RELEASE",
 
