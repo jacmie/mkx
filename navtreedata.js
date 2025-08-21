@@ -92,9 +92,9 @@ var NAVTREE =
         [ "5.3.7 TT - Tap-Toggle", "p_5.html#p_5_3_7", null ]
       ] ],
       [ "5.4 SEQ - Sequence Keys", "p_5.html#p_5_4", null ],
-      [ "5.5 HoldTap Keys", "p_5.html#p_5_5", null ],
-      [ "5.6 TapDance Keys", "p_5.html#p_5_6", null ],
-      [ "5.7 Sticky Keys", "p_5.html#p_5_7", null ],
+      [ "5.5 HT - HoldTap Keys", "p_5.html#p_5_5", null ],
+      [ "5.6 TD - TapDance Keys", "p_5.html#p_5_6", null ],
+      [ "5.7 SK - Sticky Keys", "p_5.html#p_5_7", null ],
       [ "5.8 VIM Keys", "p_5.html#p_5_8", [
         [ "5.8.1 Normal Mode", "p_5.html#p_5_8_1", null ],
         [ "5.8.2 Edit Mode", "p_5.html#p_5_8_2", null ],

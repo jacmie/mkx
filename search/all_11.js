@@ -4,5 +4,6 @@ var searchData=
   ['hid_1',['4.2 HID',['../p_4.html#p_4_2',1,'']]],
   ['hid_5fble_2',['4.2.2 HID_BLE',['../p_4.html#p_4_2_2',1,'']]],
   ['hid_5fusb_3',['4.2.1 HID_USB',['../p_4.html#p_4_2_1',1,'']]],
-  ['holdtap_20keys_4',['5.5 HoldTap Keys',['../p_5.html#p_5_5',1,'']]]
+  ['holdtap_20keys_4',['5.5 HT - HoldTap Keys',['../p_5.html#p_5_5',1,'']]],
+  ['ht_20holdtap_20keys_5',['5.5 HT - HoldTap Keys',['../p_5.html#p_5_5',1,'']]]
 ];

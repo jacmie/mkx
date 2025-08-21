@@ -119,9 +119,9 @@ $(document).ready(function(){initNavTree('p_5.html',''); initResizable(); });
 </ul>
 </li>
 <li class="level1"><a href="#p_5_4">5.4 SEQ - Sequence Keys</a></li>
-<li class="level1"><a href="#p_5_5">5.5 HoldTap Keys</a></li>
-<li class="level1"><a href="#p_5_6">5.6 TapDance Keys</a></li>
-<li class="level1"><a href="#p_5_7">5.7 Sticky Keys</a></li>
+<li class="level1"><a href="#p_5_5">5.5 HT - HoldTap Keys</a></li>
+<li class="level1"><a href="#p_5_6">5.6 TD - TapDance Keys</a></li>
+<li class="level1"><a href="#p_5_7">5.7 SK - Sticky Keys</a></li>
 <li class="level1"><a href="#p_5_8">5.8 VIM Keys</a><ul><li class="level2"><a href="#p_5_8_1">5.8.1 Normal Mode</a></li>
 <li class="level2"><a href="#p_5_8_2">5.8.2 Edit Mode</a></li>
 <li class="level2"><a href="#p_5_8_3">5.8.3 Visual Mode</a></li>
@@ -482,18 +482,90 @@ $(document).ready(function(){initNavTree('p_5.html',''); initResizable(); });
 <p>Sending multiple keystrokes. <br  />
  See how it can be used in the section <b>Get Started - Hardware Keypass</b> <br  />
 </p>
+<div class="fragment"><div class="line">SEQ(</div>
+<div class="line">    key_list: list[KeysAbstract]</div>
+<div class="line">)</div>
+</div><!-- fragment --><p><b>key_list</b> <br  />
+ Keys list which generates the sequence.</p>
 <p><b>Example:</b> </p><div class="fragment"><div class="line"><span class="keyword">from</span> mkx.keys_sequence <span class="keyword">import</span> SEQ</div>
 <div class="line"> </div>
 <div class="line">HK = SEQ([M_LSFT(H), E, L, L, O, SPACE, </div>
 <div class="line">          M_LSFT(W), O, R, L, D, SPACE, </div>
 <div class="line">          M_LSFT(M), M_LSFT(K), M_LSFT(X), M_LSFT(N1), ENTER])</div>
 </div><!-- fragment --><h1><a class="anchor" id="p_5_5"></a>
-5.5 HoldTap Keys</h1>
-<h1><a class="anchor" id="p_5_6"></a>
-5.6 TapDance Keys</h1>
-<h1><a class="anchor" id="p_5_7"></a>
-5.7 Sticky Keys</h1>
-<h1><a class="anchor" id="p_5_8"></a>
+5.5 HT - HoldTap Keys</h1>
+<p>The HoldTap module allows keys to perform two actions: <br  />
+</p><ul>
+<li>tap the key to trigger the tap key <br  />
+</li>
+<li>hold it longer than the configurable timeout to trigger the hold key <br  />
+</li>
+</ul>
+<p>HoldTap is commonly paired with modifier keys. <br  />
+ For example, <em>HT(ESCAPE, LCTRL)</em> configures a key to send Escape when tapped, and Left Control when held.</p>
+<div class="fragment"><div class="line">HT(</div>
+<div class="line">    tap_key: KeysAbstract,</div>
+<div class="line">    hold_key: KeysAbstract,</div>
+<div class="line">    timeout=200</div>
+<div class="line">)</div>
+</div><!-- fragment --><p><b>tap_key</b> <br  />
+ Activated key on tap. <br  />
+</p>
+<p><b>hold_key</b> <br  />
+ Activated key on hold. <br  />
+</p>
+<p><b>timeout</b> <br  />
+ Time threshold (in milliseconds) that distinguishes a tap from a hold. <br  />
+</p>
+<p><b>Example:</b> </p><div class="fragment"><div class="line"><span class="keyword">from</span> mkx.keys_holdtap <span class="keyword">import</span> HT</div>
+<div class="line"> </div>
+<div class="line">HT_ESC_CTRL = HT(ESCAPE, LEFT_CONTROL)</div>
+</div><!-- fragment --><h1><a class="anchor" id="p_5_6"></a>
+5.6 TD - TapDance Keys</h1>
+<p>Tap Dance allows a single physical key to act as multiple keys. <br  />
+ With basic Tap Dance, different actions are triggered by a series of taps within a set timeout. <br  />
+</p>
+<p>For example, TD(A, B) sends: <br  />
+</p><ul>
+<li>"a" when tapped once quickly. <br  />
+</li>
+<li>"b" when tapped twice quickly. <br  />
+</li>
+</ul>
+<div class="fragment"><div class="line">TD(</div>
+<div class="line">    *keys: KeysAbstract,</div>
+<div class="line">    timeout=200</div>
+<div class="line">)</div>
+</div><!-- fragment --><p><b>keys</b> <br  />
+ Unlimited number of keys for each tap. <br  />
+</p>
+<p><b>timeout</b> <br  />
+ Time threshold (in milliseconds) that distinguishes each tap. <br  />
+</p>
+<p><b>Example:</b> </p><div class="fragment"><div class="line"><span class="keyword">from</span> mkx.keys_tapdance <span class="keyword">import</span> TD</div>
+<div class="line"> </div>
+<div class="line">TD_D_DEL = TD(D, DEL)</div>
+</div><!-- fragment --><h1><a class="anchor" id="p_5_7"></a>
+5.7 SK - Sticky Keys</h1>
+<p>When pressed once, it behaves as if the key were held until the next key is pressed. <br  />
+</p>
+<div class="fragment"><div class="line">SK(</div>
+<div class="line">    key: KeysAbstract, </div>
+<div class="line">    defer_release=<span class="keyword">False</span>, </div>
+<div class="line">    retap_cancel=<span class="keyword">True</span></div>
+<div class="line">)</div>
+</div><!-- fragment --><p><b>key</b> <br  />
+ Key that should be sticky. <br  />
+</p>
+<p><b>defer_release</b> <br  />
+ Flag whether the wrapped key release event is triggered immediately when let go, or deferred until later. <br  />
+</p>
+<p><b>retap_cancel</b> <br  />
+ Flag if retap of the sticky key cancels it.</p>
+<p><b>Example:</b> </p><div class="fragment"><div class="line"><span class="keyword">from</span> mkx.keys_stiky <span class="keyword">import</span> SK</div>
+<div class="line"> </div>
+<div class="line">SK_A = SK(A)</div>
+</div><!-- fragment --><h1><a class="anchor" id="p_5_8"></a>
 5.8 VIM Keys</h1>
 <p>"Hardeare Vim" keys allow to mimic basic behavior of the Vim editor. <br  />
  Even if you are not a fan of Vim you may find selected keys usefull. <br  />
@@ -625,8 +697,86 @@ $(document).ready(function(){initNavTree('p_5.html',''); initResizable(); });
 </table>
 <h1><a class="anchor" id="p_5_9"></a>
 5.9 Media Keys</h1>
+<p>Media Keys provide shortcuts for common media control functions.</p>
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadNone">Key   </th><th class="markdownTableHeadNone">Aliases   </th><th class="markdownTableHeadNone">Description    </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">MUTE   </td><td class="markdownTableBodyNone">AUDIO_MUTE   </td><td class="markdownTableBodyNone">Mute/unmute system audio    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">VOLU   </td><td class="markdownTableBodyNone">AUDIO_VOL_UP, VOLUME_INCREMENT   </td><td class="markdownTableBodyNone">Increase system volume    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">VOLD   </td><td class="markdownTableBodyNone">AUDIO_VOL_DOWN, VOLUME_DECREMENT   </td><td class="markdownTableBodyNone">Decrease system volume    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">BRIU   </td><td class="markdownTableBodyNone">BRIGHTNESS_UP, BRIGHTNESS_INCREMENT   </td><td class="markdownTableBodyNone">Increase display brightness    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">BRID   </td><td class="markdownTableBodyNone">BRIGHTNESS_DOWN, BRIGHTNESS_DECREMENT   </td><td class="markdownTableBodyNone">Decrease display brightness    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">MNXT   </td><td class="markdownTableBodyNone">MEDIA_NEXT_TRACK, SCAN_NEXT_TRACK   </td><td class="markdownTableBodyNone">Skip to next media track    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">MPRV   </td><td class="markdownTableBodyNone">MEDIA_PREV_TRACK, SCAN_PREVIOUS_TRACK   </td><td class="markdownTableBodyNone">Return to previous media track    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">MSTP   </td><td class="markdownTableBodyNone">MEDIA_STOP, STOP   </td><td class="markdownTableBodyNone">Stop media playback    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">MPLY   </td><td class="markdownTableBodyNone">MEDIA_PLAY_PAUSE, PLAY_PAUSE   </td><td class="markdownTableBodyNone">Toggle media playback (play/pause)    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">EJCT   </td><td class="markdownTableBodyNone">MEDIA_EJECT, EJECT   </td><td class="markdownTableBodyNone">Eject removable media    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">MFFD   </td><td class="markdownTableBodyNone">MEDIA_FAST_FORWARD, FAST_FORWARD   </td><td class="markdownTableBodyNone">Fast-forward through media    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">MRWD   </td><td class="markdownTableBodyNone">MEDIA_REWIND, REWIND   </td><td class="markdownTableBodyNone">Rewind through media    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">MREC   </td><td class="markdownTableBodyNone">MEDIA_RECORD, RECORD   </td><td class="markdownTableBodyNone">Start or stop recording   </td></tr>
+</table>
 <h1><a class="anchor" id="p_5_10"></a>
 5.10 Mouse Keys</h1>
+<p>Keys controling mouse functions.</p>
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadNone">Key   </th><th class="markdownTableHeadNone">Aliases   </th><th class="markdownTableHeadNone">Description    </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">MB_LC   </td><td class="markdownTableBodyNone">LMB, MB_LEFT_CLICK   </td><td class="markdownTableBodyNone">Left mouse button click    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">MB_RC   </td><td class="markdownTableBodyNone">RMB, MB_RIGHT_CLICK   </td><td class="markdownTableBodyNone">Right mouse button click    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">MB_MC   </td><td class="markdownTableBodyNone">MMB, MB_MIDDLE_CLICK   </td><td class="markdownTableBodyNone">Middle mouse button click    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">MB_BC   </td><td class="markdownTableBodyNone">BMB, MB_BACK_CLICK   </td><td class="markdownTableBodyNone">Back mouse button click    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">MB_FC   </td><td class="markdownTableBodyNone">FMB, MB_FORWARD_CLICK   </td><td class="markdownTableBodyNone">Forward mouse button click    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">MB_LP   </td><td class="markdownTableBodyNone">MB_LEFT_PRESS   </td><td class="markdownTableBodyNone">Press and hold left mouse button    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">MB_RP   </td><td class="markdownTableBodyNone">MB_RIGHT_PRESS   </td><td class="markdownTableBodyNone">Press and hold right mouse button    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">MB_MP   </td><td class="markdownTableBodyNone">MB_MIDDLE_PRESS   </td><td class="markdownTableBodyNone">Press and hold middle mouse button    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">MB_BP   </td><td class="markdownTableBodyNone">MB_BACK_PRESS   </td><td class="markdownTableBodyNone">Press and hold back mouse button    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">MB_FP   </td><td class="markdownTableBodyNone">MB_FORWARD_PRESS   </td><td class="markdownTableBodyNone">Press and hold forward mouse button    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">MB_LR   </td><td class="markdownTableBodyNone">MB_LEFT_RELEASE   </td><td class="markdownTableBodyNone">Release left mouse button    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">MB_RR   </td><td class="markdownTableBodyNone">MB_RIGHT_RELEASE   </td><td class="markdownTableBodyNone">Release right mouse button    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">MB_R   </td><td class="markdownTableBodyNone">MB_MIDDLE_RELEASE   </td><td class="markdownTableBodyNone">Release middle mouse button    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">MB_BR   </td><td class="markdownTableBodyNone">MB_BACK_RELEASE   </td><td class="markdownTableBodyNone">Release back mouse button    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">MB_FR   </td><td class="markdownTableBodyNone">MB_FORWARD_RELEASE   </td><td class="markdownTableBodyNone">Release forward mouse button    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">MB_MR   </td><td class="markdownTableBodyNone">MB_MOVE_RIGHT   </td><td class="markdownTableBodyNone">Move mouse right    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">MB_ML   </td><td class="markdownTableBodyNone">MB_MOVE_LEFT   </td><td class="markdownTableBodyNone">Move mouse left    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">MB_MU   </td><td class="markdownTableBodyNone">MB_MOVE_UP   </td><td class="markdownTableBodyNone">Move mouse up    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">MB_MD   </td><td class="markdownTableBodyNone">MB_MOVE_DOWN   </td><td class="markdownTableBodyNone">Move mouse down    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">MB_SU   </td><td class="markdownTableBodyNone">MB_SCROLL_UP   </td><td class="markdownTableBodyNone">Scroll up    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">MB_SD   </td><td class="markdownTableBodyNone">MB_SCROLL_DOWN   </td><td class="markdownTableBodyNone">Scroll down   </td></tr>
+</table>
 </div></div><!-- contents -->
 </div><!-- PageDoc -->
 </div><!-- doc-content -->
