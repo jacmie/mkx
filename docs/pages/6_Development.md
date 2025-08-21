@@ -4,6 +4,7 @@
 
 @section p_6_1 Dev
 
+To add functionality, inherit from the **Abstract** classes if possible, and use them like the already implemented functions and keys.  
 
 @section p_6_2 Build with mpy
 
