@@ -7,7 +7,7 @@
   <img width=800 src="KeyPass_keyboard.jpg">
 </div>
 
-This simple setup uses an unmodified *Seeed Xiao RP2040* connected to a computer via USB.
+This simple setup uses an unmodified *Seeed Xiao nRF52840* connected to a computer via USB.
 <br>
 
 To make it more useful and entertaining, we simulate the behavior of a hardware security key.  
@@ -22,6 +22,12 @@ For this reason **PeripheryCentral** is defined and added to the keyboard object
 Standard keyboard keys were used, modifier key **M_LSFT** was applied to produce capital letters and special characters.  
 All input is grouped under a single key called **HK**, defined as a sequence **SEQ** key.  
 The keymap is simple and consists of only one key: **HK**.
+
+The nRF52840 supports Bluetooth Low Energy (BLE).  
+To connect the keyboard via Bluetooth, uncomment the line **keyboard.use_ble(True)**.  
+
+In some cases, the BLE connection can be unreliable and keystrokes may not be transmitted correctly.  
+If this happens, try turning Bluetooth off and on again and then reconnecting the device—for example, by re-pairing it on your phone.  
 
 ``` {.py}
 # code.py
@@ -49,8 +55,8 @@ keyboard.add_interface(interphace_central)
 
 # fmt: off
 
-HK = SEQ([M_LSFT(H), E, L, L, O, SPACE, 
-          M_LSFT(W), O, R, L, D, SPACE, 
+HK = SEQ([M_LSFT(H), E, L, L, O, SPACE,
+          M_LSFT(W), O, R, L, D, SPACE,
           M_LSFT(M), M_LSFT(K), M_LSFT(X), M_LSFT(N1), ENTER])
 
 keymap = [
@@ -62,6 +68,8 @@ keymap = [
 # fmt: on
 
 keyboard.add_keymap(keymap, 1, 1)
+# Uncomment to connect via BLE
+# keyboard.use_ble(True)
 keyboard.run_forever()
 ```
 

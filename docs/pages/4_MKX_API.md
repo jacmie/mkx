@@ -123,37 +123,7 @@ boot_cfg(
 )
 ```
 
-@section p_4_2 4.2 HID
-
-Type of HID device to use.  
-Possible options are **HID_USB** for a standard USB HID device or **HID_BLE** for a Bluetooth Low Energy HID device.  
-
-@subsection p_4_2_1  4.2.1 HID_USB
-
-Set USB HID device.
-
-**Example:**
-``` {.py}
-from mkx.hid_usb import HID_USB
-
-hid = HID_USB()
-keyboard.set_hid(hid) # TO DO
-```
-
-@subsection p_4_2_2  4.2.2 HID_BLE
-
-Set BLE HID device.
-
-**Example:**
-``` {.py}
-from mkx.hid_ble import HID_BLE
-
-hid = HID_BLE()
-keyboard.set_hid(hid) # TO DO
-```
-
-
-@section p_4_3 4.3 MKX Central
+@section p_4_2 4.2 MKX Central
 
 Main **MKX** class that manages keyboard operation and handles communication with the computer.  
 
@@ -183,7 +153,7 @@ from mkx.mkx_central import MKX_Central
 mkx_central = MKX_Central()
 ```
 
-@subsection p_4_3_1 4.3.1 add_central_periphery
+@subsection p_4_2_1 4.2.1 add_central_periphery
 
 Add **PeripheryCentral** to the ***MKX_Central**.  
 
@@ -207,7 +177,7 @@ central_peryphery = PeripheryCentral("central", col_pins, row_pins)
 mkx_central.add_central_periphery(central_peryphery)
 ```
 
-@subsection p_4_3_2 4.3.2 add_interface
+@subsection p_4_2_2 4.2.2 add_interface
 
 Add **Interface** of a **Periphery** to the **MKX_Central**.  
 
@@ -238,7 +208,7 @@ interphace_right = InterphaceUART("right_peryphery", None, board.GP1, 11, 0, 6, 
 keyboard.add_interface(interphace_right)
 ```
 
-@subsection p_4_3_3 4.3.3 add_layer_status_led
+@subsection p_4_2_3 4.2.3 add_layer_status_led
 
 Add **LayerStatusLed** to the **MKX_Central**.  
 
@@ -268,7 +238,7 @@ status_led.add_layer(3, (255, 0, 0))  # Red
 mkx_central.add_layer_status_led(status_led)
 ```
 
-@subsection p_4_3_4 4.3.4 add_backlight
+@subsection p_4_2_4 4.2.4 add_backlight
 
 Add **Backlight** to the **MKX_Central**.  
 
@@ -296,7 +266,7 @@ backlight.set_swirl(True)
 mkx_central.add_backlight(backlight)
 ```
 
-@subsection p_4_3_5 4.3.5 add_keymap
+@subsection p_4_2_5 4.2.5 add_keymap
 
 Add **Keymap** to the **MKX_Central**.  
 **Keymap** must have rectangular shape. In custom layouts where certain positions are unused, set them to **None**.
@@ -342,9 +312,30 @@ keymap = [
 mkx_central.add_keymap(keymap, 2, 1)
 ```
 
-@subsection p_4_3_6 4.3.6 run_forever
+@subsection p_4_2_6 4.2.6 use_ble
 
-Start runninhg keyboard's infinite loop.
+Enable or disable BLE.  
+
+``` {.py}
+mkx_central.use_ble(
+    use_ble: bool
+)
+```
+
+**use_ble**  
+Flag to enable or disable BLE connection, default *False*.
+
+**Example:**
+``` {.py}
+from mkx.mkx_central import MKX_Central
+
+mkx_central = MKX_Central()
+mkx_central.use_ble(True)
+```
+
+@subsection p_4_2_7 4.2.7 run_forever
+
+Start running keyboard's infinite loop.
 
 
 ``` {.py}
@@ -353,7 +344,7 @@ mkx_central.run_forever()
 ```
 
 
-@section p_4_4 4.4 MKX Periphery
+@section p_4_3 4.3 MKX Periphery
 
 The general **Periphery** captures keystrokes and transmit messages to the **MKX_Central**.  
 The **MKX_Periphery** is a simpler counterpart to the **MKX_Central**,  
@@ -378,7 +369,7 @@ PeripheryUART object (or other derived from the *PeripheryAbstract*).
 **debug**  
 Flag enabling verbose output for the Periphery.  
 
-@subsection p_4_4_1 4.4.1 PeripheryCentral
+@subsection p_4_3_1 4.3.1 PeripheryCentral
 
 Set the PeripheryCentral.
 
@@ -433,7 +424,7 @@ mkx_central.add_interface(interphace_right)
 mkx_central.run_forever()
 ```
 
-@subsection p_4_4_2 4.4.2 PeripheryUART
+@subsection p_4_3_2 4.3.2 PeripheryUART
 
 Set the PeripheryUART.
 
@@ -490,7 +481,7 @@ mkx_perifery = MKX_Periphery(peryphery, debug=True)
 mkx_perifery.run_forever()
 ```
 
-@section p_4_5 4.5 Interface
+@section p_4_4 4.4 Interface
 
 The **Interface** connects the **Periferies** to the **MKX_Central**.  
 
@@ -525,7 +516,7 @@ mkx_central.add_interface(interphace_right)
 mkx_central.run_forever()
 ```
 
-@subsection p_4_5_1 4.5.1 InterphaceCentral
+@subsection p_4_4_1 4.4.1 InterphaceCentral
 
 Set the InterphaceCentral.  
 
@@ -560,7 +551,7 @@ Maximum column number. Counting start from '0'.
 Maximum row number. Counting start from '0'.  
 
 
-@subsection p_4_5_2 4.5.2 InterphaceUART
+@subsection p_4_4_2 4.4.2 InterphaceUART
 
 Set the InterphaceUART.
 
@@ -604,11 +595,11 @@ Maximum row number. Counting start from '0'.
 UART communication baudrate.  
 
 
-@section p_4_6 4.6 Layer Status LED
+@section p_4_5 4.5 Layer Status LED
 
 Status LED used for the indication of the active layer.  
 
-@subsection p_4_6_1 4.6.1 LayerStatusLedRgbNeoPixel
+@subsection p_4_5_1 4.5.1 LayerStatusLedRgbNeoPixel
 
 RGB NeoPixel LED which indicates active layer by color.  
 
@@ -647,7 +638,7 @@ status_led.add_layer(1, (0, 0, 255))  # Blue
 mkx_central.add_layer_status_led(status_led)
 ```
 
-@subsection p_4_6_2 4.6.2 LayerStatusLedRgbThreePin
+@subsection p_4_5_2 4.5.2 LayerStatusLedRgbThreePin
 
 RGB three pin LED which indicates active layer by color.  
 *Untested!* due to lack of proper hardware configuration.
@@ -670,7 +661,7 @@ Green LED pin.
 **blue_pin**  
 Blue LED pin.
 
-@subsection p_4_6_3 4.6.3 LayerStatusLedArray
+@subsection p_4_5_3 4.5.3 LayerStatusLedArray
 
 Array of LED which indicates active layer.  
 *Untested!* due to lack of proper hardware configuration.
@@ -685,11 +676,11 @@ status_led = LayerStatusLedArray(
 **pins**  
 List of pins for LED-s.
 
-@section p_4_7 4.7 Backlight
+@section p_4_6 4.6 Backlight
 
 RGB NeoPixel backlight.
 
-@subsection p_4_7_1 4.7.1 BacklightNeopixelStatic
+@subsection p_4_6_1 4.6.1 BacklightNeopixelStatic
 
 Static color backlight.
 
@@ -730,7 +721,7 @@ backlight = BacklightNeopixelStatic(board.A0, num_pixels=72, rgb_color=(0, 0, 25
 mkx_central.add_backlight(backlight)
 ```
 
-@subsection p_4_7_2 4.7.2 BacklightNeopixelRainbow
+@subsection p_4_6_2 4.6.2 BacklightNeopixelRainbow
 
 Rainbow animated color backlight.
 
@@ -754,7 +745,7 @@ Number of the RGB NeoPixel LED-s.
 **brightness**  
 Brightness of the LED in the range 0-1.  
 
-@subsection p_4_7_2_1 4.7.2.1 faster()
+@subsection p_4_6_2_1 4.6.2.1 faster()
 
 Hom much faster should be the rainbow animation from the initial one.
 
@@ -767,7 +758,7 @@ backlight.faster(
 **value**  
 Increased animation speed up to 20.
 
-@subsection p_4_7_2_2 4.7.2.2 slower()
+@subsection p_4_6_2_2 4.6.2.2 slower()
 
 Hom much slower should be the rainbow animation from the initial one.
 
@@ -780,7 +771,7 @@ backlight.slower(
 **value**  
 Decreased animation speed up to 20.
 
-@subsection p_4_7_2_3 4.7.2.3 set_swirl()
+@subsection p_4_6_2_3 4.6.2.3 set_swirl()
 
 Should the LED-s change color independently by swirl or not.
 
