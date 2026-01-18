@@ -678,6 +678,10 @@ List of pins for LED-s.
 
 @section p_4_6 4.6 Backlight
 
+<div style="margin-left: 100px;">
+  <img width=800 src="RGB_backlight.jpg">
+</div>
+
 RGB NeoPixel backlight.
 
 @subsection p_4_6_1 4.6.1 BacklightNeopixelStatic
