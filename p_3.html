@@ -114,7 +114,7 @@ $(document).ready(function(){initNavTree('p_3.html',''); initResizable(); });
 </div>
 <div class="textblock"><h1><a class="anchor" id="p_3_1"></a>
 3.1 Hardware Keypass</h1>
-<div style="margin-left: 100px;"> <img src="KeyPass_keyboard.jpg" alt="" width="800" class="inline"/> </div><p>This simple setup uses an unmodified <em>Seeed Xiao RP2040</em> connected to a computer via USB. <br  />
+<div style="margin-left: 100px;"> <img src="KeyPass_keyboard.jpg" alt="" width="800" class="inline"/> </div><p>This simple setup uses an unmodified <em>Seeed Xiao nRF52840</em> connected to a computer via USB. <br  />
 </p>
 <p>To make it more useful and entertaining, we simulate the behavior of a hardware security key. <br  />
  ⚠️ <b>Warning:</b> <em>This is not intended for real security purposes. Actual hardware keys use encryption and have more advanced mechanisms.</em> <br  />
@@ -125,6 +125,12 @@ $(document).ready(function(){initNavTree('p_3.html',''); initResizable(); });
 <p>Standard keyboard keys were used, modifier key <b>M_LSFT</b> was applied to produce capital letters and special characters. <br  />
  All input is grouped under a single key called <b>HK</b>, defined as a sequence <b>SEQ</b> key. <br  />
  The keymap is simple and consists of only one key: <b>HK</b>.</p>
+<p>The nRF52840 supports Bluetooth Low Energy (BLE). <br  />
+ To connect the keyboard via Bluetooth, uncomment the line <b>keyboard.use_ble(True)</b>. <br  />
+</p>
+<p>In some cases, the BLE connection can be unreliable and keystrokes may not be transmitted correctly. <br  />
+ If this happens, try turning Bluetooth off and on again and then reconnecting the device—for example, by re-pairing it on your phone. <br  />
+</p>
 <div class="fragment"><div class="line"><span class="comment"># code.py</span></div>
 <div class="line"> </div>
 <div class="line"><span class="keyword">import</span> board</div>
@@ -150,8 +156,8 @@ $(document).ready(function(){initNavTree('p_3.html',''); initResizable(); });
 <div class="line"> </div>
 <div class="line"><span class="comment"># fmt: off</span></div>
 <div class="line"> </div>
-<div class="line">HK = SEQ([M_LSFT(H), E, L, L, O, SPACE, </div>
-<div class="line">          M_LSFT(W), O, R, L, D, SPACE, </div>
+<div class="line">HK = SEQ([M_LSFT(H), E, L, L, O, SPACE,</div>
+<div class="line">          M_LSFT(W), O, R, L, D, SPACE,</div>
 <div class="line">          M_LSFT(M), M_LSFT(K), M_LSFT(X), M_LSFT(N1), ENTER])</div>
 <div class="line"> </div>
 <div class="line">keymap = [</div>
@@ -163,6 +169,8 @@ $(document).ready(function(){initNavTree('p_3.html',''); initResizable(); });
 <div class="line"><span class="comment"># fmt: on</span></div>
 <div class="line"> </div>
 <div class="line">keyboard.add_keymap(keymap, 1, 1)</div>
+<div class="line"><span class="comment"># Uncomment to connect via BLE</span></div>
+<div class="line"><span class="comment"># keyboard.use_ble(True)</span></div>
 <div class="line">keyboard.run_forever()</div>
 </div><!-- fragment --><h1><a class="anchor" id="p_3_2"></a>
 3.2 Booster Keyboard</h1>

@@ -108,36 +108,33 @@ $(document).ready(function(){initNavTree('p_4.html',''); initResizable(); });
 <div class="contents">
 <div class="toc"><h3>Table of Contents</h3>
 <ul><li class="level1"><a href="#p_4_1">4.1 Boot Config</a></li>
-<li class="level1"><a href="#p_4_2">4.2 HID</a><ul><li class="level2"><a href="#p_4_2_1">4.2.1 HID_USB</a></li>
-<li class="level2"><a href="#p_4_2_2">4.2.2 HID_BLE</a></li>
+<li class="level1"><a href="#p_4_2">4.2 MKX Central</a><ul><li class="level2"><a href="#p_4_2_1">4.2.1 add_central_periphery</a></li>
+<li class="level2"><a href="#p_4_2_2">4.2.2 add_interface</a></li>
+<li class="level2"><a href="#p_4_2_3">4.2.3 add_layer_status_led</a></li>
+<li class="level2"><a href="#p_4_2_4">4.2.4 add_backlight</a></li>
+<li class="level2"><a href="#p_4_2_5">4.2.5 add_keymap</a></li>
+<li class="level2"><a href="#p_4_2_6">4.2.6 use_ble</a></li>
+<li class="level2"><a href="#p_4_2_7">4.2.7 run_forever</a></li>
 </ul>
 </li>
-<li class="level1"><a href="#p_4_3">4.3 MKX Central</a><ul><li class="level2"><a href="#p_4_3_1">4.3.1 add_central_periphery</a></li>
-<li class="level2"><a href="#p_4_3_2">4.3.2 add_interface</a></li>
-<li class="level2"><a href="#p_4_3_3">4.3.3 add_layer_status_led</a></li>
-<li class="level2"><a href="#p_4_3_4">4.3.4 add_backlight</a></li>
-<li class="level2"><a href="#p_4_3_5">4.3.5 add_keymap</a></li>
-<li class="level2"><a href="#p_4_3_6">4.3.6 run_forever</a></li>
+<li class="level1"><a href="#p_4_3">4.3 MKX Periphery</a><ul><li class="level2"><a href="#p_4_3_1">4.3.1 PeripheryCentral</a></li>
+<li class="level2"><a href="#p_4_3_2">4.3.2 PeripheryUART</a></li>
 </ul>
 </li>
-<li class="level1"><a href="#p_4_4">4.4 MKX Periphery</a><ul><li class="level2"><a href="#p_4_4_1">4.4.1 PeripheryCentral</a></li>
-<li class="level2"><a href="#p_4_4_2">4.4.2 PeripheryUART</a></li>
+<li class="level1"><a href="#p_4_4">4.4 Interface</a><ul><li class="level2"><a href="#p_4_4_1">4.4.1 InterphaceCentral</a></li>
+<li class="level2"><a href="#p_4_4_2">4.4.2 InterphaceUART</a></li>
 </ul>
 </li>
-<li class="level1"><a href="#p_4_5">4.5 Interface</a><ul><li class="level2"><a href="#p_4_5_1">4.5.1 InterphaceCentral</a></li>
-<li class="level2"><a href="#p_4_5_2">4.5.2 InterphaceUART</a></li>
+<li class="level1"><a href="#p_4_5">4.5 Layer Status LED</a><ul><li class="level2"><a href="#p_4_5_1">4.5.1 LayerStatusLedRgbNeoPixel</a></li>
+<li class="level2"><a href="#p_4_5_2">4.5.2 LayerStatusLedRgbThreePin</a></li>
+<li class="level2"><a href="#p_4_5_3">4.5.3 LayerStatusLedArray</a></li>
 </ul>
 </li>
-<li class="level1"><a href="#p_4_6">4.6 Layer Status LED</a><ul><li class="level2"><a href="#p_4_6_1">4.6.1 LayerStatusLedRgbNeoPixel</a></li>
-<li class="level2"><a href="#p_4_6_2">4.6.2 LayerStatusLedRgbThreePin</a></li>
-<li class="level2"><a href="#p_4_6_3">4.6.3 LayerStatusLedArray</a></li>
-</ul>
-</li>
-<li class="level1"><a href="#p_4_7">4.7 Backlight</a><ul><li class="level2"><a href="#p_4_7_1">4.7.1 BacklightNeopixelStatic</a></li>
-<li class="level2"><a href="#p_4_7_2">4.7.2 BacklightNeopixelRainbow</a></li>
-<li class="level2"><a href="#p_4_7_2_1">4.7.2.1 faster()</a></li>
-<li class="level2"><a href="#p_4_7_2_2">4.7.2.2 slower()</a></li>
-<li class="level2"><a href="#p_4_7_2_3">4.7.2.3 set_swirl()</a></li>
+<li class="level1"><a href="#p_4_6">4.6 Backlight</a><ul><li class="level2"><a href="#p_4_6_1">4.6.1 BacklightNeopixelStatic</a></li>
+<li class="level2"><a href="#p_4_6_2">4.6.2 BacklightNeopixelRainbow</a></li>
+<li class="level2"><a href="#p_4_6_2_1">4.6.2.1 faster()</a></li>
+<li class="level2"><a href="#p_4_6_2_2">4.6.2.2 slower()</a></li>
+<li class="level2"><a href="#p_4_6_2_3">4.6.2.3 set_swirl()</a></li>
 </ul>
 </li>
 </ul>
@@ -237,26 +234,7 @@ $(document).ready(function(){initNavTree('p_4.html',''); initResizable(); });
 <div class="line">    usb_id=(<span class="stringliteral">&quot;MKX Device&quot;</span>, <span class="stringliteral">&quot;Sq Keyboard&quot;</span>),</div>
 <div class="line">)</div>
 </div><!-- fragment --><h1><a class="anchor" id="p_4_2"></a>
-4.2 HID</h1>
-<p>Type of HID device to use. <br  />
- Possible options are <b>HID_USB</b> for a standard USB HID device or <b>HID_BLE</b> for a Bluetooth Low Energy HID device. <br  />
-</p>
-<h2><a class="anchor" id="p_4_2_1"></a>
-4.2.1 HID_USB</h2>
-<p>Set USB HID device.</p>
-<p><b>Example:</b> </p><div class="fragment"><div class="line"><span class="keyword">from</span> mkx.hid_usb <span class="keyword">import</span> HID_USB</div>
-<div class="line"> </div>
-<div class="line">hid = HID_USB()</div>
-<div class="line">keyboard.set_hid(hid) <span class="comment"># TO DO</span></div>
-</div><!-- fragment --><h2><a class="anchor" id="p_4_2_2"></a>
-4.2.2 HID_BLE</h2>
-<p>Set BLE HID device.</p>
-<p><b>Example:</b> </p><div class="fragment"><div class="line"><span class="keyword">from</span> mkx.hid_ble <span class="keyword">import</span> HID_BLE</div>
-<div class="line"> </div>
-<div class="line">hid = HID_BLE()</div>
-<div class="line">keyboard.set_hid(hid) <span class="comment"># TO DO</span></div>
-</div><!-- fragment --><h1><a class="anchor" id="p_4_3"></a>
-4.3 MKX Central</h1>
+4.2 MKX Central</h1>
 <p>Main <b>MKX</b> class that manages keyboard operation and handles communication with the computer. <br  />
 </p>
 <div class="fragment"><div class="line"><span class="keyword">from</span> mkx.mkx_central <span class="keyword">import</span> MKX_Central</div>
@@ -274,8 +252,8 @@ $(document).ready(function(){initNavTree('p_4.html',''); initResizable(); });
 <p><b>Example:</b> </p><div class="fragment"><div class="line"><span class="keyword">from</span> mkx.mkx_central <span class="keyword">import</span> MKX_Central</div>
 <div class="line"> </div>
 <div class="line">mkx_central = MKX_Central()</div>
-</div><!-- fragment --><h2><a class="anchor" id="p_4_3_1"></a>
-4.3.1 add_central_periphery</h2>
+</div><!-- fragment --><h2><a class="anchor" id="p_4_2_1"></a>
+4.2.1 add_central_periphery</h2>
 <p>Add <b>PeripheryCentral</b> to the ***MKX_Central**. <br  />
 </p>
 <div class="fragment"><div class="line">mkx_central.add_central_periphery(</div>
@@ -290,8 +268,8 @@ $(document).ready(function(){initNavTree('p_4.html',''); initResizable(); });
 <div class="line"> </div>
 <div class="line">central_peryphery = PeripheryCentral(<span class="stringliteral">&quot;central&quot;</span>, col_pins, row_pins)</div>
 <div class="line">mkx_central.add_central_periphery(central_peryphery)</div>
-</div><!-- fragment --><h2><a class="anchor" id="p_4_3_2"></a>
-4.3.2 add_interface</h2>
+</div><!-- fragment --><h2><a class="anchor" id="p_4_2_2"></a>
+4.2.2 add_interface</h2>
 <p>Add <b>Interface</b> of a <b>Periphery</b> to the <b>MKX_Central</b>. <br  />
 </p>
 <div class="fragment"><div class="line">mkx_central.add_interface(</div>
@@ -313,8 +291,8 @@ $(document).ready(function(){initNavTree('p_4.html',''); initResizable(); });
 <div class="line"> </div>
 <div class="line">interphace_right = InterphaceUART(<span class="stringliteral">&quot;right_peryphery&quot;</span>, <span class="keywordtype">None</span>, board.GP1, 11, 0, 6, 4)</div>
 <div class="line">keyboard.add_interface(interphace_right)</div>
-</div><!-- fragment --><h2><a class="anchor" id="p_4_3_3"></a>
-4.3.3 add_layer_status_led</h2>
+</div><!-- fragment --><h2><a class="anchor" id="p_4_2_3"></a>
+4.2.3 add_layer_status_led</h2>
 <p>Add <b>LayerStatusLed</b> to the <b>MKX_Central</b>. <br  />
 </p>
 <div class="fragment"><div class="line">mkx_central.add_layer_status_led(</div>
@@ -336,8 +314,8 @@ $(document).ready(function(){initNavTree('p_4.html',''); initResizable(); });
 <div class="line">status_led.add_layer(2, (255, 255, 255))  <span class="comment"># White</span></div>
 <div class="line">status_led.add_layer(3, (255, 0, 0))  <span class="comment"># Red</span></div>
 <div class="line">mkx_central.add_layer_status_led(status_led)</div>
-</div><!-- fragment --><h2><a class="anchor" id="p_4_3_4"></a>
-4.3.4 add_backlight</h2>
+</div><!-- fragment --><h2><a class="anchor" id="p_4_2_4"></a>
+4.2.4 add_backlight</h2>
 <p>Add <b>Backlight</b> to the <b>MKX_Central</b>. <br  />
 </p>
 <div class="fragment"><div class="line">mkx_central.add_backlight(</div>
@@ -357,8 +335,8 @@ $(document).ready(function(){initNavTree('p_4.html',''); initResizable(); });
 <div class="line">backlight.slower(2)</div>
 <div class="line">backlight.set_swirl(<span class="keyword">True</span>)</div>
 <div class="line">mkx_central.add_backlight(backlight)</div>
-</div><!-- fragment --><h2><a class="anchor" id="p_4_3_5"></a>
-4.3.5 add_keymap</h2>
+</div><!-- fragment --><h2><a class="anchor" id="p_4_2_5"></a>
+4.2.5 add_keymap</h2>
 <p>Add <b>Keymap</b> to the <b>MKX_Central</b>. <br  />
  <b>Keymap</b> must have rectangular shape. In custom layouts where certain positions are unused, set them to <b>None</b>.</p>
 <div class="fragment"><div class="line">mkx_central.add_keymap(</div>
@@ -395,12 +373,25 @@ $(document).ready(function(){initNavTree('p_4.html',''); initResizable(); });
 <div class="line"><span class="comment"># fmt: on</span></div>
 <div class="line"> </div>
 <div class="line">mkx_central.add_keymap(keymap, 2, 1)</div>
-</div><!-- fragment --><h2><a class="anchor" id="p_4_3_6"></a>
-4.3.6 run_forever</h2>
-<p>Start runninhg keyboard's infinite loop.</p>
+</div><!-- fragment --><h2><a class="anchor" id="p_4_2_6"></a>
+4.2.6 use_ble</h2>
+<p>Enable or disable BLE. <br  />
+</p>
+<div class="fragment"><div class="line">mkx_central.use_ble(</div>
+<div class="line">    use_ble: bool</div>
+<div class="line">)</div>
+</div><!-- fragment --><p><b>use_ble</b> <br  />
+ Flag to enable or disable BLE connection, default <em>False</em>.</p>
+<p><b>Example:</b> </p><div class="fragment"><div class="line"><span class="keyword">from</span> mkx.mkx_central <span class="keyword">import</span> MKX_Central</div>
+<div class="line"> </div>
+<div class="line">mkx_central = MKX_Central()</div>
+<div class="line">mkx_central.use_ble(<span class="keyword">True</span>)</div>
+</div><!-- fragment --><h2><a class="anchor" id="p_4_2_7"></a>
+4.2.7 run_forever</h2>
+<p>Start running keyboard's infinite loop.</p>
 <div class="fragment"><div class="line">mkx_central.run_forever()</div>
-</div><!-- fragment --><h1><a class="anchor" id="p_4_4"></a>
-4.4 MKX Periphery</h1>
+</div><!-- fragment --><h1><a class="anchor" id="p_4_3"></a>
+4.3 MKX Periphery</h1>
 <p>The general <b>Periphery</b> captures keystrokes and transmit messages to the <b>MKX_Central</b>. <br  />
  The <b>MKX_Periphery</b> is a simpler counterpart to the <b>MKX_Central</b>, <br  />
  operating continuously on hardware separate from the <b>MKX_Central</b>. <br  />
@@ -420,8 +411,8 @@ $(document).ready(function(){initNavTree('p_4.html',''); initResizable(); });
 <p><b>debug</b> <br  />
  Flag enabling verbose output for the Periphery. <br  />
 </p>
-<h2><a class="anchor" id="p_4_4_1"></a>
-4.4.1 PeripheryCentral</h2>
+<h2><a class="anchor" id="p_4_3_1"></a>
+4.3.1 PeripheryCentral</h2>
 <p>Set the PeripheryCentral.</p>
 <div class="fragment"><div class="line"><span class="keyword">from</span> mkx.periphery_central <span class="keyword">import</span> PeripheryCentral</div>
 <div class="line"> </div>
@@ -467,8 +458,8 @@ $(document).ready(function(){initNavTree('p_4.html',''); initResizable(); });
 <div class="line"><span class="comment"># other code ...</span></div>
 <div class="line"> </div>
 <div class="line">mkx_central.run_forever()</div>
-</div><!-- fragment --><h2><a class="anchor" id="p_4_4_2"></a>
-4.4.2 PeripheryUART</h2>
+</div><!-- fragment --><h2><a class="anchor" id="p_4_3_2"></a>
+4.3.2 PeripheryUART</h2>
 <p>Set the PeripheryUART.</p>
 <div class="fragment"><div class="line"><span class="keyword">from</span> mkx.periphery_uart <span class="keyword">import</span> PeripheryUART</div>
 <div class="line"> </div>
@@ -516,8 +507,8 @@ $(document).ready(function(){initNavTree('p_4.html',''); initResizable(); });
 <div class="line"> </div>
 <div class="line">mkx_perifery = MKX_Periphery(peryphery, debug=<span class="keyword">True</span>)</div>
 <div class="line">mkx_perifery.run_forever()</div>
-</div><!-- fragment --><h1><a class="anchor" id="p_4_5"></a>
-4.5 Interface</h1>
+</div><!-- fragment --><h1><a class="anchor" id="p_4_4"></a>
+4.4 Interface</h1>
 <p>The <b>Interface</b> connects the <b>Periferies</b> to the <b>MKX_Central</b>. <br  />
 </p>
 <p>Possible options are <b>InterphaceCentral</b> matching the <b>PeriferyCentral</b> and <br  />
@@ -547,8 +538,8 @@ $(document).ready(function(){initNavTree('p_4.html',''); initResizable(); });
 <div class="line"><span class="comment"># other code ...</span></div>
 <div class="line"> </div>
 <div class="line">mkx_central.run_forever()</div>
-</div><!-- fragment --><h2><a class="anchor" id="p_4_5_1"></a>
-4.5.1 InterphaceCentral</h2>
+</div><!-- fragment --><h2><a class="anchor" id="p_4_4_1"></a>
+4.4.1 InterphaceCentral</h2>
 <p>Set the InterphaceCentral. <br  />
 </p>
 <p>Min/max column and rows values can be inverted, meaning min value can be bigger than max. <br  />
@@ -577,8 +568,8 @@ $(document).ready(function(){initNavTree('p_4.html',''); initResizable(); });
 <p><b>row_max</b> <br  />
  Maximum row number. Counting start from '0'. <br  />
 </p>
-<h2><a class="anchor" id="p_4_5_2"></a>
-4.5.2 InterphaceUART</h2>
+<h2><a class="anchor" id="p_4_4_2"></a>
+4.4.2 InterphaceUART</h2>
 <p>Set the InterphaceUART.</p>
 <div class="fragment"><div class="line"><span class="keyword">from</span> mkx.interphace_uart <span class="keyword">import</span> InterphaceUART</div>
 <div class="line"> </div>
@@ -616,12 +607,12 @@ $(document).ready(function(){initNavTree('p_4.html',''); initResizable(); });
 <p><b>baudrate</b> <br  />
  UART communication baudrate. <br  />
 </p>
-<h1><a class="anchor" id="p_4_6"></a>
-4.6 Layer Status LED</h1>
+<h1><a class="anchor" id="p_4_5"></a>
+4.5 Layer Status LED</h1>
 <p>Status LED used for the indication of the active layer. <br  />
 </p>
-<h2><a class="anchor" id="p_4_6_1"></a>
-4.6.1 LayerStatusLedRgbNeoPixel</h2>
+<h2><a class="anchor" id="p_4_5_1"></a>
+4.5.1 LayerStatusLedRgbNeoPixel</h2>
 <p>RGB NeoPixel LED which indicates active layer by color. <br  />
 </p>
 <div class="fragment"><div class="line"><span class="keyword">from</span> mkx.layer_status_led_rgb_neopixel <span class="keyword">import</span> LayerStatusLedRgbNeoPixel</div>
@@ -652,8 +643,8 @@ $(document).ready(function(){initNavTree('p_4.html',''); initResizable(); });
 <div class="line">status_led.add_layer(1, (0, 0, 255))  <span class="comment"># Blue</span></div>
 <div class="line"> </div>
 <div class="line">mkx_central.add_layer_status_led(status_led)</div>
-</div><!-- fragment --><h2><a class="anchor" id="p_4_6_2"></a>
-4.6.2 LayerStatusLedRgbThreePin</h2>
+</div><!-- fragment --><h2><a class="anchor" id="p_4_5_2"></a>
+4.5.2 LayerStatusLedRgbThreePin</h2>
 <p>RGB three pin LED which indicates active layer by color. <br  />
  <em>Untested!</em> due to lack of proper hardware configuration.</p>
 <div class="fragment"><div class="line"><span class="keyword">from</span> mkx.layer_status_led_rgb_threepin <span class="keyword">import</span> LayerStatusLedRgbThreePin</div>
@@ -669,8 +660,8 @@ $(document).ready(function(){initNavTree('p_4.html',''); initResizable(); });
  Green LED pin.</p>
 <p><b>blue_pin</b> <br  />
  Blue LED pin.</p>
-<h2><a class="anchor" id="p_4_6_3"></a>
-4.6.3 LayerStatusLedArray</h2>
+<h2><a class="anchor" id="p_4_5_3"></a>
+4.5.3 LayerStatusLedArray</h2>
 <p>Array of LED which indicates active layer. <br  />
  <em>Untested!</em> due to lack of proper hardware configuration.</p>
 <div class="fragment"><div class="line"><span class="keyword">from</span> mkx.layer_status_led_array <span class="keyword">import</span> LayerStatusLedArray</div>
@@ -680,11 +671,11 @@ $(document).ready(function(){initNavTree('p_4.html',''); initResizable(); });
 <div class="line">)</div>
 </div><!-- fragment --><p> <b>pins</b> <br  />
  List of pins for LED-s.</p>
-<h1><a class="anchor" id="p_4_7"></a>
-4.7 Backlight</h1>
+<h1><a class="anchor" id="p_4_6"></a>
+4.6 Backlight</h1>
 <p>RGB NeoPixel backlight.</p>
-<h2><a class="anchor" id="p_4_7_1"></a>
-4.7.1 BacklightNeopixelStatic</h2>
+<h2><a class="anchor" id="p_4_6_1"></a>
+4.6.1 BacklightNeopixelStatic</h2>
 <p>Static color backlight.</p>
 <div class="fragment"><div class="line"><span class="keyword">from</span> mkx.backlight_neopixel_static <span class="keyword">import</span> BacklightNeopixelStatic</div>
 <div class="line"> </div>
@@ -716,8 +707,8 @@ $(document).ready(function(){initNavTree('p_4.html',''); initResizable(); });
 <div class="line">backlight = BacklightNeopixelStatic(board.A0, num_pixels=72, rgb_color=(0, 0, 255), brightness=0.4)</div>
 <div class="line"> </div>
 <div class="line">mkx_central.add_backlight(backlight)</div>
-</div><!-- fragment --><h2><a class="anchor" id="p_4_7_2"></a>
-4.7.2 BacklightNeopixelRainbow</h2>
+</div><!-- fragment --><h2><a class="anchor" id="p_4_6_2"></a>
+4.6.2 BacklightNeopixelRainbow</h2>
 <p>Rainbow animated color backlight.</p>
 <div class="fragment"><div class="line"><span class="keyword">from</span> mkx.backlight_neopixel_rainbow <span class="keyword">import</span> BacklightNeopixelRainbow</div>
 <div class="line"> </div>
@@ -736,24 +727,24 @@ $(document).ready(function(){initNavTree('p_4.html',''); initResizable(); });
 <p><b>brightness</b> <br  />
  Brightness of the LED in the range 0-1. <br  />
 </p>
-<h2><a class="anchor" id="p_4_7_2_1"></a>
-4.7.2.1 faster()</h2>
+<h2><a class="anchor" id="p_4_6_2_1"></a>
+4.6.2.1 faster()</h2>
 <p>Hom much faster should be the rainbow animation from the initial one.</p>
 <div class="fragment"><div class="line">backlight.faster(</div>
 <div class="line">    value</div>
 <div class="line">)</div>
 </div><!-- fragment --><p><b>value</b> <br  />
  Increased animation speed up to 20.</p>
-<h2><a class="anchor" id="p_4_7_2_2"></a>
-4.7.2.2 slower()</h2>
+<h2><a class="anchor" id="p_4_6_2_2"></a>
+4.6.2.2 slower()</h2>
 <p>Hom much slower should be the rainbow animation from the initial one.</p>
 <div class="fragment"><div class="line">backlight.slower(</div>
 <div class="line">    value</div>
 <div class="line">)</div>
 </div><!-- fragment --><p><b>value</b> <br  />
  Decreased animation speed up to 20.</p>
-<h2><a class="anchor" id="p_4_7_2_3"></a>
-4.7.2.3 set_swirl()</h2>
+<h2><a class="anchor" id="p_4_6_2_3"></a>
+4.6.2.3 set_swirl()</h2>
 <p>Should the LED-s change color independently by swirl or not.</p>
 <div class="fragment"><div class="line">backlight.set_swirl(</div>
 <div class="line">    swirl :bool</div>
