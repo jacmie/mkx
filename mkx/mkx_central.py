@@ -5,6 +5,11 @@ from collections import OrderedDict
 import usb_hid
 from adafruit_hid.keyboard import Keyboard
 
+import adafruit_ble
+from adafruit_ble.advertising.standard import ProvideServicesAdvertisement
+from adafruit_ble.services.standard.hid import HIDService
+from adafruit_ble.services.standard.device_info import DeviceInfoService
+
 from mkx.interphace_abstract import InterfahceAbstract
 from mkx.communication_message import sync_messages, debounce
 
@@ -44,6 +49,41 @@ class MKX_Central:
         self.sticky_key_manager = StickyKeyManager()
         self.layers_manager = LayersManager(default_layer=0)
         self.backlight = None
+
+        self._use_ble = False
+        self.ble_radio = None
+        self.ble_hid = None
+
+    def _init_ble(self):
+        # Services auto-register with the BLE adapter on creation
+        self.ble_radio = adafruit_ble.BLERadio()
+
+        self.ble_hid = HIDService()
+        self.device_info = DeviceInfoService(
+            manufacturer="MKX",
+            model_number="MKX-Central",
+            software_revision="1.0.0",
+        )
+
+        self.advertisement = ProvideServicesAdvertisement(self.ble_hid)
+        self.advertisement.complete_name = "MKX keyboard"
+        self.advertisement.appearance = 961
+
+        if not self.ble_radio.connected:
+            time.sleep(0.5)
+            self.ble_radio.start_advertising(self.advertisement)
+
+        if self.ble_radio.connected:
+            print("BLE connected")
+        else:
+            print("BLE Not connected")
+
+    def _ensure_ble_advertising(self):
+        if not self.ble_radio.connected and not self.ble_radio.advertising:
+            self.ble_radio.start_advertising(self.advertisement)
+
+    def use_ble(self, use_ble: bool):
+        self._use_ble = use_ble
 
     def add_central_periphery(self, central_periphery):
         self.central_periphery = central_periphery
@@ -175,6 +215,12 @@ class MKX_Central:
                 self.sticky_key_manager.clear_stickies(self.keyboard, timestamp)
 
     def run_once(self):
+        if self._use_ble:
+            self._ensure_ble_advertising()
+
+            if not self.ble_hid.devices:
+                return
+
         now = time.monotonic_ns() // 1_000_000  # Current time in ms
 
         if now - self.last_frame_time >= FRAME_INTERVAL_MS:
@@ -223,10 +269,14 @@ class MKX_Central:
             self.last_frame_time = frame_end
 
     def run_forever(self):
-        self.keyboard = Keyboard(usb_hid.devices)
-
         if check(self.col_size, self.row_size, self.keymap, self.interfaces):
             sys.exit(1)
+
+        if self._use_ble:
+            self._init_ble()
+            self.keyboard = Keyboard(self.ble_hid.devices)
+        else:
+            self.keyboard = Keyboard(usb_hid.devices)
 
         self.last_frame_time = time.monotonic_ns() // 1_000_000
         while True:
