@@ -196,9 +196,6 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
 
-    if args.clean:
-        clean()
-
     if args.tidy:
         drive_arg = args.drive
         if drive_arg.startswith("/"):
@@ -207,6 +204,9 @@ if __name__ == "__main__":
             target = f"/media/{os.getenv('USER')}/{drive_arg}"
 
         tidy(mountpoint=target)
+
+    if args.clean:
+        clean()
 
     if args.compile and not args.upload:
         compile()

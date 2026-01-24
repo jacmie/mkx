@@ -3,6 +3,7 @@ import difflib
 import shutil
 import time
 import argparse
+import subprocess
 from pathlib import Path
 from watchdog.events import FileSystemEventHandler
 from watchdog.observers import Observer
@@ -27,7 +28,7 @@ class SyncHandler(FileSystemEventHandler):
 
 
 def list_py_files(directory):
-    return {f for f in os.listdir(directory) if f.endswith(".py")}
+    return {f for f in os.listdir(directory) if f.endswith(".py") or f.endswith(".mpy")}
 
 
 def read_file(path):
@@ -62,9 +63,17 @@ def compare_files(verbose, dir1, dir2):
                 print("".join(diff))
 
 
-def copy_if_needed(src_path, mountpoint, dry_run=False):
+def copy_if_needed(src_path, mountpoint, use_compiled=False, dry_run=False):
     # Convert the source path to a relative path from the project directory
     relative_path = src_path.relative_to(PROJECT_DIR)
+
+    # If use_compiled is True and src is a .py file, use the .mpy from .compiled instead
+    if use_compiled and str(src_path).endswith(".py"):
+        compiled_path = PROJECT_DIR / ".compiled" / relative_path
+        compiled_path = compiled_path.with_suffix(".mpy")
+        if compiled_path.exists():
+            src_path = compiled_path
+            relative_path = compiled_path.relative_to(PROJECT_DIR / ".compiled")
 
     dest = Path(mountpoint) / "lib" / relative_path
     dest.parent.mkdir(parents=True, exist_ok=True)
@@ -76,7 +85,7 @@ def copy_if_needed(src_path, mountpoint, dry_run=False):
         print(f"Error copying {src_path}: {e}")
 
 
-def initial_sync(mountpoint):
+def initial_sync(mountpoint, use_compiled=False):
     if not os.path.ismount(mountpoint):
         print(f"Error: {mountpoint} drive not found.")
         sys.exit(1)
@@ -86,25 +95,25 @@ def initial_sync(mountpoint):
         for root, _, files in os.walk(source):
             for name in files:
                 src_path = Path(root) / name
-                copy_if_needed(src_path, mountpoint)
+                copy_if_needed(src_path, mountpoint, use_compiled=use_compiled)
     print("==> Initial sync complete.")
 
 
-def sync(mountpoint):
+def sync(mountpoint, use_compiled=False):
     if not os.path.ismount(mountpoint):
         print(f"Error: {mountpoint} drive not found.")
         sys.exit(1)
 
     print(f"==> Syncing to {mountpoint}")
     for src in list(modified_files):
-        copy_if_needed(src, mountpoint)
+        copy_if_needed(src, mountpoint, use_compiled=use_compiled)
         modified_files.discard(src)
     print("==> Sync complete.")
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
-        description="Sync mkx local files to a CIRCUITPY-like device."
+        description="Sync mkx local files to a CIRCUITPY device."
     )
     parser.add_argument(
         "-d",
@@ -120,15 +129,70 @@ if __name__ == "__main__":
     parser.add_argument(
         "--Vdiff", action="store_true", help="Verbose differences between files."
     )
+    parser.add_argument(
+        "--build",
+        action="store_true",
+        help="Build .mpy binaries using build.py and upload instead of .py files.",
+    )
+    parser.add_argument(
+        "--clean",
+        action="store_true",
+        help="Remove compiled files (.compiled directory).",
+    )
+    parser.add_argument(
+        "--tidy",
+        action="store_true",
+        help="Remove all uploaded content from the MCU mountpoint.",
+    )
     args = parser.parse_args()
 
     mountpoint = f"/media/{os.getenv('USER')}/{args.drive}"
+
+    if args.tidy:
+        subprocess.run(
+            [
+                sys.executable,
+                str(PROJECT_DIR / "build.py"),
+                "--tidy",
+                "--drive",
+                args.drive,
+            ]
+        )
+        sys.exit(0)
+
+    if args.clean:
+        subprocess.run(
+            [
+                sys.executable,
+                str(PROJECT_DIR / "build.py"),
+                "--clean",
+            ]
+        )
+        sys.exit(0)
 
     if args.diff or args.Vdiff:
         compare_files(args.Vdiff, PROJECT_DIR / "mkx", Path(mountpoint) / "lib/mkx")
         sys.exit(0)
 
-    initial_sync(mountpoint)
+    # If build mode is requested, call build.py compile first and thereafter
+    # on changes we'll re-run the compile and sync .mpy files. Otherwise do initial .py sync.
+    build_mode = args.build
+    build_script = PROJECT_DIR / "build.py"
+
+    if build_mode:
+        print("==> Build mode: compiling .mpy binaries")
+        subprocess.run(
+            [
+                sys.executable,
+                str(build_script),
+                "--compile",
+                "--drive",
+                args.drive,
+            ]
+        )
+        initial_sync(mountpoint, use_compiled=True)
+    else:
+        initial_sync(mountpoint)
 
     event_handler = SyncHandler()
     observer = Observer()
@@ -140,7 +204,21 @@ if __name__ == "__main__":
         while True:
             time.sleep(1)
             if modified_files:
-                sync(mountpoint)
+                # If build mode, compile and sync .mpy files
+                if build_mode:
+                    print("==> Detected changes — rebuilding .mpy")
+                    subprocess.run(
+                        [
+                            sys.executable,
+                            str(build_script),
+                            "--compile",
+                            "--drive",
+                            args.drive,
+                        ]
+                    )
+                    sync(mountpoint, use_compiled=True)
+                else:
+                    sync(mountpoint)
     except KeyboardInterrupt:
         observer.stop()
     observer.join()
