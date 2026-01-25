@@ -5,7 +5,7 @@ var searchData=
   ['tapdance_20keys_2',['5.6 TD - TapDance Keys',['../p_5.html#p_5_6',1,'']]],
   ['td_20tapdance_20keys_3',['5.6 TD - TapDance Keys',['../p_5.html#p_5_6',1,'']]],
   ['tg_20toggle_20layer_4',['5.3.5 TG - Toggle Layer',['../p_5.html#p_5_3_5',1,'']]],
-  ['the_20circuitpy_20drive_5',['2.4.1 Synchronize Github repository with the CIRCUITPY drive',['../p_2.html#p_2_4_1',1,'']]],
+  ['the_20circuitpy_20drive_5',['the circuitpy drive',['../p_2.html#p_2_5_2',1,'2.5.2 Optional - Synchronize Github repository with the CIRCUITPY drive'],['../p_6.html#p_6_3',1,'6.3 Synchronize Github repository with the CIRCUITPY drive']]],
   ['to_20layer_20toggle_20one_20shot_20layer_6',['5.3.6 TO - To Layer (Toggle One-Shot Layer)',['../p_5.html#p_5_3_6',1,'']]],
   ['to_20to_20layer_20toggle_20one_20shot_20layer_7',['5.3.6 TO - To Layer (Toggle One-Shot Layer)',['../p_5.html#p_5_3_6',1,'']]],
   ['toggle_8',['5.3.7 TT - Tap-Toggle',['../p_5.html#p_5_3_7',1,'']]],

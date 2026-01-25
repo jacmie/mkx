@@ -110,7 +110,10 @@ $(document).ready(function(){initNavTree('p_2.html',''); initResizable(); });
 <ul><li class="level1"><a href="#p_2_1">2.1 Install Circuit Python</a></li>
 <li class="level1"><a href="#p_2_2">2.2 Set Python environment (optional)</a></li>
 <li class="level1"><a href="#p_2_3">2.3 Install Adafruit Bundles</a></li>
-<li class="level1"><a href="#p_2_4">2.4 Install MKX</a><ul><li class="level2"><a href="#p_2_4_1">2.4.1 Synchronize Github repository with the CIRCUITPY drive</a></li>
+<li class="level1"><a href="#p_2_4">2.4 Install MKX</a></li>
+<li class="level1"><a href="#p_2_5">2.5 Optional</a><ul><li class="level2"><a href="#p_2_5_1">2.5.1 Optional - Build Binary MKX Library</a></li>
+<li class="level2"><a href="#p_2_5_2">2.5.2 Optional - Synchronize Github repository with the CIRCUITPY drive</a></li>
+<li class="level2"><a href="#p_2_5_3">2.5.3 Optional - Build HTML documentation with Doxygen</a></li>
 </ul>
 </li>
 </ul>
@@ -152,11 +155,39 @@ $(document).ready(function(){initNavTree('p_2.html',''); initResizable(); });
 <p>Download the latest release, unpack and copy the <b>mkx</b> folder to the <b>CIRCUITPY/lib</b> directory. <br  />
  <br  />
 </p>
-<h2><a class="anchor" id="p_2_4_1"></a>
-2.4.1 Synchronize Github repository with the CIRCUITPY drive</h2>
-<p>The <b>MKX</b> repository includes a tool called <b>auto_sync</b> that can synchronize repository content with the <b>CIRCUITPY</b> drive. <br  />
- This is especially convenient for developers — but useful for other users as well. <br  />
- The tool requires installed <b>watchdog</b> module. Activate your Python <b>dev</b> environment and install it with:</p>
+<h1><a class="anchor" id="p_2_5"></a>
+2.5 Optional</h1>
+<h2><a class="anchor" id="p_2_5_1"></a>
+2.5.1 Optional - Build Binary MKX Library</h2>
+<p>The <b>MKX</b> repository includes a tool called <b>build</b> that compiles the MKX library into a binary format. Using the compiled library improves stability and performance. <br  />
+</p>
+<p>The build tool requires <em>Adafruit</em> <b>mpy-cross</b> <em>for CircuitPython</em>. <br  />
+</p>
+<p>You can either download a prebuilt binary for your operating system from: <br  />
+ <a href="https://adafruit-circuit-python.s3.amazonaws.com/index.html?prefix=bin/mpy-cross/">https://adafruit-circuit-python.s3.amazonaws.com/index.html?prefix=bin/mpy-cross/</a></p>
+<p>or build it yourself from the CircuitPython repository: <br  />
+</p>
+<div class="fragment"><div class="line">git clone https://github.com/adafruit/circuitpython.git</div>
+<div class="line">cd circuitpython/mpy-cross</div>
+<div class="line">make</div>
+<div class="line"># optionally add mpy-cross to system PATH</div>
+<div class="line"># build calls the mpy-cross in the process</div>
+<div class="line"># direct use:</div>
+<div class="line">./mpy-cross example/adafruit_example.py</div>
+</div><!-- fragment --><p>Clone the <b>MKX</b> repository, or your own fork:</p>
+<div class="fragment"><div class="line">git clone git@github.com:jacmie/mkx.git</div>
+</div><!-- fragment --><p>Run the build tool from the repository root to compile the MKX library into the local <b>.compile</b> directory: </p><div class="fragment"><div class="line">python build.py --compile</div>
+</div><!-- fragment --><p>Upload the whole compiled library to the <b>CIRCUITPY/lib</b> directory:</p>
+<div class="fragment"><div class="line">python build.py --upload</div>
+</div><!-- fragment --><p>For more <b>build</b> options, run:</p>
+<div class="fragment"><div class="line">python build.py -h</div>
+</div><!-- fragment --><p>See also <a class="el" href="p_6.html">6 Development</a></p>
+<h2><a class="anchor" id="p_2_5_2"></a>
+2.5.2 Optional - Synchronize Github repository with the CIRCUITPY drive</h2>
+<p>The <b>MKX</b> repository also includes tool called <b>auto_sync</b>, which automatically synchronizes repository files with the <b>CIRCUITPY</b> drive. <br  />
+ This is particularly useful for development, but can benefit other users as well. <br  />
+</p>
+<p>The tool requires installed <b>watchdog</b> module. Activate your Python <b>dev</b> environment and install it with:</p>
 <div class="fragment"><div class="line">pip install watchdog</div>
 </div><!-- fragment --><p>Clone the <b>MKX</b> repository, or your own fork:</p>
 <div class="fragment"><div class="line">git clone git@github.com:jacmie/mkx.git</div>
@@ -166,9 +197,18 @@ $(document).ready(function(){initNavTree('p_2.html',''); initResizable(); });
 <div class="fragment"><div class="line">python auto_sync.py</div>
 </div><!-- fragment --><p>If the drive was renamed, use the <b>-d</b> flag followed by the new drive name:</p>
 <div class="fragment"><div class="line">python auto_sync.py -d MY_CIRCUITPY_DRIVE_NAME</div>
-</div><!-- fragment --><p>For more <b>auto_sync</b> options, try:</p>
+</div><!-- fragment --><p>The <b>auto_sync</b> can use the <b>build</b> tool: </p><div class="fragment"><div class="line">python auto_sync.py --build</div>
+</div><!-- fragment --><p>For more <b>auto_sync</b> options, run:</p>
 <div class="fragment"><div class="line">python auto_sync.py -h</div>
-</div><!-- fragment --> </div></div><!-- contents -->
+</div><!-- fragment --><p>See also <a class="el" href="p_6.html">6 Development</a></p>
+<h2><a class="anchor" id="p_2_5_3"></a>
+2.5.3 Optional - Build HTML documentation with Doxygen</h2>
+<p>Download Doxygen and install it: <a href="https://www.doxygen.nl/download.html">https://www.doxygen.nl/download.html</a></p>
+<p>From the <b>docs</b> directory, run: </p><div class="fragment"><div class="line">doxygen ./Doxyfile</div>
+</div><!-- fragment --><p> Open the documentation <b>docs/html/index.html</b> <br  />
+</p>
+<p>See also <a class="el" href="p_6.html">6 Development</a> </p>
+</div></div><!-- contents -->
 </div><!-- PageDoc -->
 </div><!-- doc-content -->
 <!-- start footer part -->

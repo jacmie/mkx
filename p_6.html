@@ -107,27 +107,60 @@ $(document).ready(function(){initNavTree('p_6.html',''); initResizable(); });
 </div><!--header-->
 <div class="contents">
 <div class="toc"><h3>Table of Contents</h3>
-<ul><li class="level1"><a href="#p_6_1">Dev</a></li>
-<li class="level1"><a href="#p_6_2">Build with mpy</a><ul><li class="level2"><a href="#autotoc_md3">Code rules</a></li>
-</ul>
-</li>
+<ul><li class="level1"><a href="#p_6_1">6.1 Code rules</a></li>
+<li class="level1"><a href="#p_6_2">6.2 Build Binary MKX Library</a></li>
+<li class="level1"><a href="#p_6_3">6.3 Synchronize Github repository with the CIRCUITPY drive</a></li>
+<li class="level1"><a href="#p_6_4">6.4 Build HTML docs</a></li>
 </ul>
 </div>
 <div class="textblock"><h1><a class="anchor" id="p_6_1"></a>
-Dev</h1>
+6.1 Code rules</h1>
+<ul>
+<li>keep files structure flat</li>
+<li>place the library on board in the default <b>CIRCUITPYTHON/lib</b> directory</li>
+</ul>
 <p>To add functionality, inherit from the <b>Abstract</b> classes if possible, and use them like the already implemented functions and keys. <br  />
 </p>
 <h1><a class="anchor" id="p_6_2"></a>
-Build with mpy</h1>
-<div class="fragment"><div class="line">python build.py compile</div>
-<div class="line">python build.py upload</div>
-<div class="line">python build.py clean</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md3"></a>
-Code rules</h2>
-<ul>
-<li>keep files structure flat</li>
-<li>place the library on board in the default CIRCUITPYTHON/lib </li>
-</ul>
+6.2 Build Binary MKX Library</h1>
+<p>Install <em>Adafruit</em> <b>mpy-cross</b> <em>for CircuitPython</em>, see <a class="el" href="p_2.html">2 Istallation</a> Use the <b>build</b> tool from the <b>MKX</b> repository:</p>
+<div class="fragment"><div class="line">usage: build.py [-h] [-d DRIVE] [--compile] [--upload] [--clean] [--tidy]</div>
+<div class="line"> </div>
+<div class="line">Compile/upload mkx to a CIRCUITPY device.</div>
+<div class="line"> </div>
+<div class="line">options:</div>
+<div class="line">  -h, --help            show this help message and exit</div>
+<div class="line">  -d DRIVE, --drive DRIVE</div>
+<div class="line">                        Name of the mounted drive (default: CIRCUITPY) or full mount path</div>
+<div class="line">  --compile             Compile .py files to .mpy (use with --upload to compile before upload)</div>
+<div class="line">  --upload              Upload compiled .mpy files to the drive (does not compile unless --compile given)</div>
+<div class="line">  --clean               Remove compiled files (.compiled)</div>
+<div class="line">  --tidy                Removing all content from the mkx dir on the MCU mountpoint</div>
+</div><!-- fragment --><h1><a class="anchor" id="p_6_3"></a>
+6.3 Synchronize Github repository with the CIRCUITPY drive</h1>
+<p>Install <b>watchdog</b> tool, see <a class="el" href="p_2.html">2 Istallation</a> Use the <b>auto_sync</b> tool from the <b>MKX</b> repository:</p>
+<div class="fragment"><div class="line">usage: auto_sync.py [-h] [-d DRIVE] [--diff] [--Vdiff] [--build] [--clean] [--tidy]</div>
+<div class="line"> </div>
+<div class="line">Sync mkx local files to a CIRCUITPY device.</div>
+<div class="line"> </div>
+<div class="line">options:</div>
+<div class="line">  -h, --help            show this help message and exit</div>
+<div class="line">  -d DRIVE, --drive DRIVE</div>
+<div class="line">                        Name of the mounted drive (default: CIRCUITPY)</div>
+<div class="line">  --diff                Which files are different and should be updated.</div>
+<div class="line">  --Vdiff               Verbose differences between files.</div>
+<div class="line">  --build               Build .mpy binaries using build.py and upload instead of .py files.</div>
+<div class="line">  --clean               Remove compiled files (.compiled directory).</div>
+<div class="line">  --tidy                Remove all uploaded content from the MCU mountpoint.</div>
+</div><!-- fragment --><h1><a class="anchor" id="p_6_4"></a>
+6.4 Build HTML docs</h1>
+<p>The documentation is build with Doxygen: <br  />
+ <a href="https://www.doxygen.nl/">https://www.doxygen.nl/</a></p>
+<p>From the <b>docs</b> directory, run: </p><div class="fragment"><div class="line">doxygen ./Doxyfile</div>
+</div><!-- fragment --><p> Open the documentation <b>docs/html/index.html</b> <br  />
+</p>
+<p>If you update the content of the documentation run <b>doxygen</b> again. <br  />
+ Don't close the browser, just refresh the documentation page - <b>F5</b>. </p>
 </div></div><!-- contents -->
 </div><!-- PageDoc -->
 </div><!-- doc-content -->

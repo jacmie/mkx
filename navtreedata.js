@@ -35,8 +35,11 @@ var NAVTREE =
       [ "2.1 Install Circuit Python", "p_2.html#p_2_1", null ],
       [ "2.2 Set Python environment (optional)", "p_2.html#p_2_2", null ],
       [ "2.3 Install Adafruit Bundles", "p_2.html#p_2_3", null ],
-      [ "2.4 Install MKX", "p_2.html#p_2_4", [
-        [ "2.4.1 Synchronize Github repository with the CIRCUITPY drive", "p_2.html#p_2_4_1", null ]
+      [ "2.4 Install MKX", "p_2.html#p_2_4", null ],
+      [ "2.5 Optional", "p_2.html#p_2_5", [
+        [ "2.5.1 Optional - Build Binary MKX Library", "p_2.html#p_2_5_1", null ],
+        [ "2.5.2 Optional - Synchronize Github repository with the CIRCUITPY drive", "p_2.html#p_2_5_2", null ],
+        [ "2.5.3 Optional - Build HTML documentation with Doxygen", "p_2.html#p_2_5_3", null ]
       ] ]
     ] ],
     [ "3 Get Started", "p_3.html", [
@@ -103,10 +106,10 @@ var NAVTREE =
       [ "5.10 Mouse Keys", "p_5.html#p_5_10", null ]
     ] ],
     [ "6 Development", "p_6.html", [
-      [ "Dev", "p_6.html#p_6_1", null ],
-      [ "Build with mpy", "p_6.html#p_6_2", [
-        [ "Code rules", "p_6.html#autotoc_md3", null ]
-      ] ]
+      [ "6.1 Code rules", "p_6.html#p_6_1", null ],
+      [ "6.2 Build Binary MKX Library", "p_6.html#p_6_2", null ],
+      [ "6.3 Synchronize Github repository with the CIRCUITPY drive", "p_6.html#p_6_3", null ],
+      [ "6.4 Build HTML docs", "p_6.html#p_6_4", null ]
     ] ]
   ] ]
 ];

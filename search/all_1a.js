@@ -12,5 +12,5 @@ var searchData=
   ['started_9',['3 Get Started',['../p_3.html',1,'']]],
   ['status_20led_10',['4.5 Layer Status LED',['../p_4.html#p_4_5',1,'']]],
   ['sticky_20keys_11',['5.7 SK - Sticky Keys',['../p_5.html#p_5_7',1,'']]],
-  ['synchronize_20github_20repository_20with_20the_20circuitpy_20drive_12',['2.4.1 Synchronize Github repository with the CIRCUITPY drive',['../p_2.html#p_2_4_1',1,'']]]
+  ['synchronize_20github_20repository_20with_20the_20circuitpy_20drive_12',['synchronize github repository with the circuitpy drive',['../p_2.html#p_2_5_2',1,'2.5.2 Optional - Synchronize Github repository with the CIRCUITPY drive'],['../p_6.html#p_6_3',1,'6.3 Synchronize Github repository with the CIRCUITPY drive']]]
 ];

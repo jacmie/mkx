@@ -10,5 +10,6 @@ var searchData=
   ['layerstatusledrgbthreepin_7',['4.5.2 LayerStatusLedRgbThreePin',['../p_4.html#p_4_5_2',1,'']]],
   ['layout_8',['5.8.5 Vim Layout',['../p_5.html#p_5_8_5',1,'']]],
   ['led_9',['4.5 Layer Status LED',['../p_4.html#p_4_5',1,'']]],
-  ['lt_20layer_20tap_10',['5.3.4 LT - Layer Tap',['../p_5.html#p_5_3_4',1,'']]]
+  ['library_10',['library',['../p_2.html#p_2_5_1',1,'2.5.1 Optional - Build Binary MKX Library'],['../p_6.html#p_6_2',1,'6.2 Build Binary MKX Library']]],
+  ['lt_20layer_20tap_11',['5.3.4 LT - Layer Tap',['../p_5.html#p_5_3_4',1,'']]]
 ];
