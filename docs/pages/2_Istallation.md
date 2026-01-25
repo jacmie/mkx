@@ -49,10 +49,59 @@ circup install adafruit_ble adafruit_bus_device adafruit_hid neopixel simpleio
 Download the latest release, unpack and copy the **mkx** folder to the **CIRCUITPY/lib** directory.  
 <br>
 
-@subsection p_2_4_1  2.4.1 Synchronize Github repository with the CIRCUITPY drive
+@section p_2_5  2.5 Optional
 
-The **MKX** repository includes a tool called **auto_sync** that can synchronize repository content with the **CIRCUITPY** drive.  
-This is especially convenient for developers — but useful for other users as well.  
+@subsection p_2_5_1  2.5.1 Optional - Build Binary MKX Library
+
+The **MKX** repository includes a tool called **build** that compiles the MKX library into a binary format.  Using the compiled library improves stability and performance.  
+
+The build tool requires *Adafruit* **mpy-cross** *for CircuitPython*.  
+
+You can either download a prebuilt binary for your operating system from:  
+https://adafruit-circuit-python.s3.amazonaws.com/index.html?prefix=bin/mpy-cross/
+
+or build it yourself from the CircuitPython repository:  
+
+```
+git clone https://github.com/adafruit/circuitpython.git
+cd circuitpython/mpy-cross
+make
+# optionally add mpy-cross to system PATH
+# build calls the mpy-cross in the process
+# direct use:
+./mpy-cross example/adafruit_example.py
+```
+
+Clone the **MKX** repository, or your own fork:
+
+```
+git clone git@github.com:jacmie/mkx.git
+```
+
+Run the build tool from the repository root to compile the MKX library into the local <b>.compile</b> directory:
+```
+python build.py --compile
+```
+
+Upload the whole compiled library to the **CIRCUITPY/lib** directory:
+
+```
+python build.py --upload
+```
+
+For more **build** options, run:
+
+```
+python build.py -h
+```
+
+See also @ref p_6
+
+@subsection p_2_5_2  2.5.2 Optional - Synchronize Github repository with the CIRCUITPY drive
+
+The **MKX** repository also includes tool called **auto_sync**, which automatically synchronizes repository files with the **CIRCUITPY** drive.  
+This is particularly useful for development, but can benefit other users as well.  
+
 The tool requires installed **watchdog** module. Activate your Python **dev** environment and install it with:
 
 ```
@@ -79,8 +128,29 @@ If the drive was renamed, use the **-d** flag followed by the new drive name:
 python auto_sync.py -d MY_CIRCUITPY_DRIVE_NAME
 ```
 
-For more **auto_sync** options, try:
+The **auto_sync** can use the **build** tool:
+```
+python auto_sync.py --build
+```
+
+For more **auto_sync** options, run:
 
 ```
 python auto_sync.py -h
 ```
+
+See also @ref p_6
+
+
+@subsection p_2_5_3  2.5.3 Optional - Build HTML documentation with Doxygen
+
+Download Doxygen and install it:
+https://www.doxygen.nl/download.html
+
+From the **docs** directory, run:
+```
+doxygen ./Doxyfile
+```
+Open the documentation **docs/html/index.html**  
+
+See also @ref p_6
