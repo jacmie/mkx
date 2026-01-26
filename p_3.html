@@ -121,7 +121,7 @@ $(document).ready(function(){initNavTree('p_3.html',''); initResizable(); });
 </p>
 <p>By bridging pin D5 (sending pin) and pin D6 (receiving pin) with pliers or any other conductive object like a wire, paper clip, etc. predefined key string is sent to the computer.</p>
 <p>This setup uses only one hardware component, which acts as both the signal sender and the central processing unit. <br  />
- For this reason <b>PeripheryCentral</b> is defined and added to the keyboard object. Each peripheral device also requires an interface, here <b>InterphaceCentral</b> is added to fulfill that role.</p>
+ For this reason <b>PeripheryCentral</b> is defined and added to the keyboard object. Each peripheral device also requires an interface, here <b>InterfaceCentral</b> is added to fulfill that role.</p>
 <p>Standard keyboard keys were used, modifier key <b>M_LSFT</b> was applied to produce capital letters and special characters. <br  />
  All input is grouped under a single key called <b>HK</b>, defined as a sequence <b>SEQ</b> key. <br  />
  The keymap is simple and consists of only one key: <b>HK</b>.</p>
@@ -142,7 +142,7 @@ $(document).ready(function(){initNavTree('p_3.html',''); initResizable(); });
 <div class="line"><span class="keyword">from</span> mkx.keys_sequence <span class="keyword">import</span> SEQ</div>
 <div class="line"> </div>
 <div class="line"><span class="keyword">from</span> mkx.periphery_central <span class="keyword">import</span> PeripheryCentral</div>
-<div class="line"><span class="keyword">from</span> mkx.interphace_central <span class="keyword">import</span> InterphaceCentral</div>
+<div class="line"><span class="keyword">from</span> mkx.interface_central <span class="keyword">import</span> InterfaceCentral</div>
 <div class="line"> </div>
 <div class="line">keyboard = MKX_Central()</div>
 <div class="line"> </div>
@@ -151,8 +151,8 @@ $(document).ready(function(){initNavTree('p_3.html',''); initResizable(); });
 <div class="line">hardware_keypass_peryphery = PeripheryCentral(<span class="stringliteral">&quot;hardware_keypass&quot;</span>, col_pins, row_pins)</div>
 <div class="line">keyboard.add_central_periphery(hardware_keypass_peryphery)</div>
 <div class="line"> </div>
-<div class="line">interphace_central = InterphaceCentral(hardware_keypass_peryphery, 0, 0, 0, 0)</div>
-<div class="line">keyboard.add_interface(interphace_central)</div>
+<div class="line">interface_central = InterfaceCentral(hardware_keypass_peryphery, 0, 0, 0, 0)</div>
+<div class="line">keyboard.add_interface(interface_central)</div>
 <div class="line"> </div>
 <div class="line"><span class="comment"># fmt: off</span></div>
 <div class="line"> </div>
@@ -189,7 +189,7 @@ $(document).ready(function(){initNavTree('p_3.html',''); initResizable(); });
 <li>The right half functions as the <b>PeripheryUART</b></li>
 </ul>
 <p>These peripheries are designed solely to send signals to the central processor using a defined protocol.</p>
-<p>The left half also contains the <b>Interphaces</b> for both sides, managing communication between the <b>central</b> unit and each <b>periphery</b>.</p>
+<p>The left half also contains the <b>Interfaces</b> for both sides, managing communication between the <b>central</b> unit and each <b>periphery</b>.</p>
 <p>The <b>status LED</b> indicates the active layer:</p><ul>
 <li>Green for Layer 1</li>
 <li>Blue for Layer 2</li>
@@ -202,8 +202,8 @@ $(document).ready(function(){initNavTree('p_3.html',''); initResizable(); });
 <div class="line"><span class="keyword">from</span> mkx.mkx_central <span class="keyword">import</span> MKX_Central</div>
 <div class="line"> </div>
 <div class="line"><span class="keyword">from</span> mkx.periphery_central <span class="keyword">import</span> PeripheryCentral</div>
-<div class="line"><span class="keyword">from</span> mkx.interphace_central <span class="keyword">import</span> InterphaceCentral</div>
-<div class="line"><span class="keyword">from</span> mkx.interphace_uart <span class="keyword">import</span> InterphaceUART</div>
+<div class="line"><span class="keyword">from</span> mkx.interface_central <span class="keyword">import</span> InterfaceCentral</div>
+<div class="line"><span class="keyword">from</span> mkx.interface_uart <span class="keyword">import</span> InterfaceUART</div>
 <div class="line"><span class="keyword">from</span> mkx.layer_status_led_rgb_neopixel <span class="keyword">import</span> LayerStatusLedRgbNeoPixel</div>
 <div class="line"> </div>
 <div class="line"><span class="keyword">from</span> mkx.keys_standard <span class="keyword">import</span> *</div>
@@ -220,11 +220,11 @@ $(document).ready(function(){initNavTree('p_3.html',''); initResizable(); });
 <div class="line">central_peryphery = PeripheryCentral(<span class="stringliteral">&quot;booster_l&quot;</span>, col_pins, row_pins)</div>
 <div class="line">keyboard.add_central_periphery(central_peryphery)</div>
 <div class="line"> </div>
-<div class="line">interphace_central = InterphaceCentral(central_peryphery, 0, 0, 5, 4)</div>
-<div class="line">keyboard.add_interface(interphace_central)</div>
+<div class="line">interface_central = InterfaceCentral(central_peryphery, 0, 0, 5, 4)</div>
+<div class="line">keyboard.add_interface(interface_central)</div>
 <div class="line"> </div>
-<div class="line">interphace_right = InterphaceUART(<span class="stringliteral">&quot;booster_r&quot;</span>, <span class="keywordtype">None</span>, board.GP1, 11, 0, 6, 4)</div>
-<div class="line">keyboard.add_interface(interphace_right)</div>
+<div class="line">interface_right = InterfaceUART(<span class="stringliteral">&quot;booster_r&quot;</span>, <span class="keywordtype">None</span>, board.GP1, 11, 0, 6, 4)</div>
+<div class="line">keyboard.add_interface(interface_right)</div>
 <div class="line"> </div>
 <div class="line">status_led = LayerStatusLedRgbNeoPixel(board.GP23, brightness=0.015)</div>
 <div class="line">status_led.add_layer(0, (0, 255, 0))  <span class="comment"># Green</span></div>
@@ -335,8 +335,8 @@ $(document).ready(function(){initNavTree('p_3.html',''); initResizable(); });
 <div class="line"><span class="keyword">from</span> mkx.keys_vim <span class="keyword">import</span> *</div>
 <div class="line"> </div>
 <div class="line"><span class="keyword">from</span> mkx.periphery_central <span class="keyword">import</span> PeripheryCentral</div>
-<div class="line"><span class="keyword">from</span> mkx.interphace_central <span class="keyword">import</span> InterphaceCentral</div>
-<div class="line"><span class="keyword">from</span> mkx.interphace_uart <span class="keyword">import</span> InterphaceUART</div>
+<div class="line"><span class="keyword">from</span> mkx.interface_central <span class="keyword">import</span> InterfaceCentral</div>
+<div class="line"><span class="keyword">from</span> mkx.interface_uart <span class="keyword">import</span> InterfaceUART</div>
 <div class="line"> </div>
 <div class="line">keyboard = MKX_Central()</div>
 <div class="line"> </div>
@@ -345,11 +345,11 @@ $(document).ready(function(){initNavTree('p_3.html',''); initResizable(); });
 <div class="line">central_peryphery = PeripheryCentral(<span class="stringliteral">&quot;sq_l&quot;</span>, col_pins, row_pins)</div>
 <div class="line">keyboard.add_central_periphery(central_peryphery)</div>
 <div class="line"> </div>
-<div class="line">interphace_central = InterphaceCentral(central_peryphery, 0, 0, 5, 5)</div>
-<div class="line">keyboard.add_interface(interphace_central)</div>
+<div class="line">interface_central = InterfaceCentral(central_peryphery, 0, 0, 5, 5)</div>
+<div class="line">keyboard.add_interface(interface_central)</div>
 <div class="line"> </div>
-<div class="line">interphace_right = InterphaceUART(<span class="stringliteral">&quot;sq_r&quot;</span>, board.TX, board.RX, 6, 0, 11, 5)</div>
-<div class="line">keyboard.add_interface(interphace_right)</div>
+<div class="line">interface_right = InterfaceUART(<span class="stringliteral">&quot;sq_r&quot;</span>, board.TX, board.RX, 6, 0, 11, 5)</div>
+<div class="line">keyboard.add_interface(interface_right)</div>
 <div class="line"> </div>
 <div class="line">status_led = LayerStatusLedRgbNeoPixel(board.SCK)</div>
 <div class="line">status_led.add_layer(0, (0, 0, 255))  <span class="comment"># Blue</span></div>

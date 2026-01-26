@@ -63,8 +63,8 @@ var NAVTREE =
         [ "4.3.2 PeripheryUART", "p_4.html#p_4_3_2", null ]
       ] ],
       [ "4.4 Interface", "p_4.html#p_4_4", [
-        [ "4.4.1 InterphaceCentral", "p_4.html#p_4_4_1", null ],
-        [ "4.4.2 InterphaceUART", "p_4.html#p_4_4_2", null ]
+        [ "4.4.1 InterfaceCentral", "p_4.html#p_4_4_1", null ],
+        [ "4.4.2 InterfaceUART", "p_4.html#p_4_4_2", null ]
       ] ],
       [ "4.5 Layer Status LED", "p_4.html#p_4_5", [
         [ "4.5.1 LayerStatusLedRgbNeoPixel", "p_4.html#p_4_5_1", null ],

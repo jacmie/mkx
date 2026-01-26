@@ -11,7 +11,7 @@ var searchData=
   ['1_20faster_8',['4.6.2.1 faster()',['../p_4.html#p_4_6_2_1',1,'']]],
   ['1_20hardware_20keypass_9',['3.1 Hardware Keypass',['../p_3.html#p_3_1',1,'']]],
   ['1_20install_20circuit_20python_10',['2.1 Install Circuit Python',['../p_2.html#p_2_1',1,'']]],
-  ['1_20interphacecentral_11',['4.4.1 InterphaceCentral',['../p_4.html#p_4_4_1',1,'']]],
+  ['1_20interfacecentral_11',['4.4.1 InterfaceCentral',['../p_4.html#p_4_4_1',1,'']]],
   ['1_20layerstatusledrgbneopixel_12',['4.5.1 LayerStatusLedRgbNeoPixel',['../p_4.html#p_4_5_1',1,'']]],
   ['1_20main_20concepts_13',['1 Main Concepts',['../p_1.html',1,'']]],
   ['1_20normal_20mode_14',['5.8.1 Normal Mode',['../p_5.html#p_5_8_1',1,'']]],

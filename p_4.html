@@ -121,8 +121,8 @@ $(document).ready(function(){initNavTree('p_4.html',''); initResizable(); });
 <li class="level2"><a href="#p_4_3_2">4.3.2 PeripheryUART</a></li>
 </ul>
 </li>
-<li class="level1"><a href="#p_4_4">4.4 Interface</a><ul><li class="level2"><a href="#p_4_4_1">4.4.1 InterphaceCentral</a></li>
-<li class="level2"><a href="#p_4_4_2">4.4.2 InterphaceUART</a></li>
+<li class="level1"><a href="#p_4_4">4.4 Interface</a><ul><li class="level2"><a href="#p_4_4_1">4.4.1 InterfaceCentral</a></li>
+<li class="level2"><a href="#p_4_4_2">4.4.2 InterfaceUART</a></li>
 </ul>
 </li>
 <li class="level1"><a href="#p_4_5">4.5 Layer Status LED</a><ul><li class="level2"><a href="#p_4_5_1">4.5.1 LayerStatusLedRgbNeoPixel</a></li>
@@ -279,18 +279,18 @@ $(document).ready(function(){initNavTree('p_4.html',''); initResizable(); });
  <em>Interface</em> object.</p>
 <p><b>Example:</b> </p><div class="fragment"><div class="line"><span class="keyword">from</span> mkx.mkx_central <span class="keyword">import</span> MKX_Central</div>
 <div class="line"><span class="keyword">from</span> mkx.periphery_central <span class="keyword">import</span> PeripheryCentral</div>
-<div class="line"><span class="keyword">from</span> mkx.interphace_central <span class="keyword">import</span> InterphaceCentral</div>
-<div class="line"><span class="keyword">from</span> mkx.interphace_uart <span class="keyword">import</span> InterphaceUART</div>
+<div class="line"><span class="keyword">from</span> mkx.interface_central <span class="keyword">import</span> InterfaceCentral</div>
+<div class="line"><span class="keyword">from</span> mkx.interface_uart <span class="keyword">import</span> InterfaceUART</div>
 <div class="line"> </div>
 <div class="line">mkx_central = MKX_Central()</div>
 <div class="line"> </div>
 <div class="line">central_peryphery = PeripheryCentral(<span class="stringliteral">&quot;central&quot;</span>, col_pins, row_pins)</div>
 <div class="line"> </div>
-<div class="line">interphace_central = InterphaceCentral(central_peryphery, 0, 0, 5, 4)</div>
-<div class="line">keyboard.add_interface(interphace_central)</div>
+<div class="line">interface_central = InterfaceCentral(central_peryphery, 0, 0, 5, 4)</div>
+<div class="line">keyboard.add_interface(interface_central)</div>
 <div class="line"> </div>
-<div class="line">interphace_right = InterphaceUART(<span class="stringliteral">&quot;right_peryphery&quot;</span>, <span class="keywordtype">None</span>, board.GP1, 11, 0, 6, 4)</div>
-<div class="line">keyboard.add_interface(interphace_right)</div>
+<div class="line">interface_right = InterfaceUART(<span class="stringliteral">&quot;right_peryphery&quot;</span>, <span class="keywordtype">None</span>, board.GP1, 11, 0, 6, 4)</div>
+<div class="line">keyboard.add_interface(interface_right)</div>
 </div><!-- fragment --><h2><a class="anchor" id="p_4_2_3"></a>
 4.2.3 add_layer_status_led</h2>
 <p>Add <b>LayerStatusLed</b> to the <b>MKX_Central</b>. <br  />
@@ -401,7 +401,7 @@ $(document).ready(function(){initNavTree('p_4.html',''); initResizable(); });
 </p>
 <div class="fragment"><div class="line"><span class="keyword">from</span> mkx.mkx_periphery <span class="keyword">import</span> MKX_Periphery</div>
 <div class="line"> </div>
-<div class="line">mkx_perifery = MKX_Periphery(</div>
+<div class="line">mkx_periphery = MKX_Periphery(</div>
 <div class="line">    uart_peryphery: PeripheryAbstract, </div>
 <div class="line">    debug :bool=<span class="keyword">False</span></div>
 <div class="line">)</div>
@@ -416,7 +416,7 @@ $(document).ready(function(){initNavTree('p_4.html',''); initResizable(); });
 <p>Set the PeripheryCentral.</p>
 <div class="fragment"><div class="line"><span class="keyword">from</span> mkx.periphery_central <span class="keyword">import</span> PeripheryCentral</div>
 <div class="line"> </div>
-<div class="line">mkx_perifery = PeripheryCentral(</div>
+<div class="line">mkx_periphery = PeripheryCentral(</div>
 <div class="line">    device_id: str, </div>
 <div class="line">    col_pins, </div>
 <div class="line">    row_pins, </div>
@@ -438,8 +438,8 @@ $(document).ready(function(){initNavTree('p_4.html',''); initResizable(); });
 <div class="line"> </div>
 <div class="line"><span class="keyword">from</span> mkx.mkx_central <span class="keyword">import</span> MKX_Central</div>
 <div class="line"><span class="keyword">from</span> mkx.periphery_central <span class="keyword">import</span> PeripheryCentral</div>
-<div class="line"><span class="keyword">from</span> mkx.interphace_central <span class="keyword">import</span> InterphaceCentral</div>
-<div class="line"><span class="keyword">from</span> mkx.interphace_uart <span class="keyword">import</span> InterphaceUART</div>
+<div class="line"><span class="keyword">from</span> mkx.interface_central <span class="keyword">import</span> InterfaceCentral</div>
+<div class="line"><span class="keyword">from</span> mkx.interface_uart <span class="keyword">import</span> InterfaceUART</div>
 <div class="line"> </div>
 <div class="line">mkx_central = MKX_Central()</div>
 <div class="line"> </div>
@@ -449,11 +449,11 @@ $(document).ready(function(){initNavTree('p_4.html',''); initResizable(); });
 <div class="line">central_peryphery = PeripheryCentral(<span class="stringliteral">&quot;central_peryphery&quot;</span>, col_pins, row_pins)</div>
 <div class="line">mkx_central.add_central_periphery(central_peryphery)</div>
 <div class="line"> </div>
-<div class="line">interphace_central = InterphaceCentral(central_peryphery, 0, 0, 5, 4)</div>
-<div class="line">mkx_central.add_interface(interphace_central)</div>
+<div class="line">interface_central = InterfaceCentral(central_peryphery, 0, 0, 5, 4)</div>
+<div class="line">mkx_central.add_interface(interface_central)</div>
 <div class="line"> </div>
-<div class="line">interphace_right = InterphaceUART(<span class="stringliteral">&quot;side_perifery&quot;</span>, <span class="keywordtype">None</span>, board.GP1, 11, 0, 6, 4)</div>
-<div class="line">mkx_central.add_interface(interphace_right)</div>
+<div class="line">interface_right = InterfaceUART(<span class="stringliteral">&quot;side_periphery&quot;</span>, <span class="keywordtype">None</span>, board.GP1, 11, 0, 6, 4)</div>
+<div class="line">mkx_central.add_interface(interface_right)</div>
 <div class="line"> </div>
 <div class="line"><span class="comment"># other code ...</span></div>
 <div class="line"> </div>
@@ -463,7 +463,7 @@ $(document).ready(function(){initNavTree('p_4.html',''); initResizable(); });
 <p>Set the PeripheryUART.</p>
 <div class="fragment"><div class="line"><span class="keyword">from</span> mkx.periphery_uart <span class="keyword">import</span> PeripheryUART</div>
 <div class="line"> </div>
-<div class="line">mkx_perifery = PeripheryUART(</div>
+<div class="line">mkx_periphery = PeripheryUART(</div>
 <div class="line">    device_id: str, </div>
 <div class="line">    col_pins, </div>
 <div class="line">    row_pins, </div>
@@ -505,21 +505,21 @@ $(document).ready(function(){initNavTree('p_4.html',''); initResizable(); });
 <div class="line"> </div>
 <div class="line">peryphery = PeripheryUART(<span class="stringliteral">&quot;booster_r&quot;</span>, col_pins, row_pins, board.GP0, board.GP1)</div>
 <div class="line"> </div>
-<div class="line">mkx_perifery = MKX_Periphery(peryphery, debug=<span class="keyword">True</span>)</div>
-<div class="line">mkx_perifery.run_forever()</div>
+<div class="line">mkx_periphery = MKX_Periphery(peryphery, debug=<span class="keyword">True</span>)</div>
+<div class="line">mkx_periphery.run_forever()</div>
 </div><!-- fragment --><h1><a class="anchor" id="p_4_4"></a>
 4.4 Interface</h1>
-<p>The <b>Interface</b> connects the <b>Periferies</b> to the <b>MKX_Central</b>. <br  />
+<p>The <b>Interface</b> connects the <b>Peripheries</b> to the <b>MKX_Central</b>. <br  />
 </p>
-<p>Possible options are <b>InterphaceCentral</b> matching the <b>PeriferyCentral</b> and <br  />
- <b>InterphaceUART</b> matching the <b>PeriferyUART</b>. <br  />
+<p>Possible options are <b>InterfaceCentral</b> matching the <b>PeripheryCentral</b> and <br  />
+ <b>InterfaceUART</b> matching the <b>PeripheryUART</b>. <br  />
 </p>
 <p><b>Example:</b> </p><div class="fragment"><div class="line"><span class="keyword">import</span> board</div>
 <div class="line"> </div>
 <div class="line"><span class="keyword">from</span> mkx.mkx_central <span class="keyword">import</span> MKX_Central</div>
 <div class="line"><span class="keyword">from</span> mkx.periphery_central <span class="keyword">import</span> PeripheryCentral</div>
-<div class="line"><span class="keyword">from</span> mkx.interphace_central <span class="keyword">import</span> InterphaceCentral</div>
-<div class="line"><span class="keyword">from</span> mkx.interphace_uart <span class="keyword">import</span> InterphaceUART</div>
+<div class="line"><span class="keyword">from</span> mkx.interface_central <span class="keyword">import</span> InterfaceCentral</div>
+<div class="line"><span class="keyword">from</span> mkx.interface_uart <span class="keyword">import</span> InterfaceUART</div>
 <div class="line"> </div>
 <div class="line">mkx_central = MKX_Central()</div>
 <div class="line"> </div>
@@ -529,25 +529,25 @@ $(document).ready(function(){initNavTree('p_4.html',''); initResizable(); });
 <div class="line">central_peryphery = PeripheryCentral(<span class="stringliteral">&quot;central_peryphery&quot;</span>, col_pins, row_pins)</div>
 <div class="line">mkx_central.add_central_periphery(central_peryphery)</div>
 <div class="line"> </div>
-<div class="line">interphace_central = InterphaceCentral(central_peryphery, 0, 0, 5, 4)</div>
-<div class="line">mkx_central.add_interface(interphace_central)</div>
+<div class="line">interface_central = InterfaceCentral(central_peryphery, 0, 0, 5, 4)</div>
+<div class="line">mkx_central.add_interface(interface_central)</div>
 <div class="line"> </div>
-<div class="line">interphace_right = InterphaceUART(<span class="stringliteral">&quot;side_perifery&quot;</span>, <span class="keywordtype">None</span>, board.GP1, 11, 0, 6, 4)</div>
-<div class="line">mkx_central.add_interface(interphace_right)</div>
+<div class="line">interface_right = InterfaceUART(<span class="stringliteral">&quot;side_periphery&quot;</span>, <span class="keywordtype">None</span>, board.GP1, 11, 0, 6, 4)</div>
+<div class="line">mkx_central.add_interface(intefhace_right)</div>
 <div class="line"> </div>
 <div class="line"><span class="comment"># other code ...</span></div>
 <div class="line"> </div>
 <div class="line">mkx_central.run_forever()</div>
 </div><!-- fragment --><h2><a class="anchor" id="p_4_4_1"></a>
-4.4.1 InterphaceCentral</h2>
-<p>Set the InterphaceCentral. <br  />
+4.4.1 InterfaceCentral</h2>
+<p>Set the InterfaceCentral. <br  />
 </p>
 <p>Min/max column and rows values can be inverted, meaning min value can be bigger than max. <br  />
  Inverted min/max column and rows values will change the keys mapping. <br  />
 </p>
-<div class="fragment"><div class="line"><span class="keyword">from</span> mkx.interphace_central <span class="keyword">import</span> InterphaceCentral</div>
+<div class="fragment"><div class="line"><span class="keyword">from</span> mkx.interface_central <span class="keyword">import</span> InterfaceCentral</div>
 <div class="line"> </div>
-<div class="line">interface = InterphaceCentral(</div>
+<div class="line">interface = InterfaceCentral(</div>
 <div class="line">    central_periphery: InterfahceAbstract, </div>
 <div class="line">    col_min :int, </div>
 <div class="line">    row_min :int, </div>
@@ -555,7 +555,7 @@ $(document).ready(function(){initNavTree('p_4.html',''); initResizable(); });
 <div class="line">    row_max :int</div>
 <div class="line">)</div>
 </div><!-- fragment --><p><b>central_periphery</b> <br  />
- PeriferyCentral object.</p>
+ PeripheryCentral object.</p>
 <p><b>col_min</b> <br  />
  Minimum column number. Counting start from '0'. <br  />
 </p>
@@ -569,11 +569,11 @@ $(document).ready(function(){initNavTree('p_4.html',''); initResizable(); });
  Maximum row number. Counting start from '0'. <br  />
 </p>
 <h2><a class="anchor" id="p_4_4_2"></a>
-4.4.2 InterphaceUART</h2>
-<p>Set the InterphaceUART.</p>
-<div class="fragment"><div class="line"><span class="keyword">from</span> mkx.interphace_uart <span class="keyword">import</span> InterphaceUART</div>
+4.4.2 InterfaceUART</h2>
+<p>Set the InterfaceUART.</p>
+<div class="fragment"><div class="line"><span class="keyword">from</span> mkx.interface_uart <span class="keyword">import</span> InterfaceUART</div>
 <div class="line"> </div>
-<div class="line">mkx_perifery = InterphaceUART(</div>
+<div class="line">mkx_periphery = InterfaceUART(</div>
 <div class="line">    device_id: str, </div>
 <div class="line">    tx_pin,</div>
 <div class="line">    rx_pin,</div>

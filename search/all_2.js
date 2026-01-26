@@ -22,7 +22,7 @@ var searchData=
   ['2_20booster_20keyboard_19',['3.2 Booster Keyboard',['../p_3.html#p_3_2',1,'']]],
   ['2_20build_20binary_20mkx_20library_20',['6.2 Build Binary MKX Library',['../p_6.html#p_6_2',1,'']]],
   ['2_20edit_20mode_21',['5.8.2 Edit Mode',['../p_5.html#p_5_8_2',1,'']]],
-  ['2_20interphaceuart_22',['4.4.2 InterphaceUART',['../p_4.html#p_4_4_2',1,'']]],
+  ['2_20interfaceuart_22',['4.4.2 InterfaceUART',['../p_4.html#p_4_4_2',1,'']]],
   ['2_20istallation_23',['2 Istallation',['../p_2.html',1,'']]],
   ['2_20layerstatusledrgbthreepin_24',['4.5.2 LayerStatusLedRgbThreePin',['../p_4.html#p_4_5_2',1,'']]],
   ['2_20mkx_20central_25',['4.2 MKX Central',['../p_4.html#p_4_2',1,'']]],
