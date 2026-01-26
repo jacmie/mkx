@@ -10,7 +10,7 @@ from adafruit_ble.advertising.standard import ProvideServicesAdvertisement
 from adafruit_ble.services.standard.hid import HIDService
 from adafruit_ble.services.standard.device_info import DeviceInfoService
 
-from mkx.interphace_abstract import InterfahceAbstract
+from mkx.interface_abstract import InterfaceAbstract
 from mkx.communication_message import sync_messages, debounce
 
 from mkx.timed_keys import TimedKeys, TimedKeysManager
@@ -91,7 +91,7 @@ class MKX_Central:
     def add_layer_status_led(self, status_led: LayerStatusLedAbstract):
         self.layers_manager.add_layer_status_led(status_led)
 
-    def add_interface(self, interface: InterfahceAbstract):
+    def add_interface(self, interface: InterfaceAbstract):
         self.interfaces.append(interface)
 
     def add_keymap(self, keymap, col_size, row_size):

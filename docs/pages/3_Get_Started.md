@@ -17,7 +17,7 @@ To make it more useful and entertaining, we simulate the behavior of a hardware 
 By bridging pin D5 (sending pin) and pin D6 (receiving pin) with pliers or any other conductive object like a wire, paper clip, etc. predefined key string is sent to the computer.
 
 This setup uses only one hardware component, which acts as both the signal sender and the central processing unit.  
-For this reason **PeripheryCentral** is defined and added to the keyboard object. Each peripheral device also requires an interface, here **InterphaceCentral** is added to fulfill that role.
+For this reason **PeripheryCentral** is defined and added to the keyboard object. Each peripheral device also requires an interface, here **InterfaceCentral** is added to fulfill that role.
 
 Standard keyboard keys were used, modifier key **M_LSFT** was applied to produce capital letters and special characters.  
 All input is grouped under a single key called **HK**, defined as a sequence **SEQ** key.  
@@ -41,7 +41,7 @@ from mkx.keys_modifiers import M_LSFT
 from mkx.keys_sequence import SEQ
 
 from mkx.periphery_central import PeripheryCentral
-from mkx.interphace_central import InterphaceCentral
+from mkx.interface_central import InterfaceCentral
 
 keyboard = MKX_Central()
 
@@ -50,8 +50,8 @@ row_pins = (board.D6,)
 hardware_keypass_peryphery = PeripheryCentral("hardware_keypass", col_pins, row_pins)
 keyboard.add_central_periphery(hardware_keypass_peryphery)
 
-interphace_central = InterphaceCentral(hardware_keypass_peryphery, 0, 0, 0, 0)
-keyboard.add_interface(interphace_central)
+interface_central = InterfaceCentral(hardware_keypass_peryphery, 0, 0, 0, 0)
+keyboard.add_interface(interface_central)
 
 # fmt: off
 
@@ -98,7 +98,7 @@ In terms of architecture:
 
 These peripheries are designed solely to send signals to the central processor using a defined protocol.
 
-The left half also contains the **Interphaces** for both sides, managing communication between the **central** unit and each **periphery**.
+The left half also contains the **Interfaces** for both sides, managing communication between the **central** unit and each **periphery**.
 
 The **status LED** indicates the active layer:
 - Green for Layer 1
@@ -115,8 +115,8 @@ import board
 from mkx.mkx_central import MKX_Central
 
 from mkx.periphery_central import PeripheryCentral
-from mkx.interphace_central import InterphaceCentral
-from mkx.interphace_uart import InterphaceUART
+from mkx.interface_central import InterfaceCentral
+from mkx.interface_uart import InterfaceUART
 from mkx.layer_status_led_rgb_neopixel import LayerStatusLedRgbNeoPixel
 
 from mkx.keys_standard import *
@@ -133,11 +133,11 @@ row_pins = (board.GP10, board.GP11, board.GP13, board.GP15, board.GP17)
 central_peryphery = PeripheryCentral("booster_l", col_pins, row_pins)
 keyboard.add_central_periphery(central_peryphery)
 
-interphace_central = InterphaceCentral(central_peryphery, 0, 0, 5, 4)
-keyboard.add_interface(interphace_central)
+interface_central = InterfaceCentral(central_peryphery, 0, 0, 5, 4)
+keyboard.add_interface(interface_central)
 
-interphace_right = InterphaceUART("booster_r", None, board.GP1, 11, 0, 6, 4)
-keyboard.add_interface(interphace_right)
+interface_right = InterfaceUART("booster_r", None, board.GP1, 11, 0, 6, 4)
+keyboard.add_interface(interface_right)
 
 status_led = LayerStatusLedRgbNeoPixel(board.GP23, brightness=0.015)
 status_led.add_layer(0, (0, 255, 0))  # Green
@@ -268,8 +268,8 @@ from mkx.keys_layers import TO
 from mkx.keys_vim import *
 
 from mkx.periphery_central import PeripheryCentral
-from mkx.interphace_central import InterphaceCentral
-from mkx.interphace_uart import InterphaceUART
+from mkx.interface_central import InterfaceCentral
+from mkx.interface_uart import InterfaceUART
 
 keyboard = MKX_Central()
 
@@ -278,11 +278,11 @@ row_pins = (board.A2, board.MISO, board.D10, board.D9, board.D6, board.D5)
 central_peryphery = PeripheryCentral("sq_l", col_pins, row_pins)
 keyboard.add_central_periphery(central_peryphery)
 
-interphace_central = InterphaceCentral(central_peryphery, 0, 0, 5, 5)
-keyboard.add_interface(interphace_central)
+interface_central = InterfaceCentral(central_peryphery, 0, 0, 5, 5)
+keyboard.add_interface(interface_central)
 
-interphace_right = InterphaceUART("sq_r", board.TX, board.RX, 6, 0, 11, 5)
-keyboard.add_interface(interphace_right)
+interface_right = InterfaceUART("sq_r", board.TX, board.RX, 6, 0, 11, 5)
+keyboard.add_interface(interface_right)
 
 status_led = LayerStatusLedRgbNeoPixel(board.SCK)
 status_led.add_layer(0, (0, 0, 255))  # Blue

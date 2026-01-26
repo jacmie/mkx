@@ -1,11 +1,11 @@
 import busio
 import sys
 
-from mkx.interphace_abstract import InterfahceAbstract
+from mkx.interface_abstract import InterfaceAbstract
 from mkx.communication_message import encode_message, MessageParser
 
 
-class InterphaceUART(InterfahceAbstract):
+class InterfaceUART(InterfaceAbstract):
     def __init__(
         self,
         device_id,

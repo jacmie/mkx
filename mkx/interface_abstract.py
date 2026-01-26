@@ -1,4 +1,4 @@
-class InterfahceAbstract:
+class InterfaceAbstract:
     def __init__(self, device_id, col_min, row_min, col_max, row_max):
         self.device_id = device_id
         self.buffer = b""

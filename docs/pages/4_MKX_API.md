@@ -194,18 +194,18 @@ mkx_central.add_interface(
 ``` {.py}
 from mkx.mkx_central import MKX_Central
 from mkx.periphery_central import PeripheryCentral
-from mkx.interphace_central import InterphaceCentral
-from mkx.interphace_uart import InterphaceUART
+from mkx.interface_central import InterfaceCentral
+from mkx.interface_uart import InterfaceUART
 
 mkx_central = MKX_Central()
 
 central_peryphery = PeripheryCentral("central", col_pins, row_pins)
 
-interphace_central = InterphaceCentral(central_peryphery, 0, 0, 5, 4)
-keyboard.add_interface(interphace_central)
+interface_central = InterfaceCentral(central_peryphery, 0, 0, 5, 4)
+keyboard.add_interface(interface_central)
  
-interphace_right = InterphaceUART("right_peryphery", None, board.GP1, 11, 0, 6, 4)
-keyboard.add_interface(interphace_right)
+interface_right = InterfaceUART("right_peryphery", None, board.GP1, 11, 0, 6, 4)
+keyboard.add_interface(interface_right)
 ```
 
 @subsection p_4_2_3 4.2.3 add_layer_status_led
@@ -357,7 +357,7 @@ or as **PeripheryUART**, on a separate hardware module and communicates via UART
 ``` {.py}
 from mkx.mkx_periphery import MKX_Periphery
 
-mkx_perifery = MKX_Periphery(
+mkx_periphery = MKX_Periphery(
     uart_peryphery: PeripheryAbstract, 
     debug :bool=False
 )
@@ -376,7 +376,7 @@ Set the PeripheryCentral.
 ``` {.py}
 from mkx.periphery_central import PeripheryCentral
 
-mkx_perifery = PeripheryCentral(
+mkx_periphery = PeripheryCentral(
     device_id: str, 
     col_pins, 
     row_pins, 
@@ -402,8 +402,8 @@ import board
  
 from mkx.mkx_central import MKX_Central
 from mkx.periphery_central import PeripheryCentral
-from mkx.interphace_central import InterphaceCentral
-from mkx.interphace_uart import InterphaceUART
+from mkx.interface_central import InterfaceCentral
+from mkx.interface_uart import InterfaceUART
 
 mkx_central = MKX_Central()
  
@@ -413,11 +413,11 @@ row_pins = (board.GP10, board.GP11, board.GP13, board.GP15, board.GP17)
 central_peryphery = PeripheryCentral("central_peryphery", col_pins, row_pins)
 mkx_central.add_central_periphery(central_peryphery)
 
-interphace_central = InterphaceCentral(central_peryphery, 0, 0, 5, 4)
-mkx_central.add_interface(interphace_central)
+interface_central = InterfaceCentral(central_peryphery, 0, 0, 5, 4)
+mkx_central.add_interface(interface_central)
  
-interphace_right = InterphaceUART("side_perifery", None, board.GP1, 11, 0, 6, 4)
-mkx_central.add_interface(interphace_right)
+interface_right = InterfaceUART("side_periphery", None, board.GP1, 11, 0, 6, 4)
+mkx_central.add_interface(interface_right)
 
 # other code ...
 
@@ -431,7 +431,7 @@ Set the PeripheryUART.
 ``` {.py}
 from mkx.periphery_uart import PeripheryUART
 
-mkx_perifery = PeripheryUART(
+mkx_periphery = PeripheryUART(
     device_id: str, 
     col_pins, 
     row_pins, 
@@ -477,16 +477,16 @@ row_pins = (board.GP10, board.GP11, board.GP13, board.GP15, board.GP17)
  
 peryphery = PeripheryUART("booster_r", col_pins, row_pins, board.GP0, board.GP1)
  
-mkx_perifery = MKX_Periphery(peryphery, debug=True)
-mkx_perifery.run_forever()
+mkx_periphery = MKX_Periphery(peryphery, debug=True)
+mkx_periphery.run_forever()
 ```
 
 @section p_4_4 4.4 Interface
 
-The **Interface** connects the **Periferies** to the **MKX_Central**.  
+The **Interface** connects the **Peripheries** to the **MKX_Central**.  
 
-Possible options are **InterphaceCentral** matching the **PeriferyCentral** and  
-**InterphaceUART** matching the **PeriferyUART**.  
+Possible options are **InterfaceCentral** matching the **PeripheryCentral** and  
+**InterfaceUART** matching the **PeripheryUART**.  
 
 **Example:**
 ``` {.py}
@@ -494,8 +494,8 @@ import board
  
 from mkx.mkx_central import MKX_Central
 from mkx.periphery_central import PeripheryCentral
-from mkx.interphace_central import InterphaceCentral
-from mkx.interphace_uart import InterphaceUART
+from mkx.interface_central import InterfaceCentral
+from mkx.interface_uart import InterfaceUART
 
 mkx_central = MKX_Central()
  
@@ -505,28 +505,28 @@ row_pins = (board.GP10, board.GP11, board.GP13, board.GP15, board.GP17)
 central_peryphery = PeripheryCentral("central_peryphery", col_pins, row_pins)
 mkx_central.add_central_periphery(central_peryphery)
 
-interphace_central = InterphaceCentral(central_peryphery, 0, 0, 5, 4)
-mkx_central.add_interface(interphace_central)
+interface_central = InterfaceCentral(central_peryphery, 0, 0, 5, 4)
+mkx_central.add_interface(interface_central)
  
-interphace_right = InterphaceUART("side_perifery", None, board.GP1, 11, 0, 6, 4)
-mkx_central.add_interface(interphace_right)
+interface_right = InterfaceUART("side_periphery", None, board.GP1, 11, 0, 6, 4)
+mkx_central.add_interface(intefhace_right)
 
 # other code ...
 
 mkx_central.run_forever()
 ```
 
-@subsection p_4_4_1 4.4.1 InterphaceCentral
+@subsection p_4_4_1 4.4.1 InterfaceCentral
 
-Set the InterphaceCentral.  
+Set the InterfaceCentral.  
 
 Min/max column and rows values can be inverted, meaning min value can be bigger than max.  
 Inverted min/max column and rows values will change the keys mapping.  
 
 ``` {.py}
-from mkx.interphace_central import InterphaceCentral
+from mkx.interface_central import InterfaceCentral
 
-interface = InterphaceCentral(
+interface = InterfaceCentral(
     central_periphery: InterfahceAbstract, 
     col_min :int, 
     row_min :int, 
@@ -536,7 +536,7 @@ interface = InterphaceCentral(
 ```
 
 **central_periphery**  
-PeriferyCentral object.
+PeripheryCentral object.
 
 **col_min**  
 Minimum column number. Counting start from '0'.  
@@ -551,14 +551,14 @@ Maximum column number. Counting start from '0'.
 Maximum row number. Counting start from '0'.  
 
 
-@subsection p_4_4_2 4.4.2 InterphaceUART
+@subsection p_4_4_2 4.4.2 InterfaceUART
 
-Set the InterphaceUART.
+Set the InterfaceUART.
 
 ``` {.py}
-from mkx.interphace_uart import InterphaceUART
+from mkx.interface_uart import InterfaceUART
 
-mkx_perifery = InterphaceUART(
+mkx_periphery = InterfaceUART(
     device_id: str, 
     tx_pin,
     rx_pin,

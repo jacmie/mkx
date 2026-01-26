@@ -1,8 +1,8 @@
-from mkx.interphace_abstract import InterfahceAbstract
+from mkx.interface_abstract import InterfaceAbstract
 from mkx.communication_message import MessageParser
 
 
-class InterphaceCentral(InterfahceAbstract):
+class InterfaceCentral(InterfaceAbstract):
     def __init__(self, central_periphery, col_min, row_min, col_max, row_max):
         super().__init__(
             central_periphery.device_id, col_min, row_min, col_max, row_max
