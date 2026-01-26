@@ -1,0 +1,13 @@
+# Requirements for running tests locally
+
+# Testing framework
+pytest>=7.0.0
+pytest-mock>=3.10.0
+
+# Coverage
+coverage>=7.0.0
+
+# Code quality
+pylint>=2.16.0
+flake8>=5.0.0
+mypy>=0.991

@@ -139,10 +139,27 @@ For more **auto_sync** options, run:
 python auto_sync.py -h
 ```
 
-See also @ref p_6
+See also @ref p_6_2
 
 
-@subsection p_2_5_3  2.5.3 Optional - Build HTML documentation with Doxygen
+@subsection p_2_5_3  2.5.3 Optional - Testing Tools
+
+Testing **MKX** requires Python to be installed and your environment activated (<i>see section 2.2</i>).  
+In the **dev** Python environment:
+
+```
+pip install pytest coverage
+```
+
+Additional optional code quality tools can be installed:
+
+```
+pip install pylint flake8 mypy
+```
+
+See also @ref p_6_4 for how to run and write tests.
+
+@subsection p_2_5_4  2.5.4 Optional - Build HTML documentation with Doxygen
 
 Download Doxygen and install it:
 https://www.doxygen.nl/download.html
@@ -153,4 +170,4 @@ doxygen ./Doxyfile
 ```
 Open the documentation **docs/html/index.html**  
 
-See also @ref p_6
+See also @ref p_6_5

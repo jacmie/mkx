@@ -49,7 +49,69 @@ options:
   --tidy                Remove all uploaded content from the MCU mountpoint.
 ```
 
-@section p_6_4 6.4 Build HTML docs
+@section p_6_4 6.4 Testing
+
+Before deploying to hardware, use the included test suite to verify functionality.
+
+Install testing tools see @ref p_2_5_3
+
+@subsection p_6_4_1 6.4.1 Run Tests
+
+From the **tests** directory, run the test suite:
+
+```
+cd tests
+pytest -v
+```
+
+To see which features are being tested:
+
+```
+pytest -v --collect-only
+```
+
+@subsection p_6_4_2 6.4.2 Code Coverage
+
+Check code coverage to identify untested functionality:
+
+```
+coverage run -m pytest
+coverage report -m
+```
+
+This shows a detailed coverage report for each file.
+
+@subsection p_6_4_3 6.4.3 Write New Tests
+
+Tests are located in the **tests** directory. Use existing test files as templates:
+
+- `test_keys_standard.py` - Example: testing basic key press/release
+- `test_manager_layers.py` - Example: testing layer management
+- `test_keys_holdtap.py` - Example: testing timing logic
+- `test_custom_key_template.py` - Template for creating new tests
+
+Key points for writing tests:
+
+1. Use the provided pytest fixtures from `conftest.py`:
+   - `mock_keyboard` - Simulated keyboard for tracking key events
+   - `mock_digitalio` - Simulated GPIO pins
+   - `layer_manager` - Pre-configured layer manager
+   - `timed_key_tracker` - For testing time-dependent keys
+
+2. Tests mock all CircuitPython hardware dependencies, so tests run on desktop without hardware
+
+3. Follow naming convention: `test_*.py` files with `test_*()` functions
+
+Example test:
+
+```python
+def test_my_feature(mock_keyboard, layer_manager):
+    """Test my feature with mocked hardware."""
+    # Your test code here
+    assert mock_keyboard.press_count >= 1
+```
+
+@section p_6_5 6.5 Build HTML docs
 
 The documentation is build with Doxygen:  
 https://www.doxygen.nl/
