@@ -218,9 +218,13 @@ adafruit_hid_keyboard_mock.Keyboard = MockKeyboard
 adafruit_hid_keycode_mock = MagicMock()
 adafruit_hid_keycode_mock.Keycode = MockKeycode
 adafruit_hid_mouse_mock = MagicMock()
+adafruit_hid_consumer_control_mock = MagicMock()
+adafruit_hid_consumer_control_code_mock = MagicMock()
+adafruit_hid_consumer_control_code_mock.ConsumerControlCode = MagicMock()
 keypad_mock = MagicMock()
 time_mock = MagicMock()
 digitalio_mock = MagicMock()
+usb_hid_mock = MagicMock()
 digitalio_mock.Pull = MockDigitalIO.Pull
 digitalio_mock.DigitalInOut = MockDigitalIO.DigitalInOut
 
@@ -228,9 +232,14 @@ sys.modules["adafruit_hid"] = adafruit_hid_mock
 sys.modules["adafruit_hid.keyboard"] = adafruit_hid_keyboard_mock
 sys.modules["adafruit_hid.keycode"] = adafruit_hid_keycode_mock
 sys.modules["adafruit_hid.mouse"] = adafruit_hid_mouse_mock
+sys.modules["adafruit_hid.consumer_control"] = adafruit_hid_consumer_control_mock
+sys.modules["adafruit_hid.consumer_control_code"] = (
+    adafruit_hid_consumer_control_code_mock
+)
 sys.modules["keypad"] = keypad_mock
 sys.modules["time"] = time_mock
 sys.modules["digitalio"] = digitalio_mock
+sys.modules["usb_hid"] = usb_hid_mock
 
 # Add mkx to path for imports
 from pathlib import Path
