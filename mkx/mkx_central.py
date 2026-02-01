@@ -35,7 +35,7 @@ class MKX_Central(MKX_Abstract):
                     verbose=False,
                 )
 
-    def process_key_event(self, event_json):
+    def process_key_event_msg(self, event_json):
         timestamp = event_json["timestamp"]
         device_id = event_json["device_id"]
         local_col = event_json["col"]
@@ -107,7 +107,7 @@ class MKX_Central(MKX_Abstract):
             )
 
             for key_event in debounced_msg:
-                self.process_key_event(key_event)
+                self.process_key_event_msg(key_event)
                 print("")
 
             if self.backlight:
