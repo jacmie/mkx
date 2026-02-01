@@ -5,10 +5,7 @@ from collections import OrderedDict
 import usb_hid
 from adafruit_hid.keyboard import Keyboard
 
-import adafruit_ble
-from adafruit_ble.advertising.standard import ProvideServicesAdvertisement
-from adafruit_ble.services.standard.hid import HIDService
-from adafruit_ble.services.standard.device_info import DeviceInfoService
+from mkx.ble import BLE
 
 from mkx.interface_abstract import InterfaceAbstract
 from mkx.communication_message import sync_messages, debounce
@@ -51,36 +48,7 @@ class MKX_Central:
         self.backlight = None
 
         self._use_ble = False
-        self.ble_radio = None
-        self.ble_hid = None
-
-    def _init_ble(self):
-        # Services auto-register with the BLE adapter on creation
-        self.ble_radio = adafruit_ble.BLERadio()
-
-        self.ble_hid = HIDService()
-        self.device_info = DeviceInfoService(
-            manufacturer="MKX",
-            model_number="MKX-Central",
-            software_revision="1.0.0",
-        )
-
-        self.advertisement = ProvideServicesAdvertisement(self.ble_hid)
-        self.advertisement.complete_name = "MKX keyboard"
-        self.advertisement.appearance = 961
-
-        if not self.ble_radio.connected:
-            time.sleep(0.5)
-            self.ble_radio.start_advertising(self.advertisement)
-
-        if self.ble_radio.connected:
-            print("BLE connected")
-        else:
-            print("BLE Not connected")
-
-    def _ensure_ble_advertising(self):
-        if not self.ble_radio.connected and not self.ble_radio.advertising:
-            self.ble_radio.start_advertising(self.advertisement)
+        self._ble = None
 
     def use_ble(self, use_ble: bool):
         self._use_ble = use_ble
@@ -216,9 +184,9 @@ class MKX_Central:
 
     def run_once(self):
         if self._use_ble:
-            self._ensure_ble_advertising()
+            self._ble.ensure_advertising()
 
-            if not self.ble_hid.devices:
+            if not self._ble.devices:
                 return
 
         now = time.monotonic_ns() // 1_000_000  # Current time in ms
@@ -273,8 +241,9 @@ class MKX_Central:
             sys.exit(1)
 
         if self._use_ble:
-            self._init_ble()
-            self.keyboard = Keyboard(self.ble_hid.devices)
+            self._ble = BLE()
+            self._ble.init()
+            self.keyboard = Keyboard(self._ble.devices)
         else:
             self.keyboard = Keyboard(usb_hid.devices)
 
