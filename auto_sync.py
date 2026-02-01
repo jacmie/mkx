@@ -10,6 +10,8 @@ from watchdog.observers import Observer
 
 PROJECT_DIR = Path(__file__).parent
 SOURCE_DIRS = [PROJECT_DIR / "mkx"]  # Add more if needed
+IGNORED_DIRS = {"__pycache__", ".pytest_cache", ".git", ".compiled"}
+IGNORED_FILES = {".covarage", ".DS_Store"}
 
 modified_files = set()
 
@@ -18,17 +20,34 @@ class SyncHandler(FileSystemEventHandler):
     def on_modified(self, event):
         if event.is_directory:
             return
-        for source in SOURCE_DIRS:
-            src_path = Path(event.src_path).resolve()
-            source_path = source.resolve()
 
-            # Now comparing relative paths
+        src_path = Path(event.src_path).resolve()
+
+        if any(part in IGNORED_DIRS for part in src_path.parts):
+            return
+
+        if src_path.name in IGNORED_FILES:
+            return
+
+        for source in SOURCE_DIRS:
+            source_path = source.resolve()
             if src_path.is_relative_to(source_path):
                 modified_files.add(src_path)
 
 
-def list_py_files(directory):
-    return {f for f in os.listdir(directory) if f.endswith(".py") or f.endswith(".mpy")}
+def list_py_files(directory: Path):
+    py_files = set()
+
+    for root, dirs, files in os.walk(directory):
+        dirs[:] = [d for d in dirs if d not in IGNORED_DIRS]
+
+        for name in files:
+            if name in IGNORED_FILES:
+                continue
+            if name.endswith((".py", ".mpy")):
+                py_files.add(name)
+
+    return py_files
 
 
 def read_file(path):
@@ -92,8 +111,12 @@ def initial_sync(mountpoint, use_compiled=False):
 
     print(f"==> Performing initial sync to {mountpoint}")
     for source in SOURCE_DIRS:
-        for root, _, files in os.walk(source):
+        for root, dirs, files in os.walk(source):
+            dirs[:] = [d for d in dirs if d not in IGNORED_DIRS]
+
             for name in files:
+                if name in IGNORED_FILES:
+                    continue
                 src_path = Path(root) / name
                 copy_if_needed(src_path, mountpoint, use_compiled=use_compiled)
     print("==> Initial sync complete.")
