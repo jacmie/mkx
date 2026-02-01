@@ -3,72 +3,74 @@ from mkx.timed_keys import TimedKeys
 from mkx.keys_sticky import SK
 
 
+def _get_key(self, logical_index: int):
+    active_layer = self.layers_manager.get_top_layer()
+
+    try:
+        key = self.keymap[active_layer][logical_index]
+    except IndexError:
+        print(f"Key index {logical_index} out of bounds for layer {active_layer}")
+        return None
+
+    return key
+
+
 def process_key_event(
     self, device_id: str, logical_index: int, pressed: bool, timestamp: int
 ):
     """
-    Pure key handling logic.
+    Core key event handling logic.
+    Maps a logical key index to a key object and dispatches press/release behavior.
     """
 
+    # Uniquely identify a pressed key across devices and positions
     key_pos = (device_id, logical_index)
 
     if pressed:
-        active_layer = self.layers_manager.get_top_layer()
-
-        try:
-            key = self.keymap[active_layer][logical_index]
-        except IndexError:
-            print(f"Key index {logical_index} out of bounds for layer {active_layer}")
-            return
-
+        # Resolve key from the currently active layer
+        key = _get_key(self, logical_index)
         if key is None:
             return
 
-        # Store keys for tracking release and avoid keys lock: key press -> layer changed -> key release
+        print("key:", key.key_name, "pressed")
+
+        # Track pressed keys to ensure correct release handling
+        # (prevents stuck keys when layers change while a key is held)
         self.pressed_keys[key_pos] = key
 
+        # Layer keys may modify the active layer on press
         if isinstance(key, KeysLayer):
             key.on_press(self.layers_manager, self.keyboard, timestamp)
+            # Non-tap layer keys do not generate a normal key press
             if not isinstance(key, LT) and not isinstance(key, TT):
                 return
 
-        # Call on_press for all types of keys (except KeysLayer, which you already handled above)
+        # Dispatch press event for all regular and tap-enabled keys
         key.on_press(self.layers_manager, self.keyboard, timestamp)
 
-        # If the key is time-based, register it *after* on_press so it's active
+        # Register time-dependent keys after activation
         if isinstance(key, TimedKeys):
             self.timed_keys_manager.register(key)
 
-        print("key:", key.key_name, "pressed")
-
+        # Register sticky keys for deferred release handling
         if isinstance(key, SK):
             self.sticky_key_manager.register(key)
 
     else:
-        # Retrieve previously stored KeysLayer key (if any)
+        # Resolve the key being released:
+        # prefer tracked key (layer-safe), fall back to current layer lookup
         key = self.pressed_keys.pop(key_pos, None)
 
         if key is None:
-            # Fallback: look up from top layer if not tracked
-            active_layer = self.layers_manager.get_top_layer()
-            try:
-                key = self.keymap[active_layer][logical_index]
-            except IndexError:
-                print(
-                    f"Key index {logical_index} out of bounds for layer {active_layer}"
-                )
-                return
-
+            key = _get_key(self, logical_index)
             if key is None:
                 return
 
-        if isinstance(key, KeysLayer):
-            key.on_release(self.layers_manager, self.keyboard, timestamp)
-            return
-
         print("key:", key.key_name, "released")
 
+        # Dispatch release event
         key.on_release(self.layers_manager, self.keyboard, timestamp)
 
+        # Clear active sticky keys unless the released key itself is sticky
         if not isinstance(key, SK):
             self.sticky_key_manager.clear_stickies(self.keyboard, timestamp)
