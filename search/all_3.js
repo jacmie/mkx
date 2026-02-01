@@ -19,9 +19,10 @@ var searchData=
   ['3_20layerstatusledarray_16',['4.5.3 LayerStatusLedArray',['../p_4.html#p_4_5_3',1,'']]],
   ['3_20mkx_20keyboard_17',['1.3 MKX Keyboard',['../p_1.html#p_1_3',1,'']]],
   ['3_20mkx_20periphery_18',['4.3 MKX Periphery',['../p_4.html#p_4_3',1,'']]],
-  ['3_20optional_20build_20html_20documentation_20with_20doxygen_19',['2.5.3 Optional - Build HTML documentation with Doxygen',['../p_2.html#p_2_5_3',1,'']]],
+  ['3_20optional_20testing_20tools_19',['2.5.3 Optional - Testing Tools',['../p_2.html#p_2_5_3',1,'']]],
   ['3_20set_5fswirl_20',['4.6.2.3 set_swirl()',['../p_4.html#p_4_6_2_3',1,'']]],
   ['3_20synchronize_20github_20repository_20with_20the_20circuitpy_20drive_21',['6.3 Synchronize Github repository with the CIRCUITPY drive',['../p_6.html#p_6_3',1,'']]],
   ['3_20visual_20mode_22',['5.8.3 Visual Mode',['../p_5.html#p_5_8_3',1,'']]],
-  ['3_5fget_5fstarted_2emd_23',['3_Get_Started.md',['../3__Get__Started_8md.html',1,'']]]
+  ['3_20write_20new_20tests_23',['6.4.3 Write New Tests',['../p_6.html#p_6_4_3',1,'']]],
+  ['3_5fget_5fstarted_2emd_24',['3_Get_Started.md',['../3__Get__Started_8md.html',1,'']]]
 ];

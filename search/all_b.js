@@ -7,7 +7,7 @@ var searchData=
   ['booster_20keyboard_4',['3.2 Booster Keyboard',['../p_3.html#p_3_2',1,'']]],
   ['boot_20config_5',['4.1 Boot Config',['../p_4.html#p_4_1',1,'']]],
   ['build_20binary_20mkx_20library_6',['build binary mkx library',['../p_2.html#p_2_5_1',1,'2.5.1 Optional - Build Binary MKX Library'],['../p_6.html#p_6_2',1,'6.2 Build Binary MKX Library']]],
-  ['build_20html_20docs_7',['6.4 Build HTML docs',['../p_6.html#p_6_4',1,'']]],
-  ['build_20html_20documentation_20with_20doxygen_8',['2.5.3 Optional - Build HTML documentation with Doxygen',['../p_2.html#p_2_5_3',1,'']]],
+  ['build_20html_20docs_7',['6.5 Build HTML docs',['../p_6.html#p_6_5',1,'']]],
+  ['build_20html_20documentation_20with_20doxygen_8',['2.5.4 Optional - Build HTML documentation with Doxygen',['../p_2.html#p_2_5_4',1,'']]],
   ['bundles_9',['2.3 Install Adafruit Bundles',['../p_2.html#p_2_3',1,'']]]
 ];

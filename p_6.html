@@ -110,7 +110,12 @@ $(document).ready(function(){initNavTree('p_6.html',''); initResizable(); });
 <ul><li class="level1"><a href="#p_6_1">6.1 Code rules</a></li>
 <li class="level1"><a href="#p_6_2">6.2 Build Binary MKX Library</a></li>
 <li class="level1"><a href="#p_6_3">6.3 Synchronize Github repository with the CIRCUITPY drive</a></li>
-<li class="level1"><a href="#p_6_4">6.4 Build HTML docs</a></li>
+<li class="level1"><a href="#p_6_4">6.4 Testing</a><ul><li class="level2"><a href="#p_6_4_1">6.4.1 Run Tests</a></li>
+<li class="level2"><a href="#p_6_4_2">6.4.2 Code Coverage</a></li>
+<li class="level2"><a href="#p_6_4_3">6.4.3 Write New Tests</a></li>
+</ul>
+</li>
+<li class="level1"><a href="#p_6_5">6.5 Build HTML docs</a></li>
 </ul>
 </div>
 <div class="textblock"><h1><a class="anchor" id="p_6_1"></a>
@@ -153,7 +158,50 @@ $(document).ready(function(){initNavTree('p_6.html',''); initResizable(); });
 <div class="line">  --clean               Remove compiled files (.compiled directory).</div>
 <div class="line">  --tidy                Remove all uploaded content from the MCU mountpoint.</div>
 </div><!-- fragment --><h1><a class="anchor" id="p_6_4"></a>
-6.4 Build HTML docs</h1>
+6.4 Testing</h1>
+<p>Before deploying to hardware, use the included test suite to verify functionality.</p>
+<p>Install testing tools see <a class="el" href="p_2.html#p_2_5_3">2.5.3 Optional - Testing Tools</a></p>
+<h2><a class="anchor" id="p_6_4_1"></a>
+6.4.1 Run Tests</h2>
+<p>From the <b>tests</b> directory, run the test suite:</p>
+<div class="fragment"><div class="line">cd tests</div>
+<div class="line">pytest -v</div>
+</div><!-- fragment --><p>To see which features are being tested:</p>
+<div class="fragment"><div class="line">pytest -v --collect-only</div>
+</div><!-- fragment --><h2><a class="anchor" id="p_6_4_2"></a>
+6.4.2 Code Coverage</h2>
+<p>Check code coverage to identify untested functionality:</p>
+<div class="fragment"><div class="line">coverage run -m pytest</div>
+<div class="line">coverage report -m</div>
+</div><!-- fragment --><p>This shows a detailed coverage report for each file.</p>
+<h2><a class="anchor" id="p_6_4_3"></a>
+6.4.3 Write New Tests</h2>
+<p>Tests are located in the <b>tests</b> directory. Use existing test files as templates:</p>
+<ul>
+<li><code>test_keys_standard.py</code> - Example: testing basic key press/release</li>
+<li><code>test_manager_layers.py</code> - Example: testing layer management</li>
+<li><code>test_keys_holdtap.py</code> - Example: testing timing logic</li>
+<li><code>test_custom_key_template.py</code> - Template for creating new tests</li>
+</ul>
+<p>Key points for writing tests:</p>
+<ol type="1">
+<li>Use the provided pytest fixtures from <code>conftest.py</code>:<ul>
+<li><code>mock_keyboard</code> - Simulated keyboard for tracking key events</li>
+<li><code>mock_digitalio</code> - Simulated GPIO pins</li>
+<li><code>layer_manager</code> - Pre-configured layer manager</li>
+<li><code>timed_key_tracker</code> - For testing time-dependent keys</li>
+</ul>
+</li>
+<li>Tests mock all CircuitPython hardware dependencies, so tests run on desktop without hardware</li>
+<li>Follow naming convention: <code>test_*.py</code> files with <code>test_*()</code> functions</li>
+</ol>
+<p>Example test:</p>
+<div class="fragment"><div class="line"><span class="keyword">def </span>test_my_feature(mock_keyboard, layer_manager):</div>
+<div class="line">    <span class="stringliteral">&quot;&quot;&quot;Test my feature with mocked hardware.&quot;&quot;&quot;</span></div>
+<div class="line">    <span class="comment"># Your test code here</span></div>
+<div class="line">    <span class="keyword">assert</span> mock_keyboard.press_count &gt;= 1</div>
+</div><!-- fragment --><h1><a class="anchor" id="p_6_5"></a>
+6.5 Build HTML docs</h1>
 <p>The documentation is build with Doxygen: <br  />
  <a href="https://www.doxygen.nl/">https://www.doxygen.nl/</a></p>
 <p>From the <b>docs</b> directory, run: </p><div class="fragment"><div class="line">doxygen ./Doxyfile</div>

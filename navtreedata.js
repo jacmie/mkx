@@ -39,7 +39,8 @@ var NAVTREE =
       [ "2.5 Optional", "p_2.html#p_2_5", [
         [ "2.5.1 Optional - Build Binary MKX Library", "p_2.html#p_2_5_1", null ],
         [ "2.5.2 Optional - Synchronize Github repository with the CIRCUITPY drive", "p_2.html#p_2_5_2", null ],
-        [ "2.5.3 Optional - Build HTML documentation with Doxygen", "p_2.html#p_2_5_3", null ]
+        [ "2.5.3 Optional - Testing Tools", "p_2.html#p_2_5_3", null ],
+        [ "2.5.4 Optional - Build HTML documentation with Doxygen", "p_2.html#p_2_5_4", null ]
       ] ]
     ] ],
     [ "3 Get Started", "p_3.html", [
@@ -109,7 +110,12 @@ var NAVTREE =
       [ "6.1 Code rules", "p_6.html#p_6_1", null ],
       [ "6.2 Build Binary MKX Library", "p_6.html#p_6_2", null ],
       [ "6.3 Synchronize Github repository with the CIRCUITPY drive", "p_6.html#p_6_3", null ],
-      [ "6.4 Build HTML docs", "p_6.html#p_6_4", null ]
+      [ "6.4 Testing", "p_6.html#p_6_4", [
+        [ "6.4.1 Run Tests", "p_6.html#p_6_4_1", null ],
+        [ "6.4.2 Code Coverage", "p_6.html#p_6_4_2", null ],
+        [ "6.4.3 Write New Tests", "p_6.html#p_6_4_3", null ]
+      ] ],
+      [ "6.5 Build HTML docs", "p_6.html#p_6_5", null ]
     ] ]
   ] ]
 ];

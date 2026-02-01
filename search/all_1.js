@@ -17,7 +17,8 @@ var searchData=
   ['1_20normal_20mode_14',['5.8.1 Normal Mode',['../p_5.html#p_5_8_1',1,'']]],
   ['1_20optional_20build_20binary_20mkx_20library_15',['2.5.1 Optional - Build Binary MKX Library',['../p_2.html#p_2_5_1',1,'']]],
   ['1_20peripherycentral_16',['4.3.1 PeripheryCentral',['../p_4.html#p_4_3_1',1,'']]],
-  ['1_20standard_20keys_17',['5.1 Standard Keys',['../p_5.html#p_5_1',1,'']]],
-  ['10_20mouse_20keys_18',['5.10 Mouse Keys',['../p_5.html#p_5_10',1,'']]],
-  ['1_5fmain_5fconcepts_2emd_19',['1_Main_Concepts.md',['../1__Main__Concepts_8md.html',1,'']]]
+  ['1_20run_20tests_17',['6.4.1 Run Tests',['../p_6.html#p_6_4_1',1,'']]],
+  ['1_20standard_20keys_18',['5.1 Standard Keys',['../p_5.html#p_5_1',1,'']]],
+  ['10_20mouse_20keys_19',['5.10 Mouse Keys',['../p_5.html#p_5_10',1,'']]],
+  ['1_5fmain_5fconcepts_2emd_20',['1_Main_Concepts.md',['../1__Main__Concepts_8md.html',1,'']]]
 ];
