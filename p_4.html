@@ -108,7 +108,7 @@ $(document).ready(function(){initNavTree('p_4.html',''); initResizable(); });
 <div class="contents">
 <div class="toc"><h3>Table of Contents</h3>
 <ul><li class="level1"><a href="#p_4_1">4.1 Boot Config</a></li>
-<li class="level1"><a href="#p_4_2">4.2 MKX Central</a><ul><li class="level2"><a href="#p_4_2_1">4.2.1 add_central_periphery</a></li>
+<li class="level1"><a href="#p_4_2">4.2 MKX Central</a><ul><li class="level2"><a href="#p_4_2_1">4.2.1 add_periphery_central</a></li>
 <li class="level2"><a href="#p_4_2_2">4.2.2 add_interface</a></li>
 <li class="level2"><a href="#p_4_2_3">4.2.3 add_layer_status_led</a></li>
 <li class="level2"><a href="#p_4_2_4">4.2.4 add_backlight</a></li>
@@ -253,10 +253,10 @@ $(document).ready(function(){initNavTree('p_4.html',''); initResizable(); });
 <div class="line"> </div>
 <div class="line">mkx_central = MKX_Central()</div>
 </div><!-- fragment --><h2><a class="anchor" id="p_4_2_1"></a>
-4.2.1 add_central_periphery</h2>
+4.2.1 add_periphery_central</h2>
 <p>Add <b>PeripheryCentral</b> to the ***MKX_Central**. <br  />
 </p>
-<div class="fragment"><div class="line">mkx_central.add_central_periphery(</div>
+<div class="fragment"><div class="line">mkx_central.add_periphery_central(</div>
 <div class="line">    central_periphery: PeripheryAbstract</div>
 <div class="line">)</div>
 </div><!-- fragment --><p><b>central_periphery</b> <br  />
@@ -267,7 +267,7 @@ $(document).ready(function(){initNavTree('p_4.html',''); initResizable(); });
 <div class="line">mkx_central = MKX_Central()</div>
 <div class="line"> </div>
 <div class="line">central_peryphery = PeripheryCentral(<span class="stringliteral">&quot;central&quot;</span>, col_pins, row_pins)</div>
-<div class="line">mkx_central.add_central_periphery(central_peryphery)</div>
+<div class="line">mkx_central.add_periphery_central(central_peryphery)</div>
 </div><!-- fragment --><h2><a class="anchor" id="p_4_2_2"></a>
 4.2.2 add_interface</h2>
 <p>Add <b>Interface</b> of a <b>Periphery</b> to the <b>MKX_Central</b>. <br  />
@@ -447,7 +447,7 @@ $(document).ready(function(){initNavTree('p_4.html',''); initResizable(); });
 <div class="line">row_pins = (board.GP10, board.GP11, board.GP13, board.GP15, board.GP17)</div>
 <div class="line"> </div>
 <div class="line">central_peryphery = PeripheryCentral(<span class="stringliteral">&quot;central_peryphery&quot;</span>, col_pins, row_pins)</div>
-<div class="line">mkx_central.add_central_periphery(central_peryphery)</div>
+<div class="line">mkx_central.add_periphery_central(central_peryphery)</div>
 <div class="line"> </div>
 <div class="line">interface_central = InterfaceCentral(central_peryphery, 0, 0, 5, 4)</div>
 <div class="line">mkx_central.add_interface(interface_central)</div>
@@ -527,7 +527,7 @@ $(document).ready(function(){initNavTree('p_4.html',''); initResizable(); });
 <div class="line">row_pins = (board.GP10, board.GP11, board.GP13, board.GP15, board.GP17)</div>
 <div class="line"> </div>
 <div class="line">central_peryphery = PeripheryCentral(<span class="stringliteral">&quot;central_peryphery&quot;</span>, col_pins, row_pins)</div>
-<div class="line">mkx_central.add_central_periphery(central_peryphery)</div>
+<div class="line">mkx_central.add_periphery_central(central_peryphery)</div>
 <div class="line"> </div>
 <div class="line">interface_central = InterfaceCentral(central_peryphery, 0, 0, 5, 4)</div>
 <div class="line">mkx_central.add_interface(interface_central)</div>

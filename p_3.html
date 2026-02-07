@@ -135,24 +135,21 @@ $(document).ready(function(){initNavTree('p_3.html',''); initResizable(); });
 <div class="line"> </div>
 <div class="line"><span class="keyword">import</span> board</div>
 <div class="line"> </div>
-<div class="line"><span class="keyword">from</span> mkx.mkx_central <span class="keyword">import</span> MKX_Central</div>
+<div class="line"><span class="keyword">from</span> mkx.mkx_single <span class="keyword">import</span> MKX_Single</div>
 <div class="line"> </div>
 <div class="line"><span class="keyword">from</span> mkx.keys_standard <span class="keyword">import</span> *</div>
 <div class="line"><span class="keyword">from</span> mkx.keys_modifiers <span class="keyword">import</span> M_LSFT</div>
 <div class="line"><span class="keyword">from</span> mkx.keys_sequence <span class="keyword">import</span> SEQ</div>
 <div class="line"> </div>
-<div class="line"><span class="keyword">from</span> mkx.periphery_central <span class="keyword">import</span> PeripheryCentral</div>
-<div class="line"><span class="keyword">from</span> mkx.interface_central <span class="keyword">import</span> InterfaceCentral</div>
+<div class="line"><span class="keyword">from</span> mkx.periphery_single <span class="keyword">import</span> PeripherySingle</div>
+<div class="line"><span class="keyword">from</span> mkx.interface_single <span class="keyword">import</span> InterfaceSingle</div>
 <div class="line"> </div>
-<div class="line">keyboard = MKX_Central()</div>
+<div class="line">keyboard = MKX_Single()</div>
 <div class="line"> </div>
 <div class="line">col_pins = (board.D5,)</div>
 <div class="line">row_pins = (board.D6,)</div>
-<div class="line">hardware_keypass_peryphery = PeripheryCentral(<span class="stringliteral">&quot;hardware_keypass&quot;</span>, col_pins, row_pins)</div>
-<div class="line">keyboard.add_central_periphery(hardware_keypass_peryphery)</div>
-<div class="line"> </div>
-<div class="line">interface_central = InterfaceCentral(hardware_keypass_peryphery, 0, 0, 0, 0)</div>
-<div class="line">keyboard.add_interface(interface_central)</div>
+<div class="line">keyboard.add_periphery_single(PeripherySingle(col_pins, row_pins))</div>
+<div class="line">keyboard.add_interface(InterfaceSingle(0, 0, 0, 0))</div>
 <div class="line"> </div>
 <div class="line"><span class="comment"># fmt: off</span></div>
 <div class="line"> </div>
@@ -218,7 +215,7 @@ $(document).ready(function(){initNavTree('p_3.html',''); initResizable(); });
 <div class="line">row_pins = (board.GP10, board.GP11, board.GP13, board.GP15, board.GP17)</div>
 <div class="line"> </div>
 <div class="line">central_peryphery = PeripheryCentral(<span class="stringliteral">&quot;booster_l&quot;</span>, col_pins, row_pins)</div>
-<div class="line">keyboard.add_central_periphery(central_peryphery)</div>
+<div class="line">keyboard.add_periphery_central(central_peryphery)</div>
 <div class="line"> </div>
 <div class="line">interface_central = InterfaceCentral(central_peryphery, 0, 0, 5, 4)</div>
 <div class="line">keyboard.add_interface(interface_central)</div>
@@ -343,7 +340,7 @@ $(document).ready(function(){initNavTree('p_3.html',''); initResizable(); });
 <div class="line">col_pins = (board.D13, board.D12, board.D11, board.A1, board.A4, board.A3)</div>
 <div class="line">row_pins = (board.A2, board.MISO, board.D10, board.D9, board.D6, board.D5)</div>
 <div class="line">central_peryphery = PeripheryCentral(<span class="stringliteral">&quot;sq_l&quot;</span>, col_pins, row_pins)</div>
-<div class="line">keyboard.add_central_periphery(central_peryphery)</div>
+<div class="line">keyboard.add_periphery_central(central_peryphery)</div>
 <div class="line"> </div>
 <div class="line">interface_central = InterfaceCentral(central_peryphery, 0, 0, 5, 5)</div>
 <div class="line">keyboard.add_interface(interface_central)</div>

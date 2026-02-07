@@ -51,7 +51,7 @@ var NAVTREE =
     [ "4 MKX API", "p_4.html", [
       [ "4.1 Boot Config", "p_4.html#p_4_1", null ],
       [ "4.2 MKX Central", "p_4.html#p_4_2", [
-        [ "4.2.1 add_central_periphery", "p_4.html#p_4_2_1", null ],
+        [ "4.2.1 add_periphery_central", "p_4.html#p_4_2_1", null ],
         [ "4.2.2 add_interface", "p_4.html#p_4_2_2", null ],
         [ "4.2.3 add_layer_status_led", "p_4.html#p_4_2_3", null ],
         [ "4.2.4 add_backlight", "p_4.html#p_4_2_4", null ],

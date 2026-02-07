@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['2_201_20add_5fcentral_5fperiphery_0',['4.2.1 add_central_periphery',['../p_4.html#p_4_2_1',1,'']]],
+  ['2_201_20add_5fperiphery_5fcentral_0',['4.2.1 add_periphery_central',['../p_4.html#p_4_2_1',1,'']]],
   ['2_201_20faster_1',['4.6.2.1 faster()',['../p_4.html#p_4_6_2_1',1,'']]],
   ['2_201_20install_20circuit_20python_2',['2.1 Install Circuit Python',['../p_2.html#p_2_1',1,'']]],
   ['2_202_20add_5finterface_3',['4.2.2 add_interface',['../p_4.html#p_4_2_2',1,'']]],

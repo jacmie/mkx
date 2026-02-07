@@ -3,7 +3,7 @@ var searchData=
   ['1_201_20central_0',['1.1 Central',['../p_1.html#p_1_1',1,'']]],
   ['1_202_20periphery_1',['1.2 Periphery',['../p_1.html#p_1_2',1,'']]],
   ['1_203_20mkx_20keyboard_2',['1.3 MKX Keyboard',['../p_1.html#p_1_3',1,'']]],
-  ['1_20add_5fcentral_5fperiphery_3',['4.2.1 add_central_periphery',['../p_4.html#p_4_2_1',1,'']]],
+  ['1_20add_5fperiphery_5fcentral_3',['4.2.1 add_periphery_central',['../p_4.html#p_4_2_1',1,'']]],
   ['1_20backlightneopixelstatic_4',['4.6.1 BacklightNeopixelStatic',['../p_4.html#p_4_6_1',1,'']]],
   ['1_20boot_20config_5',['4.1 Boot Config',['../p_4.html#p_4_1',1,'']]],
   ['1_20code_20rules_6',['6.1 Code rules',['../p_6.html#p_6_1',1,'']]],

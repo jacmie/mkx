@@ -2,7 +2,7 @@ var searchData=
 [
   ['4_201_20boot_20config_0',['4.1 Boot Config',['../p_4.html#p_4_1',1,'']]],
   ['4_201_20run_20tests_1',['6.4.1 Run Tests',['../p_6.html#p_6_4_1',1,'']]],
-  ['4_202_201_20add_5fcentral_5fperiphery_2',['4.2.1 add_central_periphery',['../p_4.html#p_4_2_1',1,'']]],
+  ['4_202_201_20add_5fperiphery_5fcentral_2',['4.2.1 add_periphery_central',['../p_4.html#p_4_2_1',1,'']]],
   ['4_202_202_20add_5finterface_3',['4.2.2 add_interface',['../p_4.html#p_4_2_2',1,'']]],
   ['4_202_203_20add_5flayer_5fstatus_5fled_4',['4.2.3 add_layer_status_led',['../p_4.html#p_4_2_3',1,'']]],
   ['4_202_204_20add_5fbacklight_5',['4.2.4 add_backlight',['../p_4.html#p_4_2_4',1,'']]],
