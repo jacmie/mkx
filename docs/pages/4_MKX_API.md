@@ -153,12 +153,12 @@ from mkx.mkx_central import MKX_Central
 mkx_central = MKX_Central()
 ```
 
-@subsection p_4_2_1 4.2.1 add_central_periphery
+@subsection p_4_2_1 4.2.1 add_periphery_central
 
 Add **PeripheryCentral** to the ***MKX_Central**.  
 
 ``` {.py}
-mkx_central.add_central_periphery(
+mkx_central.add_periphery_central(
     central_periphery: PeripheryAbstract
 )
 ```
@@ -174,7 +174,7 @@ from mkx.periphery_central import PeripheryCentral
 mkx_central = MKX_Central()
 
 central_peryphery = PeripheryCentral("central", col_pins, row_pins)
-mkx_central.add_central_periphery(central_peryphery)
+mkx_central.add_periphery_central(central_peryphery)
 ```
 
 @subsection p_4_2_2 4.2.2 add_interface
@@ -411,7 +411,7 @@ col_pins = (board.GP9, board.GP7, board.GP5, board.GP4, board.GP3, board.GP2)
 row_pins = (board.GP10, board.GP11, board.GP13, board.GP15, board.GP17)
  
 central_peryphery = PeripheryCentral("central_peryphery", col_pins, row_pins)
-mkx_central.add_central_periphery(central_peryphery)
+mkx_central.add_periphery_central(central_peryphery)
 
 interface_central = InterfaceCentral(central_peryphery, 0, 0, 5, 4)
 mkx_central.add_interface(interface_central)
@@ -503,7 +503,7 @@ col_pins = (board.GP9, board.GP7, board.GP5, board.GP4, board.GP3, board.GP2)
 row_pins = (board.GP10, board.GP11, board.GP13, board.GP15, board.GP17)
  
 central_peryphery = PeripheryCentral("central_peryphery", col_pins, row_pins)
-mkx_central.add_central_periphery(central_peryphery)
+mkx_central.add_periphery_central(central_peryphery)
 
 interface_central = InterfaceCentral(central_peryphery, 0, 0, 5, 4)
 mkx_central.add_interface(interface_central)

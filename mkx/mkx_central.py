@@ -3,6 +3,7 @@ import json
 from collections import OrderedDict
 
 from mkx.mkx_abstract import MKX_Abstract
+from mkx.periphery_central import PeripheryCentral
 
 from mkx.communication_message import sync_messages, debounce
 
@@ -10,11 +11,24 @@ FRAME_INTERVAL_MS = 5
 
 
 class MKX_Central(MKX_Abstract):
-    def __init__(self, keymap=None):
-        super().__init__(keymap)
+    def __init__(self):
+        super().__init__()
+        self.periphery_central = None
 
-    def add_central_periphery(self, central_periphery):
-        self.central_periphery = central_periphery
+    def add_periphery_central(self, periphery_central: PeripheryCentral):
+        self.periphery_central = periphery_central
+
+    def _periphery_central_send(self):
+        if self.periphery_central:
+            signal = self.periphery_central.get_key_events()
+            for col, row, pressed in signal:
+                self.periphery_central.send(
+                    "key_event",
+                    OrderedDict(
+                        [("col", col), ("row", row), ("pressed", pressed)],
+                    ),
+                    verbose=False,
+                )
 
     def send_to(self, device_id: str, msg_type: str, data: dict):
         adapter = self.adapters.get(device_id)
@@ -23,19 +37,7 @@ class MKX_Central(MKX_Abstract):
         else:
             print(f"[{device_id}] not connected, can't send")
 
-    def central_periphery_send(self):
-        if self.central_periphery:
-            signal = self.central_periphery.get_key_events()
-            for col, row, pressed in signal:
-                self.central_periphery.send(
-                    "key_event",
-                    OrderedDict(
-                        [("col", col), ("row", row), ("pressed", pressed)],
-                    ),
-                    verbose=False,
-                )
-
-    def process_key_event_msg(self, event_json):
+    def _process_key_event_msg(self, event_json):
         timestamp = event_json["timestamp"]
         device_id = event_json["device_id"]
         local_col = event_json["col"]
@@ -62,11 +64,8 @@ class MKX_Central(MKX_Abstract):
         super().process_key_event(device_id, logical_index, pressed, timestamp)
 
     def run_once(self):
-        if self._use_ble:
-            self._ble.ensure_advertising()
-
-            if not self._ble.devices:
-                return
+        if not self._ensure_ble():
+            return
 
         now = time.monotonic_ns() // 1_000_000  # Current time in ms
 
@@ -80,7 +79,7 @@ class MKX_Central(MKX_Abstract):
                 if time.monotonic_ns() // 1_000_000 >= frame_end:
                     break
 
-                self.central_periphery_send()
+                self._periphery_central_send()
 
                 # Loop over all interfaces to process received data
                 for interface in self.interfaces:
@@ -100,14 +99,12 @@ class MKX_Central(MKX_Abstract):
             if debounced_msg:
                 print("debounced_msg:", json.dumps(debounced_msg))
 
-            # AddOns TO DO
-
             self.timed_keys_manager.update(
                 self.layers_manager, self.keyboard, time.monotonic_ns() // 1_000_000
             )
 
             for key_event in debounced_msg:
-                self.process_key_event_msg(key_event)
+                self._process_key_event_msg(key_event)
                 print("")
 
             if self.backlight:
@@ -115,11 +112,10 @@ class MKX_Central(MKX_Abstract):
 
             self.last_frame_time = frame_end
 
+    def run_forever(self):
+        if self._init_keyboard():
+            sys.exit(1)
 
-# dynamic throttling Pseudocode:
-# if active_keys:
-#     loop_delay = 1  # ms — high responsiveness
-# elif recent_key_activity < 500 ms:
-#     loop_delay = 5  # ms — balance
-# else:
-#     loop_delay = 10–20  # ms — power saving
+        self.last_frame_time = time.monotonic_ns() // 1_000_000
+        while True:
+            self.run_once()

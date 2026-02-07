@@ -5,7 +5,9 @@ from adafruit_hid.keyboard import Keyboard
 
 from mkx.ble import BLE
 
+from mkx.periphery_single import PeripherySingle
 from mkx.interface_abstract import InterfaceAbstract
+from mkx.keys_abstract import KeysAbstract
 
 from mkx.layer_status_led_abstract import LayerStatusLedAbstract
 from mkx.manager_layers import LayersManager
@@ -16,16 +18,16 @@ from mkx.backlight_abstract import BacklightAbstract
 from mkx.check import check
 from mkx.process_key_event import process_key_event as _process_key_event
 
-FRAME_INTERVAL_MS = 5
+# FRAME_INTERVAL_MS = 5
 
 
 class MKX_Abstract:
-    def __init__(self, keymap=None):
+    def __init__(self):
         print("MKX -> Start:")
 
         self.col_size = 0
         self.row_size = 0
-        self.keymap = keymap or []
+        self.keymap = []
         self.interfaces = []
 
         self.last_frame_time = 0
@@ -40,6 +42,7 @@ class MKX_Abstract:
         self._use_ble = False
         self._ble = None
 
+        self.periphery_single = None
         self.keyboard = None
 
     def _init_keyboard(self):
@@ -53,8 +56,20 @@ class MKX_Abstract:
         else:
             self.keyboard = Keyboard(usb_hid.devices)
 
+    def _ensure_ble(self):
+        if self._use_ble:
+            self._ble.ensure_advertising()
+
+            if not self._ble.devices:
+                return False
+
+        return True
+
     def use_ble(self, use_ble: bool):
         self._use_ble = use_ble
+
+    def add_periphery_single(self, periphery_single: PeripherySingle):
+        self.periphery_single = periphery_single
 
     def add_interface(self, interface: InterfaceAbstract):
         self.interfaces.append(interface)
@@ -62,7 +77,9 @@ class MKX_Abstract:
     def add_layer_status_led(self, status_led: LayerStatusLedAbstract):
         self.layers_manager.add_layer_status_led(status_led)
 
-    def add_keymap(self, keymap, col_size, row_size):
+    def add_keymap(
+        self, keymap: list[list[KeysAbstract]], col_size: int, row_size: int
+    ):
         self.keymap = keymap
         self.col_size = col_size
         self.row_size = row_size
@@ -74,37 +91,47 @@ class MKX_Abstract:
     def add_backlight(self, backlight: BacklightAbstract):
         self.backlight = backlight
 
+    def collect_key_events(self):
+        if self.periphery_single:
+            return self.periphery_single.get_key_events()
+        return []
+        # for col, row, pressed in signal:
+        #     self.central_periphery.send(
+        #         "key_event",
+        #         OrderedDict(
+        #             [("col", col), ("row", row), ("pressed", pressed)],
+        #         ),
+        #         verbose=False,
+        #     )
+
     def process_key_event(self, device_id, logical_index, pressed, timestamp):
         _process_key_event(self, device_id, logical_index, pressed, timestamp)
 
     def run_once(self):
-        # if self._use_ble:
-        #     self._ble.ensure_advertising()
+        if not self._ensure_ble():
+            return
 
-        #     if not self._ble.devices:
-        #         return
-
-        # now = time.monotonic_ns() // 1_000_000
+        now = time.monotonic_ns() // 1_000_000
         # if now - self.last_frame_time < FRAME_INTERVAL_MS:
         #     return
 
-        # events = self.collect_key_events()
+        events = self.collect_key_events()
 
-        # self.timed_keys_manager.update(self.layers_manager, self.keyboard, now)
+        self.timed_keys_manager.update(self.layers_manager, self.keyboard, now)
 
-        # for event in events:
-        #     self.process_key_event(event)
+        for event in events:
+            self.process_key_event(event)
 
-        # if self.backlight:
-        #     self.backlight.shine()
+        if self.backlight:
+            self.backlight.shine()
 
         # self.last_frame_time = now
-        pass
+        # pass
 
     def run_forever(self):
         if self._init_keyboard():
             sys.exit(1)
 
-        self.last_frame_time = time.monotonic_ns() // 1_000_000
+        # self.last_frame_time = time.monotonic_ns() // 1_000_000
         while True:
             self.run_once()
