@@ -34,24 +34,21 @@ If this happens, try turning Bluetooth off and on again and then reconnecting th
 
 import board
 
-from mkx.mkx_central import MKX_Central
+from mkx.mkx_single import MKX_Single
 
 from mkx.keys_standard import *
 from mkx.keys_modifiers import M_LSFT
 from mkx.keys_sequence import SEQ
 
-from mkx.periphery_central import PeripheryCentral
-from mkx.interface_central import InterfaceCentral
+from mkx.periphery_single import PeripherySingle
+from mkx.interface_single import InterfaceSingle
 
-keyboard = MKX_Central()
+keyboard = MKX_Single()
 
 col_pins = (board.D5,)
 row_pins = (board.D6,)
-hardware_keypass_peryphery = PeripheryCentral("hardware_keypass", col_pins, row_pins)
-keyboard.add_periphery_central(hardware_keypass_peryphery)
-
-interface_central = InterfaceCentral(hardware_keypass_peryphery, 0, 0, 0, 0)
-keyboard.add_interface(interface_central)
+keyboard.add_periphery_single(PeripherySingle(col_pins, row_pins))
+keyboard.add_interface(InterfaceSingle(0, 0, 0, 0))
 
 # fmt: off
 

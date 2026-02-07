@@ -6,6 +6,7 @@ from mkx.mkx_abstract import MKX_Abstract
 from mkx.periphery_central import PeripheryCentral
 
 from mkx.communication_message import sync_messages, debounce
+from mkx.process_key_event import process_key_event
 
 FRAME_INTERVAL_MS = 5
 
@@ -14,6 +15,7 @@ class MKX_Central(MKX_Abstract):
     def __init__(self):
         super().__init__()
         self.periphery_central = None
+        self.last_frame_time = 0
 
     def add_periphery_central(self, periphery_central: PeripheryCentral):
         self.periphery_central = periphery_central
@@ -29,6 +31,9 @@ class MKX_Central(MKX_Abstract):
                     ),
                     verbose=False,
                 )
+        else:
+            print("No periphery central registered!")
+            exit(1)
 
     def send_to(self, device_id: str, msg_type: str, data: dict):
         adapter = self.adapters.get(device_id)
@@ -45,23 +50,17 @@ class MKX_Central(MKX_Abstract):
         pressed = event_json["pressed"]
 
         # find the interface for this device_id
-        iface = None
-        for i in self.interfaces:
-            if i.device_id == device_id:
-                iface = i
-                break
+        iface = self._get_interface(device_id)
         if iface is None:
-            print(f"No interface registered for device_id {device_id}")
-            return
+            print(f"No interface registered for device_id {device_id}!")
+            exit(1)
 
         # translate to flat index through the interface’s coordinate map
-        try:
-            logical_index = iface.logical_index(local_col, local_row)
-        except IndexError as e:
-            print(e)
+        logical_index = self._get_logical_index(iface, local_col, local_row)
+        if logical_index is None:
             return
 
-        super().process_key_event(device_id, logical_index, pressed, timestamp)
+        process_key_event(self, device_id, logical_index, pressed, timestamp)
 
     def run_once(self):
         if not self._ensure_ble():
@@ -113,8 +112,7 @@ class MKX_Central(MKX_Abstract):
             self.last_frame_time = frame_end
 
     def run_forever(self):
-        if self._init_keyboard():
-            sys.exit(1)
+        self._init_keyboard()
 
         self.last_frame_time = time.monotonic_ns() // 1_000_000
         while True:

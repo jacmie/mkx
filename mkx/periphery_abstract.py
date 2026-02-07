@@ -26,7 +26,7 @@ class PeripheryAbstract:
         )
 
     def get_key_events(self) -> list[tuple[int, int, bool]]:
-        """Returns a list of (row, col, pressed) events"""
+        """Returns a list of (col, row, pressed) events"""
         return self.matrix_scanner.get_key_events()
 
     def receive(self, verbose=False) -> list[dict]:

@@ -16,9 +16,7 @@ from mkx.keys_sticky import StickyKeyManager
 from mkx.backlight_abstract import BacklightAbstract
 
 from mkx.check import check
-from mkx.process_key_event import process_key_event as _process_key_event
-
-# FRAME_INTERVAL_MS = 5
+from mkx.process_key_event import process_key_event
 
 
 class MKX_Abstract:
@@ -29,9 +27,9 @@ class MKX_Abstract:
         self.row_size = 0
         self.keymap = []
         self.interfaces = []
-
-        self.last_frame_time = 0
-        self.pressed_keys = {}
+        self.pressed_keys: dict[int, bool] = (
+            {}
+        )  # used to track time-dependent keys and prevent stuck keys when layers change while held
 
         self.timed_keys_manager = TimedKeysManager()
         self.sticky_key_manager = StickyKeyManager()
@@ -44,26 +42,6 @@ class MKX_Abstract:
 
         self.periphery_single = None
         self.keyboard = None
-
-    def _init_keyboard(self):
-        if check(self.col_size, self.row_size, self.keymap, self.interfaces):
-            sys.exit(1)
-
-        if self._use_ble:
-            self._ble = BLE()
-            self._ble.init()
-            self.keyboard = Keyboard(self._ble.devices)
-        else:
-            self.keyboard = Keyboard(usb_hid.devices)
-
-    def _ensure_ble(self):
-        if self._use_ble:
-            self._ble.ensure_advertising()
-
-            if not self._ble.devices:
-                return False
-
-        return True
 
     def use_ble(self, use_ble: bool):
         self._use_ble = use_ble
@@ -91,47 +69,86 @@ class MKX_Abstract:
     def add_backlight(self, backlight: BacklightAbstract):
         self.backlight = backlight
 
-    def collect_key_events(self):
-        if self.periphery_single:
-            return self.periphery_single.get_key_events()
-        return []
-        # for col, row, pressed in signal:
-        #     self.central_periphery.send(
-        #         "key_event",
-        #         OrderedDict(
-        #             [("col", col), ("row", row), ("pressed", pressed)],
-        #         ),
-        #         verbose=False,
-        #     )
+    def _init_keyboard(self):
+        if check(self.col_size, self.row_size, self.keymap, self.interfaces):
+            sys.exit(1)
 
-    def process_key_event(self, device_id, logical_index, pressed, timestamp):
-        _process_key_event(self, device_id, logical_index, pressed, timestamp)
+        if self._use_ble:
+            self._ble = BLE()
+            self._ble.init()
+            self.keyboard = Keyboard(self._ble.devices)
+        else:
+            self.keyboard = Keyboard(usb_hid.devices)
+
+    def _ensure_ble(self):
+        if self._use_ble and self._ble:
+            self._ble.ensure_advertising()
+            return bool(self._ble.devices)
+        return True
+
+    def _get_interface(self, device_id):
+        for interface in self.interfaces:
+            if interface.device_id == device_id:
+                return interface
+
+        print(f"No interface registered for device_id {device_id}!")
+        return None
+
+    def _get_logical_index(self, iface, col, row):
+        try:
+            return iface.logical_index(col, row)
+        except IndexError as e:
+            print(e)
+            return None
+
+    def _collect_key_events(self):
+        if not self.periphery_single:
+            print("No periphery single registered!")
+            exit(1)
+
+        iface = self._get_interface(self.periphery_single.device_id)
+        if iface is None:
+            print("No interface single registered!")
+            exit(1)
+
+        raw_events = self.periphery_single.get_key_events()
+        if not raw_events:
+            return []
+
+        events = []
+
+        # translate to flat index through the interface’s coordinate map
+        for local_col, local_row, pressed in raw_events:
+            logical_index = self._get_logical_index(iface, local_col, local_row)
+            if logical_index is None:
+                continue
+
+            events.append((logical_index, pressed))
+
+        return events
 
     def run_once(self):
         if not self._ensure_ble():
             return
 
         now = time.monotonic_ns() // 1_000_000
-        # if now - self.last_frame_time < FRAME_INTERVAL_MS:
-        #     return
-
-        events = self.collect_key_events()
 
         self.timed_keys_manager.update(self.layers_manager, self.keyboard, now)
 
-        for event in events:
-            self.process_key_event(event)
+        for event in self._collect_key_events():
+            logical_index, pressed = event
+
+            process_key_event(
+                self, self.periphery_single.device_id, logical_index, pressed, now
+            )
 
         if self.backlight:
             self.backlight.shine()
 
-        # self.last_frame_time = now
-        # pass
+        time.sleep(0.001)  # Keep CPU usage low
 
     def run_forever(self):
-        if self._init_keyboard():
-            sys.exit(1)
+        self._init_keyboard()
 
-        # self.last_frame_time = time.monotonic_ns() // 1_000_000
         while True:
             self.run_once()
