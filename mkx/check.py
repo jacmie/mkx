@@ -1,5 +1,10 @@
+from mkx.ansi_colors import Ansi, Ansi256
+
+
 def check(total_cols, total_rows, keymap, interfaces):
-    print(f"\n=== KEYMAP-CHECK (layer 0) ===")
+    print(
+        f"{Ansi256.MINT}=== {Ansi.BOLD}KEYMAP-CHECK {Ansi.ITALIC}(layer 0) {Ansi.NORMAL}==={Ansi.RESET}"
+    )
 
     errors = False
 
@@ -15,7 +20,9 @@ def check(total_cols, total_rows, keymap, interfaces):
             ("col_max", iface.col_max, total_cols),
         ]:
             if not (0 <= val < limit):
-                print(f"[ERROR] {name}: {dim}={val} out of bounds 0-{limit-1}")
+                print(
+                    f"{Ansi.RED}[ERROR] {name}: {Ansi256.LIGHT_ORANGE}{dim}={val} out of bounds 0-{limit-1}{Ansi.RESET}"
+                )
                 errors = True
 
             # coordinate map presence
@@ -30,9 +37,12 @@ def check(total_cols, total_rows, keymap, interfaces):
         for i, idx in enumerate(coord_map):
             if not (0 <= idx < keymap_size):
                 print(
-                    f"[ERROR] {name}: coord_map[{i}]={idx} out of range 0-{keymap_size-1}"
+                    f"{Ansi.RED}[ERROR] {name}: {Ansi256.LIGHT_ORANGE}coord_map[{i}]={idx} out of range 0-{keymap_size-1}{Ansi.RESET}"
                 )
                 errors = True
+
+        if errors:
+            return errors
 
         # --- Build a shadow matrix for visualisation ---
         shadow = [["·" for _ in range(total_cols)] for _ in range(total_rows)]
@@ -49,16 +59,14 @@ def check(total_cols, total_rows, keymap, interfaces):
             char = char[:8]
             shadow[r][c] = char
 
-        # --- Print results ---
         print(
-            "\n[{}] covers rows {}-{}, cols {}-{}".format(
-                name, iface.row_min, iface.row_max, iface.col_min, iface.col_max
-            )
+            f"\n{Ansi256.MINT}{Ansi.BOLD}[{name}]{Ansi.RESET} "
+            f"{Ansi.BLUE}covers rows {iface.row_min}-{iface.row_max}, "
+            f"cols {iface.col_min}-{iface.col_max}{Ansi.RESET}"
         )
 
-        # pretty‑print shadow
         for r in range(total_rows):
             row_str = "  ".join(f"{cell:>8}" for cell in shadow[r])
-            print(row_str)
+            print(f"{Ansi256.SKY}{row_str}{Ansi.RESET}")
 
     return errors

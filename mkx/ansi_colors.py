@@ -1,7 +1,9 @@
 class Ansi:
     # Reset / styles
     RESET = "\033[0m"
+    NORMAL = "\033[22m"
     BOLD = "\033[1m"
+    ITALIC = "\033[3m"
     DIM = "\033[2m"
     UNDERLINE = "\033[4m"
     REVERSE = "\033[7m"
