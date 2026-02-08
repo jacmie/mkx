@@ -1,8 +1,8 @@
 import busio
-import sys
 
 from mkx.interface_abstract import InterfaceAbstract
 from mkx.communication_message import encode_message, MessageParser
+from mkx.error import halt_on_error
 
 
 class InterfaceUART(InterfaceAbstract):
@@ -43,9 +43,11 @@ class InterfaceUART(InterfaceAbstract):
 
             print(f"[{self.device_id}] UART reconnected")
         except Exception as e:
-            print(f"[{self.device_id}] UART reconnect failed: {e}")
             self.uart = None
-            sys.exit(1)
+            halt_on_error(
+                "[{self.device_id}] UART reconnect failed: {e}!",
+                status_led=None,
+            )
 
     def receive(self, verbose=False):
         if not self.ensure_connection():
