@@ -1,4 +1,4 @@
-import sys, time
+import time
 
 import usb_hid
 from adafruit_hid.keyboard import Keyboard
@@ -17,11 +17,15 @@ from mkx.backlight_abstract import BacklightAbstract
 
 from mkx.check import check
 from mkx.process_key_event import process_key_event
+from mkx.error import halt_on_error
+from mkx.ansi_colors import Ansi, Ansi256
 
 
 class MKX_Abstract:
     def __init__(self):
-        print("MKX -> Start:")
+        print()
+        print(f"{Ansi.BOLD}{Ansi256.LIGHT_GREEN}MKX -> Start:{Ansi.RESET}")
+        print()
 
         self.col_size = 0
         self.row_size = 0
@@ -62,16 +66,31 @@ class MKX_Abstract:
         self.col_size = col_size
         self.row_size = row_size
 
-        if not all(len(row) == col_size * row_size for row in keymap):
-            print("Keymap layers must be rectangular and match given size!")
-            sys.exit(1)
+        expected_size = col_size * row_size
+
+        for layer_index, layer in enumerate(keymap):
+            actual_size = len(layer)
+
+            if actual_size != expected_size:
+                halt_on_error(
+                    (
+                        f"Invalid keymap layer {layer_index}: "
+                        f"expected {expected_size} keys "
+                        f"({col_size}x{row_size}), "
+                        f"got {actual_size}"
+                    ),
+                    status_led=getattr(self.layers_manager, "status_led", None),
+                )
 
     def add_backlight(self, backlight: BacklightAbstract):
         self.backlight = backlight
 
     def _init_keyboard(self):
         if check(self.col_size, self.row_size, self.keymap, self.interfaces):
-            sys.exit(1)
+            halt_on_error(
+                "Checking the keyboard Configuration failed!",
+                status_led=getattr(self.layers_manager, "status_led", None),
+            )
 
         if self._use_ble:
             self._ble = BLE()
@@ -91,7 +110,11 @@ class MKX_Abstract:
             if interface.device_id == device_id:
                 return interface
 
-        print(f"No interface registered for device_id {device_id}!")
+        halt_on_error(
+            f"No interface registered for device_id {device_id}!",
+            status_led=getattr(self.layers_manager, "status_led", None),
+        )
+
         return None
 
     def _get_logical_index(self, iface, col, row):
@@ -103,13 +126,17 @@ class MKX_Abstract:
 
     def _collect_key_events(self):
         if not self.periphery_single:
-            print("No periphery single registered!")
-            exit(1)
+            halt_on_error(
+                "No periphery single registered!",
+                status_led=getattr(self.layers_manager, "status_led", None),
+            )
 
         iface = self._get_interface(self.periphery_single.device_id)
         if iface is None:
-            print("No interface single registered!")
-            exit(1)
+            halt_on_error(
+                "No interface single registered!",
+                status_led=getattr(self.layers_manager, "status_led", None),
+            )
 
         raw_events = self.periphery_single.get_key_events()
         if not raw_events:
