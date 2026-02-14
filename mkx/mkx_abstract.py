@@ -99,6 +99,11 @@ class MKX_Abstract:
         else:
             self.keyboard = Keyboard(usb_hid.devices)
 
+        print(
+            f"{Ansi256.LIGHT_GREEN}Keyboard initialized successfully! {Ansi.BOLD}TYPE!!!{Ansi.RESET}"
+        )
+        print()
+
     def _ensure_ble(self):
         if self._use_ble and self._ble:
             self._ble.ensure_advertising()

@@ -69,4 +69,6 @@ def check(total_cols, total_rows, keymap, interfaces):
             row_str = "  ".join(f"{cell:>8}" for cell in shadow[r])
             print(f"{Ansi256.SKY}{row_str}{Ansi.RESET}")
 
+    print()
+
     return errors

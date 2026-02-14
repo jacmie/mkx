@@ -74,3 +74,5 @@ def process_key_event(
         # Clear active sticky keys unless the released key itself is sticky
         if not isinstance(key, SK):
             self.sticky_key_manager.clear_stickies(self.keyboard, timestamp)
+
+    print()
