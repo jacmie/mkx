@@ -76,9 +76,9 @@ class MKX_Touch(MKX_Abstract):
 
         super()._init_keyboard()
 
-    def _touch_to_logical_index(self, address, ele):
-        addr_pin = (address, ele)
-        iface = self.electrodes_map.get(addr_pin)
+    def _get_interface(self, address, ele):
+        addr_ele = (address, ele)
+        iface = self.electrodes_map.get(addr_ele)
 
         if iface is None:
             halt_on_error(
@@ -86,7 +86,61 @@ class MKX_Touch(MKX_Abstract):
                 status_led=getattr(self.layers_manager, "status_led", None),
             )
 
-        return iface.get_logical_index_for_electrode(address, ele)
+        return iface
+
+    def _handle_electrode_pair_event(
+        self,
+        periphery,
+        electrode_set,
+        is_pressed: bool,
+        events: list,
+    ):
+        """
+        Handles a 2-electrode press/release event.
+        Generates exactly one logical key event per electrode pair.
+        """
+
+        if len(electrode_set) != 2:
+            return
+
+        ele1, ele2 = tuple(electrode_set)
+
+        iface = self._get_interface(periphery.address, ele1)
+        logical_index = iface.get_logical_index_for_electrode_pair(
+            periphery.address, ele1, ele2
+        )
+
+        if logical_index is not None:
+            events.append((logical_index, is_pressed))
+            state_str = "pressed" if is_pressed else "released"
+            print(f"Logical key {logical_index} {state_str}")
+
+    def _handle_single_electrode_events(
+        self,
+        periphery,
+        electrode_set,
+        is_pressed: bool,
+        events: list,
+    ):
+        """
+        Handles single-electrode press/release events.
+        Generates one logical key event per electrode.
+        """
+
+        if not electrode_set:
+            return
+
+        state_str = "pressed" if is_pressed else "released"
+
+        for ele in electrode_set:
+            iface = self._get_interface(periphery.address, ele)
+            logical_index = iface.get_logical_index_for_electrode(
+                periphery.address, ele
+            )
+
+            if logical_index is not None:
+                events.append((logical_index, is_pressed))
+                print(f"Logical key {logical_index} {state_str}")
 
     def _collect_electrode_events(self):
         if not self.peripherys_touch:
@@ -119,38 +173,13 @@ class MKX_Touch(MKX_Abstract):
                 f"[DEBUG] Periphery {periphery.address} pressed: {pressed}, released: {released}"
             )
 
-            # Pressed events
-            for ele in pressed:
-                # haptic_click()
-                if periphery.use2electrodes:
-                    ele1, ele2 = tuple(pressed)
-                    addr_pin = (periphery.address, ele)
-                    iface = self.electrodes_map.get(addr_pin)
-                    logical_index = iface.get_logical_index_for_electrode_pair(
-                        periphery.address, ele1, ele2
-                    )
-                else:
-                    logical_index = self._touch_to_logical_index(periphery.address, ele)
-                print("[DEBUG] Mapped to logical index:", logical_index)
-                if logical_index is not None:
-                    events.append((logical_index, True))
-                    print(f"[DEBUG] Logical key {logical_index} pressed")
-
-            # Released events
-            for ele in released:
-                if periphery.use2electrodes:
-                    ele1, ele2 = tuple(released)
-                    addr_pin = (periphery.address, ele)
-                    iface = self.electrodes_map.get(addr_pin)
-                    logical_index = iface.get_logical_index_for_electrode_pair(
-                        periphery.address, ele1, ele2
-                    )
-                else:
-                    logical_index = self._touch_to_logical_index(periphery.address, ele)
-                print("[DEBUG] Mapped to logical index:", logical_index)
-                if logical_index is not None:
-                    events.append((logical_index, False))
-                    print(f"[DEBUG] Logical key {logical_index} released")
+            # Handle pressed and released events
+            if periphery.use2electrodes:
+                self._handle_electrode_pair_event(periphery, pressed, True, events)
+                self._handle_electrode_pair_event(periphery, released, False, events)
+            else:
+                self._handle_single_electrode_events(periphery, pressed, True, events)
+                self._handle_single_electrode_events(periphery, released, False, events)
 
         return events
 
