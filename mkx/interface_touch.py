@@ -1,11 +1,15 @@
 from mkx.interface_abstract import InterfaceAbstract
+from mkx.ansi_colors import Ansi, Ansi256
 
 
 class InterfaceTouch(InterfaceAbstract):
     def __init__(self, col_min, row_min, col_max, row_max):
+        print(f"{Ansi256.MINT}{Ansi.BOLD}New Touch Interface:{Ansi.RESET}")
+        print()
         self.electrodes = None
         self.electrodes_col = None
         self.electrodes_row = None
+        self.use2electrodes = None
         super().__init__("keyboard_touch", col_min, row_min, col_max, row_max)
 
     def _flatten_electrodes(electrodes_dict):
@@ -14,7 +18,7 @@ class InterfaceTouch(InterfaceAbstract):
         for addr, pins in electrodes_dict.items():
             for pin in pins:
                 result.append((addr, pin))  # tuple instead of dict
-                print(f"(0x{addr:02X}, {pin})")
+                print(f"{Ansi256.SKY}(0x{addr:02X}, {pin}){Ansi.RESET}")
         print()
 
         return tuple(result)
@@ -22,7 +26,8 @@ class InterfaceTouch(InterfaceAbstract):
     @classmethod
     def from_electrodes(cls, electrodes, col_min, row_min, col_max, row_max):
         obj = cls(col_min, row_min, col_max, row_max)
-        print("electrodes:")
+        obj.use2electrodes = False
+        print(f"{Ansi256.MINT}electrodes:{Ansi.RESET}")
         obj.electrodes = cls._flatten_electrodes(electrodes)
         print(obj.electrodes)
         return obj
@@ -32,9 +37,10 @@ class InterfaceTouch(InterfaceAbstract):
         cls, electrodes_col, electrodes_row, col_min, row_min, col_max, row_max
     ):
         obj = cls(col_min, row_min, col_max, row_max)
-        print("electrodes col:")
+        obj.use2electrodes = True
+        print(f"{Ansi256.MINT}electrodes col:{Ansi.RESET}")
         obj.electrodes_col = cls._flatten_electrodes(electrodes_col)
-        print("electrodes row:")
+        print(f"{Ansi256.MINT}electrodes row:{Ansi.RESET}")
         obj.electrodes_row = cls._flatten_electrodes(electrodes_row)
         return obj
 

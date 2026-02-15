@@ -1,6 +1,7 @@
 from mkx.keys_layers import KeysLayer, LT, TT
 from mkx.timed_keys import TimedKeys
 from mkx.keys_sticky import SK
+from mkx.ansi_colors import Ansi, Ansi256
 
 
 def _get_key(self, logical_index: int):
@@ -9,7 +10,9 @@ def _get_key(self, logical_index: int):
     try:
         key = self.keymap[active_layer][logical_index]
     except IndexError:
-        print(f"Key index {logical_index} out of bounds for layer {active_layer}")
+        print(
+            f"{Ansi.RED}Key index {logical_index} out of bounds for layer {active_layer}{Ansi.RESET}"
+        )
         return None
 
     return key
@@ -32,7 +35,7 @@ def process_key_event(
         if key is None:
             return
 
-        print("key:", key.key_name, "pressed")
+        print(f"{Ansi.YELLOW}{Ansi.BOLD}key: {key.key_name} pressed{Ansi.RESET}")
 
         # Track pressed keys to ensure correct release handling
         # (prevents stuck keys when layers change while a key is held)
@@ -66,7 +69,7 @@ def process_key_event(
             if key is None:
                 return
 
-        print("key:", key.key_name, "released")
+        print(f"{Ansi.YELLOW}{Ansi.BOLD}key: {key.key_name} released{Ansi.RESET}")
 
         # Dispatch release event
         key.on_release(self.layers_manager, self.keyboard, timestamp)

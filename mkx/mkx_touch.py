@@ -24,14 +24,6 @@ class MKX_Touch(MKX_Abstract):
     def add_periphery_touch(self, periphery_touch: PeripheryTouch):
         self.peripherys_touch.append(periphery_touch)
 
-    def handle_keypad(self, index, touched):
-        key = index
-        if touched:
-            # haptic_click()
-            print(f"[KEYPAD] Key {key} touched")
-        else:
-            print(f"[KEYPAD] Key {key} released")
-
     def _init_keyboard(self):
         for iface in self.interfaces:
             # columns
@@ -49,9 +41,37 @@ class MKX_Touch(MKX_Abstract):
                 for addr_pin in iface.electrodes:
                     self.electrodes_map[addr_pin] = iface
 
-        print("electrodes_map")
-        for address, pin in sorted(self.electrodes_map.keys()):
-            print(f"(0x{address:02X}, {pin}): {self.electrodes_map[(address, pin)]}")
+        print(f"{Ansi256.MINT}{Ansi.BOLD}electrodes_map:{Ansi.RESET}")
+        for address, pin in sorted(self.electrodes_map):
+            iface = self.electrodes_map[(address, pin)]
+            print(
+                f"{Ansi256.SKY}(0x{address:02X}, {pin}): interface[{self.interfaces.index(iface)}]{Ansi.RESET}"
+            )
+        print()
+
+        print(
+            f"{Ansi256.MINT}{Ansi.BOLD}Periphery use2electrodes settings:{Ansi.RESET}"
+        )
+        for periphery in self.peripherys_touch:
+            # set use2electrodes if not set explicitly, based on interfaces configuration
+            if periphery.use2electrodes is None:
+                periphery.use2electrodes = False
+                for (address, pin), iface in self.electrodes_map.items():
+                    if address == periphery.address:
+                        periphery.use2electrodes = bool(
+                            iface.electrodes_col and iface.electrodes_row
+                        )
+                        break
+                else:
+                    halt_on_error(
+                        f"No interface found with this address registered: 0x{address:02X}!\nCheck interfaces electrodes configuration.",
+                        status_led=getattr(self.layers_manager, "status_led", None),
+                    )
+
+            print(
+                f"{Ansi256.MINT}address 0x{periphery.address:02X}: {Ansi.RESET}"
+                f"{Ansi256.PEACH}use2electrodes = {periphery.use2electrodes}{Ansi.RESET}"
+            )
         print()
 
         super()._init_keyboard()
@@ -65,19 +85,6 @@ class MKX_Touch(MKX_Abstract):
                 f"No registered electrode: 0x{address:02X}, {ele}!\nCheck interfaces electrodes configuration.",
                 status_led=getattr(self.layers_manager, "status_led", None),
             )
-
-        # iface = self.self.electrodes_map[addr_pin]
-
-        # try:
-        #     idx_inside = iface.electrodes.index(ele)
-        # except ValueError:
-        #     print(f"[DEBUG] Electrode {ele} not found in iface.electrodes")
-        #     return None
-
-        # local_row = idx_inside // iface.num_cols
-        # local_col = idx_inside % iface.num_cols
-
-        # return iface.logical_index(local_col, local_row)
 
         return iface.get_logical_index_for_electrode(address, ele)
 
@@ -100,10 +107,6 @@ class MKX_Touch(MKX_Abstract):
 
             # If nothing changed, skip this periphery
             if current_pins == previous_pins:
-                # Optional debug log:
-                # print(
-                #     f"[DEBUG] No change on periphery 0x{periphery.address:02X}, skipping."
-                # )
                 continue
 
             # Save new state
@@ -118,6 +121,7 @@ class MKX_Touch(MKX_Abstract):
 
             # Pressed events
             for ele in pressed:
+                # haptic_click()
                 if periphery.use2electrodes:
                     ele1, ele2 = tuple(pressed)
                     addr_pin = (periphery.address, ele)
@@ -148,9 +152,6 @@ class MKX_Touch(MKX_Abstract):
                     events.append((logical_index, False))
                     print(f"[DEBUG] Logical key {logical_index} released")
 
-        # if not events:
-        #     print("[DEBUG] No key events detected this cycle")
-
         return events
 
     def run_once(self):
@@ -170,7 +171,7 @@ class MKX_Touch(MKX_Abstract):
         if self.backlight:
             self.backlight.shine()
 
-        time.sleep(0.001)  # Keep CPU usage low
+        time.sleep(0.01)  # Keep CPU usage low
         # time.sleep(1.001)  # Keep CPU usage low
 
     def run_forever(self):
