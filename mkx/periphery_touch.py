@@ -1,8 +1,8 @@
-from mkx.periphery_abstract import PeripheryAbstract
-
 import digitalio
 
 import adafruit_mpr121
+
+from mkx.ansi_colors import Ansi, Ansi256
 
 
 class PeripheryTouch:
@@ -44,35 +44,20 @@ class PeripheryTouch:
             if self.use2electrodes:
                 active = self._get_two_active_electrodes(touch_bits)
                 if active is not None:
-                    print(f"Two active electrodes: {active}")
+                    print(
+                        f"{Ansi256.SKY}Two active electrodes: {Ansi256.PEACH}{active}{Ansi.RESET}"
+                    )
                     return (self.address, active)
                 return None
             else:
                 active = tuple(i for i in range(12) if touch_bits & (1 << i))
 
                 if active:
-                    print("Touched electrodes:", active)
+                    print(
+                        f"{Ansi256.SKY}Touched electrodes: {Ansi256.PEACH}{active}{Ansi.RESET}"
+                    )
                     return (self.address, active)
 
                 return None
 
         return None
-
-        # if self.irq_pin is None or not self.irq_pin.value:
-        #     touch_bits = self.mpr121.touched()
-
-        #     if self.use2electrodes:
-        #         active_electrodes = self._get_two_active_electrodes(touch_bits)
-        #         if active_electrodes is not None:
-        #             print(
-        #                 f"Two active electrodes: {active_electrodes[0]}, {active_electrodes[1]}"
-        #             )
-        #             return active_electrodes
-        #         else:
-        #             return []
-        #     else:
-        #         touched = [i for i in range(12) if touch_bits & (1 << i)]
-        #         print("Touched electrodes:", touched)
-        #         return touched
-
-        # return []
