@@ -1,18 +1,23 @@
 from mkx.periphery_abstract import PeripheryAbstract
 
+import digitalio
+
 import adafruit_mpr121
 
 
-# class PeripheryTouch(PeripheryAbstract):
 class PeripheryTouch:
     def __init__(self, i2c, address=0x5B, irq_pin=None):
         self.address = address
         self.mpr121 = adafruit_mpr121.MPR121(i2c, address)
-        self.irq_pin = irq_pin
-        self.use2electrodes = False
-        # self.last_touch_state = {}
+        self.irq_pin = None
+        self.use2electrodes = None
 
-    def fire_only_on_2electrodes(self, enable=True):
+        if irq_pin is not None:
+            self.irq_pin = digitalio.DigitalInOut(irq_pin)
+            self.irq_pin.direction = digitalio.Direction.INPUT
+            self.irq_pin.pull = digitalio.Pull.UP
+
+    def fire_only_on_2electrodes(self, enable):
         self.use2electrodes = enable
 
     def _get_two_active_electrodes(self, touch_bits):
