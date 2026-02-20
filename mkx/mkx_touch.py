@@ -13,10 +13,8 @@ class MKX_Touch(MKX_Abstract):
         super().__init__()
         self.irq = False
         self.mpr121 = None
-        self.last_state = [False] * 12  # track last state of each electrode
         self.peripherys_touch = []
         self.electrodes_map = {}
-        self.last_touch_state = {}
 
     def use_irq(self, irq_pin: bool):
         self.irq = irq_pin
@@ -101,33 +99,40 @@ class MKX_Touch(MKX_Abstract):
             f"{Ansi256.SKY}Logical key {Ansi256.PEACH}{logical_index} {state_str}{Ansi.RESET}"
         )
 
-    def _handle_electrode_event(
-        self,
-        periphery,
-        electrode_set,
-        is_pressed: bool,
-        events: list,
-        pair_mode: bool = False,
-    ):
-        if not electrode_set:
-            return
+    def _handle_electrode_event(self, periphery, used_electrodes, values, events):
+        """
+        Polymorphic dispatcher: let interfaces decide how to process values.
+        Interfaces implement: process(address, values: dict, now: int) -> list[tuple]
+        where each tuple is (logical_index, is_pressed)
+        """
+        print(used_electrodes)
+        print(values)
 
-        if pair_mode:
-            if len(electrode_set) != 2:
-                return
-            ele1, ele2 = tuple(electrode_set)
-            iface = self._get_interface(periphery.address, ele1)
-            logical_index = iface.get_logical_index_for_electrode_pair(
-                periphery.address, ele1, ele2
-            )
-            self._add_logical_event(logical_index, is_pressed, events)
-        else:
-            for ele in electrode_set:
-                iface = self._get_interface(periphery.address, ele)
-                logical_index = iface.get_logical_index_for_electrode(
-                    periphery.address, ele
-                )
-                self._add_logical_event(logical_index, is_pressed, events)
+        # Group electrodes by interface
+        interfaces_seen = {}
+        for ele in used_electrodes:
+            iface = self._get_interface(periphery.address, ele)
+            if iface not in interfaces_seen:
+                interfaces_seen[iface] = iface
+
+        # Call process() on each unique interface with all its electrode values
+        for iface in interfaces_seen.values():
+            # Filter values dict to only include electrodes this interface uses
+            iface_values = {}
+            for ele, value in values.items():
+                if (
+                    periphery.address,
+                    ele,
+                ) in self.electrodes_map and self.electrodes_map[
+                    (periphery.address, ele)
+                ] == iface:
+                    iface_values[ele] = value
+
+            if iface_values:
+                # Call interface-specific processor
+                interface_events = iface.process(periphery.address, iface_values)
+                if interface_events:
+                    events.extend(interface_events)
 
     def _collect_electrode_events(self):
         if not self.peripherys_touch:
@@ -139,30 +144,18 @@ class MKX_Touch(MKX_Abstract):
         events = []
 
         for periphery in self.peripherys_touch:
-            result = periphery.touched_electrodes()
-
-            current_pins = set(result[1]) if result else set()
-
-            # Get previous state for this device
-            previous_pins = self.last_touch_state.get(periphery.address, set())
-
-            # If nothing changed, skip this periphery
-            if current_pins == previous_pins:
+            values = periphery.electrode_values()
+            if values is None:
                 continue
 
-            # Save new state
-            self.last_touch_state[periphery.address] = current_pins
+            for iface in self.interfaces:
 
-            # Detect changes
-            pressed = current_pins - previous_pins
-            released = previous_pins - current_pins
+                interface_events = iface.process(periphery.address, values)
+                if interface_events:
+                    events.extend(interface_events)
 
-            self._handle_electrode_event(
-                periphery, pressed, True, events, pair_mode=periphery.use2electrodes
-            )
-            self._handle_electrode_event(
-                periphery, released, False, events, pair_mode=periphery.use2electrodes
-            )
+            # values = result
+            # self._handle_electrode_event(periphery, used_electrodes, values, events)
 
         return events
 
@@ -184,7 +177,6 @@ class MKX_Touch(MKX_Abstract):
             self.backlight.shine()
 
         time.sleep(0.01)  # Keep CPU usage low
-        # time.sleep(1.001)  # Keep CPU usage low
 
     def run_forever(self):
         self._init_keyboard()

@@ -10,15 +10,16 @@ class InterfaceTouch(InterfaceAbstract):
         self.electrodes_col = None
         self.electrodes_row = None
         self.use2electrodes = None
+        self._last_active = {}  # Track previous state per address
         super().__init__("keyboard_touch", col_min, row_min, col_max, row_max)
 
     def _flatten_electrodes(electrodes_dict):
         result = []
 
-        for addr, pins in electrodes_dict.items():
-            for pin in pins:
-                result.append((addr, pin))  # tuple instead of dict
-                print(f"{Ansi256.SKY}(0x{addr:02X}, {pin}){Ansi.RESET}")
+        for addr, electrodes in electrodes_dict.items():
+            for ele in electrodes:
+                result.append((addr, ele))  # tuple instead of dict
+                print(f"{Ansi256.SKY}(0x{addr:02X}, {ele}){Ansi.RESET}")
         print()
 
         return tuple(result)
@@ -117,6 +118,70 @@ class InterfaceTouch(InterfaceAbstract):
             return None
 
         return self.logical_index(local_col, local_row)
+
+    def process(self, address, values: dict):
+        """
+        Process electrode values and return key events.
+        Threshold-based detection: values > 0 are considered active.
+        Returns list of (logical_index, is_pressed) tuples.
+        """
+        THRESHOLD = 10  # Threshold for active electrode
+
+        print(f"values: {values}")
+
+        # Determine active electrodes based on threshold
+        current_active = {ele for ele, value in values.items() if value > THRESHOLD}
+        print(f"current_active: {current_active}")
+
+        events = []
+
+        if self.use2electrodes:
+            prev_key = self._last_active.get(address)
+            current_key = None
+
+            if len(current_active) == 2:
+                ele1, ele2 = tuple(current_active)
+                current_key = self.get_logical_index_for_electrode_pair(
+                    address, ele1, ele2
+                )
+
+            # Store new key state
+            self._last_active[address] = current_key
+
+            # If key changed
+            if prev_key != current_key:
+
+                # Release old key
+                if prev_key is not None:
+                    events.append((prev_key, False))
+                    print(
+                        f"{Ansi256.SKY}Logical key {Ansi256.PEACH}{prev_key} released{Ansi.RESET}"
+                    )
+
+                # Press new key
+                if current_key is not None:
+                    events.append((current_key, True))
+                    print(
+                        f"{Ansi256.SKY}Logical key {Ansi256.PEACH}{current_key} pressed{Ansi.RESET}"
+                    )
+        else:
+            for ele in pressed:
+                logical_index = self.get_logical_index_for_electrode(address, ele)
+                if logical_index is not None:
+                    events.append((logical_index, True))
+                    print(
+                        f"{Ansi256.SKY}Logical key {Ansi256.PEACH}{logical_index} pressed{Ansi.RESET}"
+                    )
+
+            for ele in released:
+                logical_index = self.get_logical_index_for_electrode(address, ele)
+                if logical_index is not None:
+                    events.append((logical_index, False))
+                    print(
+                        f"{Ansi256.SKY}Logical key {Ansi256.PEACH}{logical_index} released{Ansi.RESET}"
+                    )
+
+        return events
 
     def is_connected(self):
         pass  # Not needed
