@@ -109,33 +109,6 @@ class PeripheryTouch:
 
         return None
 
-    # def touched_electrodes(self):
-    #     # If irq_pin==None pin is used then always read,
-    #     # otherwise only read when irq pin value is LOW (active)
-    #     if self.irq_pin is None or not self.irq_pin.value:
-    #         touch_bits = self.mpr121.touched()
-
-    #         if self.use2electrodes:
-    #             active = self._get_two_active_electrodes(touch_bits)
-    #             if active is not None:
-    #                 print(
-    #                     f"{Ansi256.SKY}Two active electrodes: {Ansi256.PEACH}{active}{Ansi.RESET}"
-    #                 )
-    #                 return (self.address, active)
-    #             return None
-    #         else:
-    #             active = tuple(i for i in range(12) if touch_bits & (1 << i))
-
-    #             if active:
-    #                 print(
-    #                     f"{Ansi256.SKY}Touched electrodes: {Ansi256.PEACH}{active}{Ansi.RESET}"
-    #                 )
-    #                 return (self.address, active)
-
-    #             return None
-
-    #     return None
-
     def electrode_values(self):
         # If irq_pin is set, only read when irq pin value is LOW (active)
         if self.irq_pin is not None and self.irq_pin.value:

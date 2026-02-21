@@ -165,6 +165,16 @@ class InterfaceTouch(InterfaceAbstract):
                         f"{Ansi256.SKY}Logical key {Ansi256.PEACH}{current_key} pressed{Ansi.RESET}"
                     )
         else:
+            # Single electrode mode: track state changes per electrode
+            prev_active = self._last_active.get(address, set())
+
+            # Calculate newly pressed and released electrodes
+            pressed = current_active - prev_active
+            released = prev_active - current_active
+
+            # Update stored state
+            self._last_active[address] = current_active
+
             for ele in pressed:
                 logical_index = self.get_logical_index_for_electrode(address, ele)
                 if logical_index is not None:

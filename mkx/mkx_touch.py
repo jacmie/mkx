@@ -74,66 +74,6 @@ class MKX_Touch(MKX_Abstract):
 
         super()._init_keyboard()
 
-    def _get_interface(self, address, ele):
-        addr_ele = (address, ele)
-        iface = self.electrodes_map.get(addr_ele)
-
-        if iface is None:
-            halt_on_error(
-                f"No registered electrode: 0x{address:02X}, {ele}!\nCheck interfaces electrodes configuration.",
-                status_led=getattr(self.layers_manager, "status_led", None),
-            )
-
-        return iface
-
-    def _add_logical_event(self, logical_index: int, is_pressed: bool, events: list):
-        if logical_index is None:
-            halt_on_error(
-                f"Couldn't determin logical_index for the keymap!\nCheck keymap and interfaces configuration.",
-                status_led=getattr(self.layers_manager, "status_led", None),
-            )
-
-        events.append((logical_index, is_pressed))
-        state_str = "pressed" if is_pressed else "released"
-        print(
-            f"{Ansi256.SKY}Logical key {Ansi256.PEACH}{logical_index} {state_str}{Ansi.RESET}"
-        )
-
-    def _handle_electrode_event(self, periphery, used_electrodes, values, events):
-        """
-        Polymorphic dispatcher: let interfaces decide how to process values.
-        Interfaces implement: process(address, values: dict, now: int) -> list[tuple]
-        where each tuple is (logical_index, is_pressed)
-        """
-        print(used_electrodes)
-        print(values)
-
-        # Group electrodes by interface
-        interfaces_seen = {}
-        for ele in used_electrodes:
-            iface = self._get_interface(periphery.address, ele)
-            if iface not in interfaces_seen:
-                interfaces_seen[iface] = iface
-
-        # Call process() on each unique interface with all its electrode values
-        for iface in interfaces_seen.values():
-            # Filter values dict to only include electrodes this interface uses
-            iface_values = {}
-            for ele, value in values.items():
-                if (
-                    periphery.address,
-                    ele,
-                ) in self.electrodes_map and self.electrodes_map[
-                    (periphery.address, ele)
-                ] == iface:
-                    iface_values[ele] = value
-
-            if iface_values:
-                # Call interface-specific processor
-                interface_events = iface.process(periphery.address, iface_values)
-                if interface_events:
-                    events.extend(interface_events)
-
     def _collect_electrode_events(self):
         if not self.peripherys_touch:
             halt_on_error(
@@ -149,13 +89,9 @@ class MKX_Touch(MKX_Abstract):
                 continue
 
             for iface in self.interfaces:
-
                 interface_events = iface.process(periphery.address, values)
                 if interface_events:
                     events.extend(interface_events)
-
-            # values = result
-            # self._handle_electrode_event(periphery, used_electrodes, values, events)
 
         return events
 
