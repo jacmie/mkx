@@ -25,26 +25,28 @@ class MKX_Touch(MKX_Abstract):
     def _init_keyboard(self):
         for iface in self.interfaces:
             # columns
-            if iface.electrodes_col:
+            if hasattr(iface, "electrodes_col") and iface.electrodes_col:
                 for addr_pin in iface.electrodes_col:
                     self.electrodes_map[addr_pin] = iface
 
             # rows
-            if iface.electrodes_row:
+            if hasattr(iface, "electrodes_row") and iface.electrodes_row:
                 for addr_pin in iface.electrodes_row:
                     self.electrodes_map[addr_pin] = iface
 
             # flat electrodes (if used)
-            if iface.electrodes:
+            if hasattr(iface, "electrodes") and iface.electrodes:
                 for addr_pin in iface.electrodes:
                     self.electrodes_map[addr_pin] = iface
 
         print(f"{Ansi256.MINT}{Ansi.BOLD}electrodes_map:{Ansi.RESET}")
-        for address, pin in sorted(self.electrodes_map):
-            iface = self.electrodes_map[(address, pin)]
-            print(
-                f"{Ansi256.SKY}(0x{address:02X}, {pin}): interface[{self.interfaces.index(iface)}]{Ansi.RESET}"
-            )
+        for key in sorted(self.electrodes_map.keys()):
+            if isinstance(key, tuple) and len(key) == 2:
+                address, pin = key
+                iface = self.electrodes_map[key]
+                print(
+                    f"{Ansi256.SKY}(0x{address:02X}, {pin}): interface[{self.interfaces.index(iface)}]{Ansi.RESET}"
+                )
         print()
 
         print(
@@ -54,17 +56,22 @@ class MKX_Touch(MKX_Abstract):
             # set use2electrodes if not set explicitly, based on interfaces configuration
             if periphery.use2electrodes is None:
                 periphery.use2electrodes = False
-                for (address, pin), iface in self.electrodes_map.items():
-                    if address == periphery.address:
-                        periphery.use2electrodes = bool(
-                            iface.electrodes_col and iface.electrodes_row
-                        )
-                        break
-                else:
-                    halt_on_error(
-                        f"No interface found with this address registered: 0x{address:02X}!\nCheck interfaces electrodes configuration.",
-                        status_led=getattr(self.layers_manager, "status_led", None),
-                    )
+                for key, iface in self.electrodes_map.items():
+                    if isinstance(key, tuple) and len(key) == 2:
+                        address, pin = key
+                        if address == periphery.address:
+                            periphery.use2electrodes = bool(
+                                hasattr(iface, "electrodes_col")
+                                and iface.electrodes_col
+                                and hasattr(iface, "electrodes_row")
+                                and iface.electrodes_row
+                            )
+                            break
+                # else:
+                #     halt_on_error(
+                #         f"No interface found with this address registered: 0x{periphery.address:02X}!\nCheck interfaces electrodes configuration.",
+                #         status_led=getattr(self.layers_manager, "status_led", None),
+                #     )
 
             print(
                 f"{Ansi256.MINT}address 0x{periphery.address:02X}: {Ansi.RESET}"

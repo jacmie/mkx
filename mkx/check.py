@@ -1,5 +1,8 @@
 from mkx.ansi_colors import Ansi, Ansi256
 
+from mkx.interface_touch_slider import InterfaceTouchSlider
+from mkx.interface_touch_wheel import InterfaceTouchWheel
+
 
 def check(total_cols, total_rows, keymap, interfaces):
     print(
@@ -9,6 +12,10 @@ def check(total_cols, total_rows, keymap, interfaces):
     errors = False
 
     for iface in interfaces:
+        # Skip slider and wheel interfaces types checking with the keymap
+        if isinstance(iface, (InterfaceTouchSlider, InterfaceTouchWheel)):
+            continue
+
         name = getattr(iface, "device_id", "unknown")
         iface.generate_rect_map(total_cols)
 
