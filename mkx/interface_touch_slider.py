@@ -1,20 +1,36 @@
 from mkx.interface_abstract import InterfaceAbstract
+from mkx.keys_abstract import KeysAbstract
 from mkx.ansi_colors import Ansi, Ansi256
+from mkx.slider_event import SliderEvent
 
 
 class InterfaceTouchSlider(InterfaceAbstract):
-    def __init__(self, electrodes, value_min=0.0, value_max=1.0):
+    def __init__(
+        self,
+        electrodes,
+        key_increase: KeysAbstract,
+        key_decrease: KeysAbstract,
+        value_min=0.0,
+        value_max=1.0,
+        step_size=0.05,
+        max_steps_per_loop=5,
+    ):
         """
         electrodes: tuple/list of (address, pin)
         """
         super().__init__("touch_slider", 0, 0, 0, 0)
 
         self.electrodes = tuple(electrodes)
+        self.key_increase = key_increase
+        self.key_decrease = key_decrease
         self.value_min = value_min
         self.value_max = value_max
+        self.step_size = step_size
+        self.max_steps_per_loop = max_steps_per_loop
 
         self._last_value = None
         self._last_active = {}  # Track previous state per address
+        self.motion_accumulator = 0.0  # Accumulate delta for step generation
 
         print(f"{Ansi256.MINT}electrodes:{Ansi.RESET}")
         self.electrodes = self._flatten_electrodes(electrodes)
@@ -85,12 +101,57 @@ class InterfaceTouchSlider(InterfaceAbstract):
 
         return delta
 
+    def _accumulate_and_generate_events(self, delta, events):
+        """
+        Accumulate delta motion and generate slider events when threshold is crossed.
+
+        Returns: updated events list
+        """
+        # Accumulate motion
+        self.motion_accumulator += delta
+        print(
+            f"{Ansi256.SKY}[Slider] accumulated: {Ansi256.PEACH}{self.motion_accumulator:.3f}{Ansi.RESET}"
+        )
+
+        # Convert accumulated motion to discrete steps
+        steps = int(self.motion_accumulator / self.step_size)
+
+        if steps != 0:
+            # Limit burst size
+            steps = max(
+                -self.max_steps_per_loop,
+                min(self.max_steps_per_loop, steps),
+            )
+            self.motion_accumulator -= steps * self.step_size
+
+            print(f"{Ansi256.SKY}[Slider] steps: {Ansi256.PEACH}{steps}{Ansi.RESET}")
+
+            # Generate events
+            if steps > 0:
+                for _ in range(steps):
+                    events.append(SliderEvent(self.key_increase, True))
+                    events.append(SliderEvent(self.key_increase, False))
+                    print(
+                        f"{Ansi256.SKY}[Slider] {Ansi256.PEACH}{self.key_increase.key_name}{Ansi.RESET}"
+                    )
+            else:
+                for _ in range(-steps):
+                    events.append(SliderEvent(self.key_decrease, True))
+                    events.append(SliderEvent(self.key_decrease, False))
+                    print(
+                        f"{Ansi256.SKY}[Slider] {Ansi256.PEACH}{self.key_decrease.key_name}{Ansi.RESET}"
+                    )
+
+        return events
+
     def process(self, address, values: dict):
+        events = []
+
         if values:
             value = self.resolve_absolute(address, values)
 
             if value is not None:
-                # Update internal state for delta calculation
+                # Calculate delta on first touch or on ongoing motion
                 if self._last_value is None:
                     self._last_value = value
                     print(
@@ -102,94 +163,16 @@ class InterfaceTouchSlider(InterfaceAbstract):
                     print(
                         f"{Ansi256.SKY}[Slider] delta: {Ansi256.PEACH}{delta:.3f}{Ansi.RESET}"
                     )
+
+                    # Accumulate motion and generate events
+                    events = self._accumulate_and_generate_events(delta, events)
         else:
             print(f"{Ansi256.SKY}[Slider] all electrodes released{Ansi.RESET}")
             self._last_value = None
+            self.motion_accumulator = 0.0  # Reset accumulator on release
 
-        return []
+        return events
 
-
-# Electrode strengths
-#         ↓
-# Interpolated position (float)
-#         ↓
-# Delta (movement)
-#         ↓
-# Accumulator
-#         ↓
-# Threshold crossed?
-#         ↓
-# Send HID key(s)
-
-# Production-Grade Wheel → HID Example
-
-# This assumes:
-# 8 electrodes
-# Circular layout
-# You already compute angle using interpolation
-
-# Step 1 — Global State
-
-# import math
-# from adafruit_hid.keycode import Keycode
-
-# last_angle = None
-# motion_accumulator = 0.0
-
-# STEP_SIZE = 0.04        # Smaller = more sensitive
-# MAX_STEPS_PER_LOOP = 5  # Prevent runaway
-
-# Step 2 — Convert Angle to Motion
-
-# def process_wheel(angle, keyboard):
-#     global last_angle, motion_accumulator
-
-#     if last_angle is None:
-#         last_angle = angle
-#         return
-
-#     delta = angle - last_angle
-
-#     # Wraparound correction
-#     if delta > math.pi:
-#         delta -= 2 * math.pi
-#     elif delta < -math.pi:
-#         delta += 2 * math.pi
-
-#     last_angle = angle
-
-#     # Add to accumulator
-#     motion_accumulator += delta
-
-#     # Convert motion into frame steps
-#     steps = int(motion_accumulator / STEP_SIZE)
-
-#     if steps != 0:
-#         # Limit burst size
-#         steps = max(-MAX_STEPS_PER_LOOP,
-#                     min(MAX_STEPS_PER_LOOP, steps))
-
-#         motion_accumulator -= steps * STEP_SIZE
-
-#         send_steps(steps, keyboard)
-
-# Step 3 — Send HID Keys
-
-# def send_steps(steps, keyboard):
-#     if steps > 0:
-#         for _ in range(steps):
-#             keyboard.send(Keycode.RIGHT_ARROW)
-#     else:
-#         for _ in range(-steps):
-#             keyboard.send(Keycode.LEFT_ARROW)
-
-# What This Achieves
-# Slow finger movement → 1 frame at a time
-# Faster spin → multiple frames
-# No jitter
-# No sudden jumps
-# Natural acceleration feel
-# This feels very close to a hardware jog wheel.
 
 # Want It Even Smoother?
 # Add velocity scaling:
@@ -206,8 +189,3 @@ class InterfaceTouchSlider(InterfaceAbstract):
 # Now:
 # Slow move → precise
 # Fast spin → scrubs faster
-
-# Important
-# Use:
-# time.sleep(0.01–0.02)
-# Not faster — or you’ll overwhelm the host with HID events.`

@@ -2,6 +2,7 @@ import time
 
 from mkx.mkx_abstract import MKX_Abstract
 from mkx.periphery_touch import PeripheryTouch
+from mkx.slider_event import SliderEvent
 
 from mkx.process_key_event import process_key_event
 from mkx.error import halt_on_error
@@ -112,9 +113,20 @@ class MKX_Touch(MKX_Abstract):
         self.timed_keys_manager.update(self.layers_manager, self.keyboard, now)
 
         for event in self._collect_electrode_events():
-            logical_index, pressed = event
-
-            process_key_event(self, "periphery_touch", logical_index, pressed, now)
+            if isinstance(event, SliderEvent):
+                # Handle slider event
+                key = event.key
+                if event.is_pressed:
+                    print(f"{Ansi.YELLOW}{Ansi.BOLD}key: {key.key_name} pressed{Ansi.RESET}")
+                    key.on_press(self.layers_manager, self.keyboard, now)
+                else:
+                    print(f"{Ansi.YELLOW}{Ansi.BOLD}key: {key.key_name} released{Ansi.RESET}")
+                    key.on_release(self.layers_manager, self.keyboard, now)
+                print()
+            else:
+                # Handle regular keyboard event
+                logical_index, pressed = event
+                process_key_event(self, "periphery_touch", logical_index, pressed, now)
 
         if self.backlight:
             self.backlight.shine()
