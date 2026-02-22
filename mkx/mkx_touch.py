@@ -3,6 +3,7 @@ import time
 from mkx.mkx_abstract import MKX_Abstract
 from mkx.periphery_touch import PeripheryTouch
 from mkx.slider_event import SliderEvent
+from mkx.interface_touch_slider import InterfaceTouchSlider
 
 from mkx.process_key_event import process_key_event
 from mkx.error import halt_on_error
@@ -97,11 +98,36 @@ class MKX_Touch(MKX_Abstract):
                 continue
 
             for iface in self.interfaces:
-                interface_events = iface.process(periphery.address, values)
+                # Pass current layer to slider/wheel interfaces for layer-aware key selection
+                if isinstance(iface, InterfaceTouchSlider):
+                    interface_events = iface.process(
+                        periphery.address,
+                        values,
+                        current_layer=self.layers_manager.get_top_layer(),
+                    )
+                else:
+                    interface_events = iface.process(periphery.address, values)
+
                 if interface_events:
                     events.extend(interface_events)
 
         return events
+
+    def _handle_slider_event(self, event, now):
+        action = "pressed" if event.is_pressed else "released"
+
+        print(
+            f"{Ansi.YELLOW}{Ansi.BOLD}"
+            f"key: {event.key.key_name} {action}"
+            f"{Ansi.RESET}"
+        )
+
+        if event.is_pressed:
+            event.key.on_press(self.layers_manager, self.keyboard, now)
+        else:
+            event.key.on_release(self.layers_manager, self.keyboard, now)
+
+        print()
 
     def run_once(self):
         # print(f"{Ansi.YELLOW}{Ansi.BOLD}=== run_once ==={Ansi.RESET}")
@@ -114,17 +140,8 @@ class MKX_Touch(MKX_Abstract):
 
         for event in self._collect_electrode_events():
             if isinstance(event, SliderEvent):
-                # Handle slider event
-                key = event.key
-                if event.is_pressed:
-                    print(f"{Ansi.YELLOW}{Ansi.BOLD}key: {key.key_name} pressed{Ansi.RESET}")
-                    key.on_press(self.layers_manager, self.keyboard, now)
-                else:
-                    print(f"{Ansi.YELLOW}{Ansi.BOLD}key: {key.key_name} released{Ansi.RESET}")
-                    key.on_release(self.layers_manager, self.keyboard, now)
-                print()
+                self._handle_slider_event(event, now)
             else:
-                # Handle regular keyboard event
                 logical_index, pressed = event
                 process_key_event(self, "periphery_touch", logical_index, pressed, now)
 

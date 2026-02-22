@@ -8,29 +8,24 @@ class InterfaceTouchSlider(InterfaceAbstract):
     def __init__(
         self,
         electrodes,
-        key_increase: KeysAbstract,
-        key_decrease: KeysAbstract,
-        value_min=0.0,
-        value_max=1.0,
+        wheel_keymap,
         step_size=0.05,
         max_steps_per_loop=5,
+        value_min=0.0,
+        value_max=1.0,
     ):
-        """
-        electrodes: tuple/list of (address, pin)
-        """
         super().__init__("touch_slider", 0, 0, 0, 0)
 
         self.electrodes = tuple(electrodes)
-        self.key_increase = key_increase
-        self.key_decrease = key_decrease
-        self.value_min = value_min
-        self.value_max = value_max
+        self.wheel_keymap = wheel_keymap
         self.step_size = step_size
         self.max_steps_per_loop = max_steps_per_loop
+        self.value_min = value_min
+        self.value_max = value_max
 
         self._last_value = None
-        self._last_active = {}  # Track previous state per address
-        self.motion_accumulator = 0.0  # Accumulate delta for step generation
+        self._last_active = {}
+        self.motion_accumulator = 0.0
 
         print(f"{Ansi256.MINT}electrodes:{Ansi.RESET}")
         self.electrodes = self._flatten_electrodes(electrodes)
@@ -47,11 +42,24 @@ class InterfaceTouchSlider(InterfaceAbstract):
 
         return tuple(result)
 
-    # ----------------------------------------
-    # Absolute value (0.0 - 1.0)
-    # ----------------------------------------
+    def _get_wheel_keys(self, layer):
+        """
+        Get wheel keys (increase, decrease) for the given layer.
+        Safe fallback to layer 0 if layer doesn't exist in keymap.
+        """
+        if not self.wheel_keymap:
+            return None, None
 
-    def resolve_absolute(self, address, values: dict):
+        # Use the specified layer if it exists, otherwise fall back to layer 0
+        if layer < len(self.wheel_keymap):
+            key_increase, key_decrease = self.wheel_keymap[layer]
+        else:
+            # Layer doesn't exist, fall back to layer 0
+            key_increase, key_decrease = self.wheel_keymap[0]
+
+        return key_increase, key_decrease
+
+    def _resolve_absolute(self, address, values: dict):
         total_weight = sum(values.values())
         weighted_sum = sum(index * value for index, value in values.items())
         weighted_avg_index = weighted_sum / total_weight
@@ -77,11 +85,7 @@ class InterfaceTouchSlider(InterfaceAbstract):
 
         return value
 
-    # ----------------------------------------
-    # Incremental (delta)
-    # ----------------------------------------
-
-    def resolve_delta(self, address, active_pins):
+    def _resolve_delta(self, address, active_pins):
         value = self.resolve_absolute(address, active_pins)
 
         if value is None:
@@ -101,10 +105,13 @@ class InterfaceTouchSlider(InterfaceAbstract):
 
         return delta
 
-    def _accumulate_and_generate_events(self, delta, events):
+    def _accumulate_and_generate_events(
+        self, delta, events, key_increase, key_decrease
+    ):
         """
         Accumulate delta motion and generate slider events when threshold is crossed.
 
+        key_increase, key_decrease: KeysAbstract objects for current layer
         Returns: updated events list
         """
         # Accumulate motion
@@ -129,26 +136,44 @@ class InterfaceTouchSlider(InterfaceAbstract):
             # Generate events
             if steps > 0:
                 for _ in range(steps):
-                    events.append(SliderEvent(self.key_increase, True))
-                    events.append(SliderEvent(self.key_increase, False))
+                    events.append(SliderEvent(key_increase, True))
+                    events.append(SliderEvent(key_increase, False))
                     print(
-                        f"{Ansi256.SKY}[Slider] {Ansi256.PEACH}{self.key_increase.key_name}{Ansi.RESET}"
+                        f"{Ansi256.SKY}[Slider] {Ansi256.PEACH}{key_increase.key_name}{Ansi.RESET}"
                     )
             else:
                 for _ in range(-steps):
-                    events.append(SliderEvent(self.key_decrease, True))
-                    events.append(SliderEvent(self.key_decrease, False))
+                    events.append(SliderEvent(key_decrease, True))
+                    events.append(SliderEvent(key_decrease, False))
                     print(
-                        f"{Ansi256.SKY}[Slider] {Ansi256.PEACH}{self.key_decrease.key_name}{Ansi.RESET}"
+                        f"{Ansi256.SKY}[Slider] {Ansi256.PEACH}{key_decrease.key_name}{Ansi.RESET}"
                     )
 
         return events
 
-    def process(self, address, values: dict):
+    def process(self, address, values: dict, current_layer=0):
+        """
+        Process electrode values for slider.
+
+        address: I2C address
+        values: dict of {electrode_list_index: electrode_value}
+        current_layer: current active layer (default: 0)
+
+        Returns: list of SliderEvent objects
+        """
         events = []
 
+        # Get the keys for the current layer
+        key_increase, key_decrease = self._get_wheel_keys(current_layer)
+
+        if key_increase is None or key_decrease is None:
+            print(
+                f"{Ansi256.SKY}[Slider] no keys defined for layer {current_layer}{Ansi.RESET}"
+            )
+            return events
+
         if values:
-            value = self.resolve_absolute(address, values)
+            value = self._resolve_absolute(address, values)
 
             if value is not None:
                 # Calculate delta on first touch or on ongoing motion
@@ -165,7 +190,9 @@ class InterfaceTouchSlider(InterfaceAbstract):
                     )
 
                     # Accumulate motion and generate events
-                    events = self._accumulate_and_generate_events(delta, events)
+                    events = self._accumulate_and_generate_events(
+                        delta, events, key_increase, key_decrease
+                    )
         else:
             print(f"{Ansi256.SKY}[Slider] all electrodes released{Ansi.RESET}")
             self._last_value = None
