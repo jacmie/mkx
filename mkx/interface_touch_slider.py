@@ -24,7 +24,6 @@ class InterfaceTouchSlider(InterfaceAbstract):
         self.value_max = value_max
 
         self._last_value = None
-        self._last_active = {}
         self.motion_accumulator = 0.0
 
         print(f"{Ansi256.MINT}electrodes:{Ansi.RESET}")
