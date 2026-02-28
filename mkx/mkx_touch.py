@@ -101,7 +101,6 @@ class MKX_Touch(MKX_Abstract):
                 # Pass current layer to slider/wheel interfaces for layer-aware key selection
                 if isinstance(iface, InterfaceTouchSlider):
                     interface_events = iface.process(
-                        periphery.address,
                         values,
                         current_layer=self.layers_manager.get_top_layer(),
                     )
