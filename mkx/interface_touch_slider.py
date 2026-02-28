@@ -10,6 +10,7 @@ class InterfaceTouchSlider(InterfaceAbstract):
         electrodes,
         slider_keymap,
         step_size=0.05,
+        dynamic_step=False,
         max_steps_per_loop=5,
         value_min=0.0,
         value_max=1.0,
@@ -22,6 +23,7 @@ class InterfaceTouchSlider(InterfaceAbstract):
         self.max_steps_per_loop = max_steps_per_loop
         self.value_min = value_min
         self.value_max = value_max
+        self.dynamic_step = dynamic_step
 
         self._last_value = None
         self.motion_accumulator = 0.0
@@ -62,6 +64,36 @@ class InterfaceTouchSlider(InterfaceAbstract):
 
         return key_increase, key_decrease
 
+    def _get_dynamic_step_size(self, delta):
+        """
+        Calculate dynamic step size based on movement speed.
+
+        Fast movements → smaller steps for faster scrubbing
+        Slow movements → larger steps for precise control
+
+        Returns: dynamic step size clamped between min and max bounds
+        """
+        speed = abs(delta)
+
+        # Ensure base step_size is valid
+        base_step = max(self.step_size, 0.01)
+
+        # Speed thresholds and resulting step sizes as fractions of base step
+        threshold_fast = 4.0 * base_step
+        threshold_medium = 1.5 * base_step
+
+        if speed > threshold_fast:
+            dynamic_step = 0.5 * base_step
+        elif speed > threshold_medium:
+            dynamic_step = 0.8 * base_step
+        else:
+            dynamic_step = 1.0 * base_step
+
+        # Clamp to reasonable bounds
+        min_step = 0.004
+        max_step = 1.0
+        return max(min_step, min(max_step, dynamic_step))
+
     def _resolve_absolute(self, values: dict):
         total_weight = sum(values.values())
         weighted_sum = sum(index * value for index, value in values.items())
@@ -89,6 +121,11 @@ class InterfaceTouchSlider(InterfaceAbstract):
         self._last_value = value
         print(f"{Ansi256.SKY}[Slider] delta: {Ansi256.PEACH}{delta:.3f}{Ansi.RESET}")
 
+        if self.dynamic_step:
+            step_size_to_use = self._get_dynamic_step_size(delta)
+        else:
+            step_size_to_use = self.step_size
+
         # Accumulate motion
         self.motion_accumulator += delta
         print(
@@ -96,7 +133,7 @@ class InterfaceTouchSlider(InterfaceAbstract):
         )
 
         # Convert accumulated motion to discrete steps
-        steps = int(self.motion_accumulator / self.step_size)
+        steps = int(self.motion_accumulator / step_size_to_use)
 
         if steps != 0:
             # Limit burst size
@@ -104,7 +141,7 @@ class InterfaceTouchSlider(InterfaceAbstract):
                 -self.max_steps_per_loop,
                 min(self.max_steps_per_loop, steps),
             )
-            self.motion_accumulator -= steps * self.step_size
+            self.motion_accumulator -= steps * step_size_to_use
 
             print(f"{Ansi256.SKY}[Slider] steps: {Ansi256.PEACH}{steps}{Ansi.RESET}")
 
@@ -141,20 +178,3 @@ class InterfaceTouchSlider(InterfaceAbstract):
             self.motion_accumulator = 0.0  # Reset accumulator on release
 
         return events
-
-
-# Want It Even Smoother?
-# Add velocity scaling:
-
-# speed = abs(delta)
-
-# if speed > 0.2:
-#     STEP_SIZE = 0.02
-# elif speed > 0.05:
-#     STEP_SIZE = 0.03
-# else:
-#     STEP_SIZE = 0.05
-
-# Now:
-# Slow move → precise
-# Fast spin → scrubs faster

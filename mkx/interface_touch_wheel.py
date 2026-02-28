@@ -9,6 +9,7 @@ class InterfaceTouchWheel(InterfaceTouchSlider):
         electrodes,
         slider_keymap,
         step_size=0.05,
+        dynamic_step=False,
         max_steps_per_loop=5,
         value_min=0.0,
         value_max=1.0,
@@ -17,6 +18,7 @@ class InterfaceTouchWheel(InterfaceTouchSlider):
             electrodes,
             slider_keymap,
             step_size,
+            dynamic_step,
             max_steps_per_loop,
             value_min,
             value_max,
@@ -86,9 +88,14 @@ class InterfaceTouchWheel(InterfaceTouchSlider):
 
         print(f"{Ansi256.SKY}[Wheel] delta: {Ansi256.PEACH}{delta:.3f}{Ansi.RESET}")
 
+        if self.dynamic_step:
+            step_size_to_use = self._get_dynamic_step_size(delta)
+        else:
+            step_size_to_use = self.step_size
+
         self.motion_accumulator += delta
 
-        steps = int(self.motion_accumulator / self.step_size)
+        steps = int(self.motion_accumulator / step_size_to_use)
 
         if steps != 0:
             steps = max(
@@ -96,7 +103,7 @@ class InterfaceTouchWheel(InterfaceTouchSlider):
                 min(self.max_steps_per_loop, steps),
             )
 
-            self.motion_accumulator -= steps * self.step_size
+            self.motion_accumulator -= steps * step_size_to_use
 
             print(f"{Ansi256.SKY}[Wheel] steps: {Ansi256.PEACH}{steps}{Ansi.RESET}")
 
