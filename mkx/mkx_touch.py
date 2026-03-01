@@ -4,6 +4,7 @@ from mkx.mkx_abstract import MKX_Abstract
 from mkx.periphery_touch import PeripheryTouch
 from mkx.slider_event import SliderEvent
 from mkx.interface_touch_slider import InterfaceTouchSlider
+from mkx.haptic import Haptic
 
 from mkx.process_key_event import process_key_event
 from mkx.error import halt_on_error
@@ -17,12 +18,16 @@ class MKX_Touch(MKX_Abstract):
         self.mpr121 = None
         self.peripherys_touch = []
         self.electrodes_map = {}
+        self.haptic = None
 
     def use_irq(self, irq_pin: bool):
         self.irq = irq_pin
 
     def add_periphery_touch(self, periphery_touch: PeripheryTouch):
         self.peripherys_touch.append(periphery_touch)
+
+    def add_haptic(self, haptic: Haptic):
+        self.haptic = haptic
 
     def _init_keyboard(self):
         for iface in self.interfaces:
@@ -106,6 +111,8 @@ class MKX_Touch(MKX_Abstract):
                     )
                 else:
                     interface_events = iface.process(periphery.address, values)
+                    if self.haptic:
+                        self.haptic.play_effect(periphery.address, values.keys())
 
                 if interface_events:
                     events.extend(interface_events)
