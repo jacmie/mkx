@@ -130,7 +130,7 @@ $(document).ready(function(){initNavTree('p_2.html',''); initResizable(); });
 2.2 Set Python environment (optional)</h1>
 <p>Installing <a href="https://www.python.org/">Python</a> is optional but convenient for users and developers of <b>MKX</b>. <br  />
  Set up a Python environment named <b>dev</b> and activate it:</p>
-<div class="fragment"><div class="line">python3 -m dev ../dev</div>
+<div class="fragment"><div class="line">python3 -m venv ../dev</div>
 <div class="line">source ../dev/bin/activate</div>
 </div><!-- fragment --><p> <br  />
 </p>
@@ -171,12 +171,12 @@ $(document).ready(function(){initNavTree('p_2.html',''); initResizable(); });
 <div class="fragment"><div class="line">git clone https://github.com/adafruit/circuitpython.git</div>
 <div class="line">cd circuitpython/mpy-cross</div>
 <div class="line">make</div>
-<div class="line"># optionally add mpy-cross to system PATH</div>
-<div class="line"># build calls the mpy-cross in the process</div>
-<div class="line"># direct use:</div>
-<div class="line">./mpy-cross example/adafruit_example.py</div>
+</div><!-- fragment --><p>Rename the binary to avoid confusion with the mpy-cross for classical Python (this is for the Circuit Python) MKX build scripts expect the name <em>adafruit-mpy-cross</em> Add <em>adafruit-mpy-cross</em> dir to system PATH to make it available globaly:</p>
+<div class="fragment"><div class="line">mv build/mpy-cross build/adafruit-mpy-cross</div>
+<div class="line">export PATH=&quot;$PATH:$(pwd)/build&quot;</div>
 </div><!-- fragment --><p>Clone the <b>MKX</b> repository, or your own fork:</p>
 <div class="fragment"><div class="line">git clone git@github.com:jacmie/mkx.git</div>
+<div class="line">cd mkx</div>
 </div><!-- fragment --><p>Run the build tool from the repository root to compile the MKX library into the local <b>.compile</b> directory: </p><div class="fragment"><div class="line">python build.py --compile</div>
 </div><!-- fragment --><p>Upload the whole compiled library to the <b>CIRCUITPY/lib</b> directory:</p>
 <div class="fragment"><div class="line">python build.py --upload</div>
