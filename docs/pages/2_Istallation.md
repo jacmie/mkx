@@ -14,7 +14,7 @@ Installing [Python](https://www.python.org/) is optional but convenient for user
 Set up a Python environment named **dev** and activate it:
 
 ```
-python3 -m dev ../dev
+python3 -m venv ../dev
 source ../dev/bin/activate
 ```
 <br>
@@ -66,16 +66,22 @@ or build it yourself from the CircuitPython repository:
 git clone https://github.com/adafruit/circuitpython.git
 cd circuitpython/mpy-cross
 make
-# optionally add mpy-cross to system PATH
-# build calls the mpy-cross in the process
-# direct use:
-./mpy-cross example/adafruit_example.py
+```
+
+Rename the binary to avoid confusion with the mpy-cross for classical Python (this is for the Circuit Python)
+MKX build scripts expect the name *adafruit-mpy-cross*
+Add *adafruit-mpy-cross* dir to system PATH to make it available globaly:
+
+```
+mv build/mpy-cross build/adafruit-mpy-cross
+export PATH="$PATH:$(pwd)/build"
 ```
 
 Clone the **MKX** repository, or your own fork:
 
 ```
 git clone git@github.com:jacmie/mkx.git
+cd mkx
 ```
 
 Run the build tool from the repository root to compile the MKX library into the local <b>.compile</b> directory:
