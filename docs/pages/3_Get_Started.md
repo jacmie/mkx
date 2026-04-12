@@ -1,7 +1,37 @@
 @page p_3 3 Get Started
 @tableofcontents
 
-@section p_3_1  3.1 Hardware Keypass
+@section p_3_1  3.1 Basic Usage
+
+@subsection p_3_1_1 3.1.1 Files Structure
+
+- *lib/* - contains Adafruit bundle libraries & MKX library  
+- *boot.py* - runs **first on boot** - sets up the environment  
+- *boot_out.txt* - boot log (useful for debugging when USB monitor is unavailable)  
+- *code.py* - main script runs on soft reboot (after saving files)  
+
+@subsection p_3_1_2 3.1.2 Programming
+
+By default **CIRCUITPY** drive appears.  
+Edit files directly on the MCU and save. With auto reload enabled (default) there will be soft restart and the saved code reloded.
+
+The **MKX library** provides **extensive logging**
+- Useful for debugging keymaps and device behavior
+- Helps identify issues quickly
+
+To view logs in real time, use a **serial monitor**
+- Recommended editors & tools:  
+  https://learn.adafruit.com/welcome-to-circuitpython/recommended-editors  
+
+- Popular options:
+  - **Mu Editor** - built-in serial console (easy for beginners)
+  - **Thonny** - simple interface with serial output
+  - **VS Code** - use extensions like *Serial Monitor*
+  - **screen / minicom (Linux/macOS)** - in terminal
+
+In the following sections few use examples of the **MKX** library are presented.
+
+@section p_3_2  3.2 Hardware Keypass
 
 <div style="margin-left: 100px;">
   <img width=800 src="KeyPass_keyboard.jpg">
@@ -70,7 +100,7 @@ keyboard.add_keymap(keymap, 1, 1)
 keyboard.run_forever()
 ```
 
-@section p_3_2  3.2 Booster Keyboard
+@section p_3_3  3.3 Booster Keyboard
 
 <div style="margin-left: 100px;">
   <img width=800 src="BOOSTER_keyboard.jpg">
@@ -199,7 +229,7 @@ keyboard = MKX_Periphery(peryphery, debug=True)
 keyboard.run_forever()
 ```
 
-@section p_3_3  3.3 Square Keyboard
+@section p_3_4  3.4 Square Keyboard
 
 <div style="margin-left: 100px;">
   <img src="SQ_keyboard.jpg">
