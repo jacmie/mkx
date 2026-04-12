@@ -123,9 +123,56 @@ boot_cfg(
 )
 ```
 
-@section p_4_2 4.2 MKX Central
+@section p_4_2 4.2 MKX Single
 
-Main **MKX** class that manages keyboard operation and handles communication with the computer.  
+Simple **MKX** class for keyboard with one MCU.  
+Manages keyboard operation and handles communication with the computer.  
+Keep things simple and efficient if you are not building split keyboard with two MCU.
+
+``` {.py}
+from mkx.mkx_single import MKX_Single
+
+mkx = MKX_Single()
+```
+
+**Example:**
+``` {.py}
+import board
+
+from mkx.mkx_single import MKX_Single
+from mkx.periphery_single import PeripherySingle
+from mkx.interface_single import InterfaceSingle
+from mkx.keys_standard import *
+
+mkx = MKX_Single()
+
+# Set up matrix pins
+col_pins = (board.GP9, board.GP7, board.GP5, board.GP4, board.GP3, board.GP2)
+row_pins = (board.GP10, board.GP11, board.GP13, board.GP15, board.GP17)
+
+# Add local matrix periphery
+periphery = PeripherySingle(col_pins, row_pins)
+mkx.add_periphery_central(periphery)
+
+# Map matrix to keyboard
+interface = InterfaceSingle(0, 0, 5, 4)
+mkx.add_interface(interface)
+
+# Define keys
+keymap = [
+    [A, B, C, D, E, F],
+    [G, H, I, J, K, L],
+]
+mkx.add_keymap(keymap, 5, 1)
+
+# Run keyboard
+mkx.run_forever()
+```
+
+@section p_4_3 4.3 MKX Central
+
+Main **MKX** class for split keyboards with many communicating MCU.  
+Manages keyboard operation and handles communication with the computer.  
 
 
 ``` {.py}
@@ -153,7 +200,7 @@ from mkx.mkx_central import MKX_Central
 mkx_central = MKX_Central()
 ```
 
-@subsection p_4_2_1 4.2.1 add_periphery_central
+@subsection p_4_3_1 4.3.1 add_periphery_central
 
 Add **PeripheryCentral** to the ***MKX_Central**.  
 
@@ -177,7 +224,7 @@ central_peryphery = PeripheryCentral("central", col_pins, row_pins)
 mkx_central.add_periphery_central(central_peryphery)
 ```
 
-@subsection p_4_2_2 4.2.2 add_interface
+@subsection p_4_3_2 4.3.2 add_interface
 
 Add **Interface** of a **Periphery** to the **MKX_Central**.  
 
@@ -208,7 +255,7 @@ interface_right = InterfaceUART("right_peryphery", None, board.GP1, 11, 0, 6, 4)
 keyboard.add_interface(interface_right)
 ```
 
-@subsection p_4_2_3 4.2.3 add_layer_status_led
+@subsection p_4_3_3 4.3.3 add_layer_status_led
 
 Add **LayerStatusLed** to the **MKX_Central**.  
 
@@ -238,7 +285,7 @@ status_led.add_layer(3, (255, 0, 0))  # Red
 mkx_central.add_layer_status_led(status_led)
 ```
 
-@subsection p_4_2_4 4.2.4 add_backlight
+@subsection p_4_3_4 4.3.4 add_backlight
 
 Add **Backlight** to the **MKX_Central**.  
 
@@ -266,7 +313,7 @@ backlight.set_swirl(True)
 mkx_central.add_backlight(backlight)
 ```
 
-@subsection p_4_2_5 4.2.5 add_keymap
+@subsection p_4_3_5 4.3.5 add_keymap
 
 Add **Keymap** to the **MKX_Central**.  
 **Keymap** must have rectangular shape. In custom layouts where certain positions are unused, set them to **None**.
@@ -312,7 +359,7 @@ keymap = [
 mkx_central.add_keymap(keymap, 2, 1)
 ```
 
-@subsection p_4_2_6 4.2.6 use_ble
+@subsection p_4_3_6 4.3.6 use_ble
 
 Enable or disable BLE.  
 
@@ -333,7 +380,7 @@ mkx_central = MKX_Central()
 mkx_central.use_ble(True)
 ```
 
-@subsection p_4_2_7 4.2.7 run_forever
+@subsection p_4_3_7 4.3.7 run_forever
 
 Start running keyboard's infinite loop.
 
@@ -344,7 +391,7 @@ mkx_central.run_forever()
 ```
 
 
-@section p_4_3 4.3 MKX Periphery
+@section p_4_4 4.4 MKX Periphery
 
 The general **Periphery** captures keystrokes and transmit messages to the **MKX_Central**.  
 The **MKX_Periphery** is a simpler counterpart to the **MKX_Central**,  
@@ -369,7 +416,7 @@ PeripheryUART object (or other derived from the *PeripheryAbstract*).
 **debug**  
 Flag enabling verbose output for the Periphery.  
 
-@subsection p_4_3_1 4.3.1 PeripherySingle
+@subsection p_4_4_1 4.4.1 PeripherySingle
 
 Set the PeripherySingle for a single matrix on the same hardware as the main controller.
 
@@ -412,7 +459,7 @@ interface = InterfaceCentral(periphery, 0, 0, 5, 4)
 mkx_central.add_interface(interface)
 ```
 
-@subsection p_4_3_2 4.3.2 PeripheryCentral
+@subsection p_4_4_2 4.4.2 PeripheryCentral
 
 Set the PeripheryCentral.
 
@@ -467,7 +514,7 @@ mkx_central.add_interface(interface_right)
 mkx_central.run_forever()
 ```
 
-@subsection p_4_3_3 4.3.3 PeripheryUART
+@subsection p_4_4_3 4.4.3 PeripheryUART
 
 Set the PeripheryUART.
 
@@ -524,7 +571,7 @@ mkx_periphery = MKX_Periphery(peryphery, debug=True)
 mkx_periphery.run_forever()
 ```
 
-@subsection p_4_3_4 4.3.4 PeripheryTouch
+@subsection p_4_4_4 4.4.4 PeripheryTouch
 
 Set the PeripheryTouch for capacitive touch sensing using the MPR121 touch sensor.
 
@@ -583,7 +630,114 @@ mkx_central = MKX_Central()
 mkx_central.add_interface(touch_interface)
 ```
 
-@section p_4_4 4.4 Interface
+@section p_4_5 4.5 MKX Touch
+
+**MKX** class for capacitive touch sensing keyboards using the MPR121 touch sensor.  
+Manages touch electrode inputs and converts them to keyboard events with optional haptic feedback.  
+Supports both single electrode mode and simplified matrix mode (2 electrodes per key next to each other, but these are not send and listen electrodes).  
+No support for multi-touch matrix, many keys pressed at once like: CTRL+C. But can call macro keys like: COPY = M_LCTL(C)  
+No support for split keyboards.  
+Can't mix with classical switches, pressed keys scanning is different.
+
+
+``` {.py}
+from mkx.mkx_touch import MKX_Touch
+
+mkx = MKX_Touch()
+```
+
+**Parameters:**  
+None (inherits all methods from **MKX_Abstract**).
+
+**Methods:**
+
+**use_irq(irq_pin)**  
+Enable IRQ (interrupt request) mode using the specified pin. Improves performance by polling only when touch is detected.
+
+**add_periphery_touch(periphery_touch: PeripheryTouch)**  
+Add a **PeripheryTouch** object to handle contact with the MPR121 sensor.
+
+**add_haptic(haptic: Haptic)**  
+Add a **Haptic** object for vibration feedback on touch events.
+
+**run_forever()**  
+Start the infinite loop for processing touch events.
+
+**Example (Single Touch Interface):**
+``` {.py}
+import board
+from mkx.i2c import init_i2c
+from mkx.mkx_touch import MKX_Touch
+from mkx.periphery_touch import PeripheryTouch
+from mkx.interface_touch import InterfaceTouch
+from mkx.keys_standard import *
+
+i2c = init_i2c()
+
+mkx = MKX_Touch()
+
+# Set up MPR121 touch sensor
+touch_periphery = PeripheryTouch(i2c, address=0x5B, irq_pin=board.GP14)
+touch_periphery.set_thresholds(touch=12, release=6)
+mkx.add_periphery_touch(touch_periphery)
+
+# Map 12 electrodes to a 3x4 grid
+electrodes = {0x5B: (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11)}
+touch_interface = InterfaceTouch.from_electrodes(electrodes, 0, 0, 3, 3)
+mkx.add_interface(touch_interface)
+
+# Define keymap
+keymap = [
+    [A, B, C, D],
+    [E, F, G, H],
+    [I, J, K, L],
+]
+mkx.add_keymap(keymap, 3, 2)
+
+# Optional: Add haptic feedback
+from mkx.haptic import Haptic
+haptic = Haptic(i2c, effect_id=1, enable_pin=board.GP15, duration=0.05)
+mkx.add_haptic(haptic)
+
+mkx.run_forever()
+```
+
+**Example (2-Electrode Matrix Mode):**
+``` {.py}
+import board
+from mkx.i2c import init_i2c
+from mkx.mkx_touch import MKX_Touch
+from mkx.periphery_touch import PeripheryTouch
+from mkx.interface_touch import InterfaceTouch
+from mkx.keys_standard import *
+
+i2c = init_i2c()
+
+mkx = MKX_Touch()
+
+# Set up MPR121 with matrix mode
+touch_periphery = PeripheryTouch(i2c, address=0x5B, irq_pin=board.GP14)
+touch_periphery.fire_only_on_2electrodes(True)
+touch_periphery.set_thresholds(touch=12, release=6)
+mkx.add_periphery_touch(touch_periphery)
+
+# 3 column electrodes × 4 row electrodes = 12 keys
+electrodes_col = {0x5B: (0, 1, 2)}
+electrodes_row = {0x5B: (8, 9, 10, 11)}
+touch_interface = InterfaceTouch.from_rows_cols(electrodes_col, electrodes_row, 0, 0, 2, 3)
+mkx.add_interface(touch_interface)
+
+keymap = [
+    [A, B, C, D],
+    [E, F, G, H],
+    [I, J, K, L],
+]
+mkx.add_keymap(keymap, 3, 2)
+
+mkx.run_forever()
+```
+
+@section p_4_6 4.6 Interface
 
 The **Interface** connects the **Peripheries** to the **MKX_Central**.  
 
@@ -618,7 +772,7 @@ mkx_central.add_interface(intefhace_right)
 mkx_central.run_forever()
 ```
 
-@subsection p_4_4_1 4.4.1 InterfaceSingle
+@subsection p_4_6_1 4.6.1 InterfaceSingle
 
 Set simpler InterfaceSingle for a hardware with one MCU.
 
@@ -668,7 +822,7 @@ interface = InterfaceSingle(0, 0, 5, 4)
 mkx_central.add_interface(interface)
 ```
 
-@subsection p_4_4_2 4.4.2 InterfaceCentral
+@subsection p_4_6_2 4.6.2 InterfaceCentral
 
 Set the InterfaceCentral for split keyboards with two MCU.  
 
@@ -703,7 +857,7 @@ Maximum column number. Counting start from '0'.
 Maximum row number. Counting start from '0'.  
 
 
-@subsection p_4_4_3 4.4.3 InterfaceUART
+@subsection p_4_6_3 4.6.3 InterfaceUART
 
 Set the InterfaceUART.
 
@@ -747,7 +901,7 @@ Maximum row number. Counting start from '0'.
 UART communication baudrate.  
 
 
-@subsection p_4_4_4 4.4.4 InterfaceTouch
+@subsection p_4_6_4 4.6.4 InterfaceTouch
 
 Interface for capacitive touch sensing.  
 Supports both single electrode mode and simplified matrix mode (2 electrodes per key next to each other, but these are not send and listen electrodes).  
@@ -815,7 +969,7 @@ touch_interface = InterfaceTouch.from_rows_cols(
 )
 ```
 
-@subsection p_4_4_5 4.4.5 InterfaceTouchSlider
+@subsection p_4_6_5 4.6.5 InterfaceTouchSlider
 
 Linear slider interface for continuous value input using capacitive electrodes.
 
@@ -877,7 +1031,7 @@ slider_interface = InterfaceTouchSlider(
 )
 ```
 
-@subsection p_4_4_6 4.4.6 InterfaceTouchWheel
+@subsection p_4_6_6 4.6.6 InterfaceTouchWheel
 
 Circular wheel interface for continuous rotational input using capacitive electrodes "closed, continous slider".
 
@@ -939,11 +1093,11 @@ wheel_interface = InterfaceTouchWheel(
 ```
 
 
-@section p_4_5 4.5 Layer Status LED
+@section p_4_7 4.7 Layer Status LED
 
 Status LED used for the indication of the active layer.  
 
-@subsection p_4_5_1 4.5.1 LayerStatusLedRgbNeoPixel
+@subsection p_4_7_1 4.7.1 LayerStatusLedRgbNeoPixel
 
 RGB NeoPixel LED which indicates active layer by color.  
 
@@ -982,7 +1136,7 @@ status_led.add_layer(1, (0, 0, 255))  # Blue
 mkx_central.add_layer_status_led(status_led)
 ```
 
-@subsection p_4_5_2 4.5.2 LayerStatusLedRgbThreePin
+@subsection p_4_7_2 4.7.2 LayerStatusLedRgbThreePin
 
 RGB three pin LED which indicates active layer by color.  
 *Untested!* due to lack of proper hardware configuration.
@@ -1005,7 +1159,7 @@ Green LED pin.
 **blue_pin**  
 Blue LED pin.
 
-@subsection p_4_5_3 4.5.3 LayerStatusLedArray
+@subsection p_4_7_3 4.7.3 LayerStatusLedArray
 
 Array of LED which indicates active layer.  
 *Untested!* due to lack of proper hardware configuration.
@@ -1020,7 +1174,7 @@ status_led = LayerStatusLedArray(
 **pins**  
 List of pins for LED-s.
 
-@section p_4_6 4.6 Backlight
+@section p_4_8 4.8 Backlight
 
 <div style="margin-left: 100px;">
   <img width=800 src="RGB_backlight.jpg">
@@ -1028,7 +1182,7 @@ List of pins for LED-s.
 
 RGB NeoPixel backlight.
 
-@subsection p_4_6_1 4.6.1 BacklightNeopixelStatic
+@subsection p_4_8_1 4.8.1 BacklightNeopixelStatic
 
 Static color backlight.
 
@@ -1069,7 +1223,7 @@ backlight = BacklightNeopixelStatic(board.A0, num_pixels=72, rgb_color=(0, 0, 25
 mkx_central.add_backlight(backlight)
 ```
 
-@subsection p_4_6_2 4.6.2 BacklightNeopixelRainbow
+@subsection p_4_8_2 4.8.2 BacklightNeopixelRainbow
 
 Rainbow animated color backlight.
 
@@ -1093,7 +1247,7 @@ Number of the RGB NeoPixel LED-s.
 **brightness**  
 Brightness of the LED in the range 0-1.  
 
-@subsection p_4_6_2_1 4.6.2.1 faster()
+@subsection p_4_8_2_1 4.8.2.1 faster()
 
 Hom much faster should be the rainbow animation from the initial one.
 
@@ -1106,7 +1260,7 @@ backlight.faster(
 **value**  
 Increased animation speed up to 20.
 
-@subsection p_4_6_2_2 4.6.2.2 slower()
+@subsection p_4_8_2_2 4.8.2.2 slower()
 
 Hom much slower should be the rainbow animation from the initial one.
 
@@ -1119,7 +1273,7 @@ backlight.slower(
 **value**  
 Decreased animation speed up to 20.
 
-@subsection p_4_6_2_3 4.6.2.3 set_swirl()
+@subsection p_4_8_2_3 4.8.2.3 set_swirl()
 
 Should the LED-s change color independently by swirl or not.
 
@@ -1148,7 +1302,7 @@ backlight.set_swirl(True)
 mkx_central.add_backlight(backlight)
 ```
 
-@section p_4_7 4.7 I2C Helper
+@section p_4_9 4.9 I2C Helper
 
 Utility function for initializing and configuring I2C communication on CircuitPython devices.  
 Provides automatic device scanning and error handling with visual feedback on error via status LED.
@@ -1200,7 +1354,7 @@ touch_periphery = PeripheryTouch(i2c, address=0x5B)
 haptic = Haptic(i2c, effect_id=1, enable_pin=board.GP15)
 ```
 
-@section p_4_8 4.8 Haptic
+@section p_4_10 4.10 Haptic
 
 Haptic feedback driver using the DRV2605 motor driver for vibration effects.  
 Supports both ERM (Eccentric Rotating Mass) and LRM (Linear Resonant) motors.
