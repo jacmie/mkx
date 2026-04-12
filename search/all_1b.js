@@ -15,6 +15,7 @@ var searchData=
   ['toggle_20layer_12',['5.3.5 TG - Toggle Layer',['../p_5.html#p_5_3_5',1,'']]],
   ['toggle_20one_20shot_20layer_13',['5.3.6 TO - To Layer (Toggle One-Shot Layer)',['../p_5.html#p_5_3_6',1,'']]],
   ['tools_14',['2.5.3 Optional - Testing Tools',['../p_2.html#p_2_5_3',1,'']]],
-  ['tt_20tap_20toggle_15',['5.3.7 TT - Tap-Toggle',['../p_5.html#p_5_3_7',1,'']]],
-  ['types_16',['Key Types',['../index.html#autotoc_md1',1,'']]]
+  ['touch_15',['4.5 MKX Touch',['../p_4.html#p_4_5',1,'']]],
+  ['tt_20tap_20toggle_16',['5.3.7 TT - Tap-Toggle',['../p_5.html#p_5_3_7',1,'']]],
+  ['types_17',['Key Types',['../index.html#autotoc_md1',1,'']]]
 ];

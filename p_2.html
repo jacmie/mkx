@@ -37,7 +37,7 @@
   </td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">MKX
-   &#160;<span id="projectnumber">v1.0.0</span>
+   &#160;<span id="projectnumber">v2.0.0</span>
    </div>
    <div id="projectbrief">Next Generation Mechanical Keyboard Firmware</div>
   </td>
@@ -208,7 +208,16 @@ $(document).ready(function(){initNavTree('p_2.html',''); initResizable(); });
  In the <b>dev</b> Python environment:</p>
 <div class="fragment"><div class="line">pip install pytest coverage</div>
 </div><!-- fragment --><p>Additional optional code quality tools can be installed:</p>
-<div class="fragment"><div class="line">pip install pylint flake8 mypy</div>
+<div class="fragment"><div class="line">pip install pylint flake8 mypy black</div>
+</div><!-- fragment --><p>Enable the tools. For example if you are using VS Code install the 'Black Formatter' and add to settings.json:</p>
+<div class="fragment"><div class="line">{</div>
+<div class="line">  &quot;python.linting.enabled&quot;: true,</div>
+<div class="line">  &quot;python.linting.pylintEnabled&quot;: true,</div>
+<div class="line">  &quot;python.linting.flake8Enabled&quot;: true,</div>
+<div class="line">  &quot;python.linting.mypyEnabled&quot;: true,</div>
+<div class="line">  &quot;editor.defaultFormatter&quot;: &quot;ms-python.black-formatter&quot;,</div>
+<div class="line">  &quot;editor.formatOnSave&quot;: true</div>
+<div class="line">}</div>
 </div><!-- fragment --><p>See also <a class="el" href="p_6.html#p_6_4">6.4 Testing</a> for how to run and write tests.</p>
 <h2><a class="anchor" id="p_2_5_4"></a>
 2.5.4 Optional - Build HTML documentation with Doxygen</h2>

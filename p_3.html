@@ -37,7 +37,7 @@
   </td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">MKX
-   &#160;<span id="projectnumber">v1.0.0</span>
+   &#160;<span id="projectnumber">v2.0.0</span>
    </div>
    <div id="projectbrief">Next Generation Mechanical Keyboard Firmware</div>
   </td>
@@ -107,13 +107,53 @@ $(document).ready(function(){initNavTree('p_3.html',''); initResizable(); });
 </div><!--header-->
 <div class="contents">
 <div class="toc"><h3>Table of Contents</h3>
-<ul><li class="level1"><a href="#p_3_1">3.1 Hardware Keypass</a></li>
-<li class="level1"><a href="#p_3_2">3.2 Booster Keyboard</a></li>
-<li class="level1"><a href="#p_3_3">3.3 Square Keyboard</a></li>
+<ul><li class="level1"><a href="#p_3_1">3.1 Basic Usage</a><ul><li class="level2"><a href="#p_3_1_1">3.1.1 Files Structure</a></li>
+<li class="level2"><a href="#p_3_1_2">3.1.2 Programming</a></li>
+</ul>
+</li>
+<li class="level1"><a href="#p_3_2">3.2 Hardware Keypass</a></li>
+<li class="level1"><a href="#p_3_3">3.3 Booster Keyboard</a></li>
+<li class="level1"><a href="#p_3_4">3.4 Square Keyboard</a></li>
+<li class="level1"><a href="#p_3_5">3.5 Hackpad Keyboard</a></li>
 </ul>
 </div>
 <div class="textblock"><h1><a class="anchor" id="p_3_1"></a>
-3.1 Hardware Keypass</h1>
+3.1 Basic Usage</h1>
+<h2><a class="anchor" id="p_3_1_1"></a>
+3.1.1 Files Structure</h2>
+<ul>
+<li><em>lib/</em> - contains Adafruit bundle libraries &amp; MKX library <br  />
+</li>
+<li><em>boot.py</em> - runs <b>first on boot</b> - sets up the environment <br  />
+</li>
+<li><em>boot_out.txt</em> - boot log (useful for debugging when USB monitor is unavailable) <br  />
+</li>
+<li><em>code.py</em> - main script runs on soft reboot (after saving files) <br  />
+</li>
+</ul>
+<h2><a class="anchor" id="p_3_1_2"></a>
+3.1.2 Programming</h2>
+<p>By default <b>CIRCUITPY</b> drive appears. <br  />
+ Edit files directly on the MCU and save. With auto reload enabled (default) there will be soft restart and the saved code reloded.</p>
+<p>The <b>MKX library</b> provides <b>extensive logging</b></p><ul>
+<li>Useful for debugging keymaps and device behavior</li>
+<li>Helps identify issues quickly</li>
+</ul>
+<p>To view logs in real time, use a <b>serial monitor</b></p><ul>
+<li>Recommended editors &amp; tools: <br  />
+ <a href="https://learn.adafruit.com/welcome-to-circuitpython/recommended-editors">https://learn.adafruit.com/welcome-to-circuitpython/recommended-editors</a> <br  />
+</li>
+<li>Popular options:<ul>
+<li><b>Mu Editor</b> - built-in serial console (easy for beginners)</li>
+<li><b>Thonny</b> - simple interface with serial output</li>
+<li><b>VS Code</b> - use extensions like <em>Serial Monitor</em></li>
+<li><b>screen / minicom (Linux/macOS)</b> - in terminal</li>
+</ul>
+</li>
+</ul>
+<p>In the following sections few use examples of the <b>MKX</b> library are presented.</p>
+<h1><a class="anchor" id="p_3_2"></a>
+3.2 Hardware Keypass</h1>
 <div style="margin-left: 100px;"> <img src="KeyPass_keyboard.jpg" alt="" width="800" class="inline"/> </div><p>This simple setup uses an unmodified <em>Seeed Xiao nRF52840</em> connected to a computer via USB. <br  />
 </p>
 <p>To make it more useful and entertaining, we simulate the behavior of a hardware security key. <br  />
@@ -169,8 +209,8 @@ $(document).ready(function(){initNavTree('p_3.html',''); initResizable(); });
 <div class="line"><span class="comment"># Uncomment to connect via BLE</span></div>
 <div class="line"><span class="comment"># keyboard.use_ble(True)</span></div>
 <div class="line">keyboard.run_forever()</div>
-</div><!-- fragment --><h1><a class="anchor" id="p_3_2"></a>
-3.2 Booster Keyboard</h1>
+</div><!-- fragment --><h1><a class="anchor" id="p_3_3"></a>
+3.3 Booster Keyboard</h1>
 <div style="margin-left: 100px;"> <img src="BOOSTER_keyboard.jpg" alt="" width="800" class="inline"/> </div><p>Here is a more practical example using a split keyboard called <b>Booster</b>.</p>
 <p>Both halves of the keyboard use the <em>Pimoroni PGA2040</em> board, chosen for its small footprint, numerous available GPIO pins, and minimal onboard extras.</p>
 <p>In the image, you can see:</p><ul>
@@ -280,8 +320,8 @@ $(document).ready(function(){initNavTree('p_3.html',''); initResizable(); });
 <div class="line"> </div>
 <div class="line">keyboard = MKX_Periphery(peryphery, debug=<span class="keyword">True</span>)</div>
 <div class="line">keyboard.run_forever()</div>
-</div><!-- fragment --><h1><a class="anchor" id="p_3_3"></a>
-3.3 Square Keyboard</h1>
+</div><!-- fragment --><h1><a class="anchor" id="p_3_4"></a>
+3.4 Square Keyboard</h1>
 <div style="margin-left: 100px;"> <img src="SQ_keyboard.jpg" alt="" class="inline"/> </div><p>Another split keyboard example, called <b>Sq (Square)</b>, is equipped with <em>Feather ESP32-S3</em> boards on both halves. <br  />
  This board provides several advantages, including potential Bluetooth connectivity, battery support, and onboard charging capabilities.</p>
 <p>Since many parts of the code are shared with the Booster keyboard, this overview will focus only on the key differences.</p>
@@ -435,6 +475,135 @@ $(document).ready(function(){initNavTree('p_3.html',''); initResizable(); });
 <div class="line">peryphery = PeripheryUART(<span class="stringliteral">&quot;sq_r&quot;</span>, col_pins, row_pins, board.TX, board.RX)</div>
 <div class="line"> </div>
 <div class="line">keyboard = MKX_Periphery(peryphery, debug=<span class="keyword">True</span>)</div>
+<div class="line">keyboard.run_forever()</div>
+</div><!-- fragment --><h1><a class="anchor" id="p_3_5"></a>
+3.5 Hackpad Keyboard</h1>
+<div style="margin-left: 100px;"> <img src="Hackpad_keyboard.jpg" alt="" class="inline"/> </div><p>Example of using capacitive touch sensing technology - a macro keypad called <b>Hackpad</b>.</p>
+<p>Runs on <em>Seeed Xiao RP2040</em> with the <b>MPR121</b> capacitive sensor and <b>DRV2605</b> for haptic feedback. <br  />
+ For these chips, Adafruit provides driver libraries, though independent drivers for other chips also exist. <br  />
+ Using custom drivers may require small MKX changes (mostly updating includes). <br  />
+</p>
+<p>Hackpad uses a 6×6 key matrix. A keypress is triggered when exactly two electrodes are activated. <br  />
+ This is not a send/receive type architecture, and multi-touch is not supported. <br  />
+</p>
+<p>Electrode pads are covered with solder mask for protection. <br  />
+ Key legends can be drawn with a marker and removed using high-percentage alcohol (IPA). <br  />
+ ⚠️ Covering MPR121 electrodes with film significantly degrades sensing (material + air gap effects). <br  />
+</p>
+<p>For storage/programming mode (see boot.py), micro mechanical switch is added on the back of the PCB, connected to pins D9 and D10. <br  />
+</p>
+<div class="fragment"><div class="line"><span class="comment"># boot.py</span></div>
+<div class="line"> </div>
+<div class="line"><span class="keyword">import</span> board</div>
+<div class="line"> </div>
+<div class="line"><span class="keyword">from</span> mkx.boot_config <span class="keyword">import</span> boot_cfg</div>
+<div class="line"> </div>
+<div class="line">boot_cfg(</div>
+<div class="line">    sense=board.D9,  </div>
+<div class="line">    source=board.D10,  </div>
+<div class="line">    autoreload=<span class="keyword">True</span>,  </div>
+<div class="line">    storage=<span class="keyword">True</span>,  </div>
+<div class="line">    usb_id=(<span class="stringliteral">&quot;MKX Device&quot;</span>, <span class="stringliteral">&quot;Hackpad&quot;</span>),  </div>
+<div class="line">)</div>
+</div><!-- fragment --><div class="fragment"><div class="line"><span class="comment"># code.py</span></div>
+<div class="line"> </div>
+<div class="line"><span class="keyword">import</span> board</div>
+<div class="line"> </div>
+<div class="line"><span class="keyword">from</span> mkx.i2c <span class="keyword">import</span> init_i2c</div>
+<div class="line"><span class="keyword">from</span> mkx.mkx_touch <span class="keyword">import</span> MKX_Touch</div>
+<div class="line"> </div>
+<div class="line"><span class="keyword">from</span> mkx.layer_status_led_rgb_threepin <span class="keyword">import</span> LayerStatusLedRgbThreePin</div>
+<div class="line"> </div>
+<div class="line"><span class="keyword">from</span> mkx.keys_standard <span class="keyword">import</span> *</div>
+<div class="line"><span class="keyword">from</span> mkx.keys_modifiers <span class="keyword">import</span> M_LCTL, M_LSFT, M_LGUI</div>
+<div class="line"><span class="keyword">from</span> mkx.keys_vim <span class="keyword">import</span> *</div>
+<div class="line"> </div>
+<div class="line"><span class="keyword">from</span> mkx.periphery_touch <span class="keyword">import</span> PeripheryTouch</div>
+<div class="line"><span class="keyword">from</span> mkx.interface_touch <span class="keyword">import</span> InterfaceTouch</div>
+<div class="line"> </div>
+<div class="line"><span class="keyword">from</span> mkx.haptic <span class="keyword">import</span> Haptic</div>
+<div class="line"> </div>
+<div class="line">keyboard = MKX_Touch()</div>
+<div class="line"> </div>
+<div class="line">status_led = LayerStatusLedRgbThreePin(</div>
+<div class="line">    board.D1, board.D0, board.D2, brightness=1, common_anode=<span class="keyword">True</span></div>
+<div class="line">)</div>
+<div class="line">status_led.add_layer(0, (0, 0, 255))  <span class="comment"># Layer 0: Blue</span></div>
+<div class="line">status_led.add_layer(1, (255, 0, 0))  <span class="comment"># Layer 1: Red</span></div>
+<div class="line">keyboard.add_layer_status_led(status_led)</div>
+<div class="line"> </div>
+<div class="line">i2c = init_i2c(board.SCL, board.SDA, status_led)</div>
+<div class="line"> </div>
+<div class="line">keyboard.add_periphery_touch(PeripheryTouch(i2c, address=0x5B, irq_pin=board.D6))</div>
+<div class="line"> </div>
+<div class="line"><span class="comment"># Define touch sensor electrode mapping (columns and rows on the 0x5B sensor)</span></div>
+<div class="line">electrodes_col = {</div>
+<div class="line">    0x5B: tuple(range(6, 12)),  <span class="comment"># Touch pins 6-11 map to Hackpad columns</span></div>
+<div class="line">}</div>
+<div class="line">electrodes_row = {</div>
+<div class="line">    0x5B: tuple(range(0, 6)),  <span class="comment"># Touch pins 0-5 map to Hackpad rows</span></div>
+<div class="line">}</div>
+<div class="line"> </div>
+<div class="line"><span class="comment"># Create 6x6 grid interface from touch sensor electrodes</span></div>
+<div class="line">keyboard.add_interface(</div>
+<div class="line">    InterfaceTouch.from_rows_cols(electrodes_col, electrodes_row, 0, 0, 5, 5)</div>
+<div class="line">)</div>
+<div class="line"> </div>
+<div class="line"><span class="comment"># Configure haptic feedback (vibration motor)</span></div>
+<div class="line">hap = Haptic(i2c, 48, board.D7, play_on_init=<span class="keyword">True</span>)</div>
+<div class="line">hap.set_electrodes(electrodes_col)  <span class="comment"># Vibrate on</span></div>
+<div class="line">keyboard.add_haptic(hap)</div>
+<div class="line"> </div>
+<div class="line"> </div>
+<div class="line">OPEN = M_LCTL(O)</div>
+<div class="line">CLOSE = M_LCTL(W)</div>
+<div class="line">SAVE = M_LCTL(S)</div>
+<div class="line"> </div>
+<div class="line">DESKTOP = M_LGUI(D)</div>
+<div class="line">LOCK = M_LGUI(L)</div>
+<div class="line"> </div>
+<div class="line">PANEL = M_LCTL(J)</div>
+<div class="line">TOOLS = M_LCTL(B)</div>
+<div class="line">PTAB = M_LCTL(PGUP)</div>
+<div class="line">NTAB = M_LCTL(PGDN)</div>
+<div class="line"> </div>
+<div class="line">ALL = M_LCTL(A)</div>
+<div class="line">COMMENT = M_LCTL(SLSH)</div>
+<div class="line">FIND = M_LCTL(F)</div>
+<div class="line">REPLACE = M_LCTL(H)</div>
+<div class="line"> </div>
+<div class="line">BUILD = F7</div>
+<div class="line">DEBUG = F5</div>
+<div class="line">RUN = F9</div>
+<div class="line"> </div>
+<div class="line"><span class="comment"># fmt: off</span></div>
+<div class="line"> </div>
+<div class="line"><span class="comment"># Keymap: 2 layers -&gt; 6 rows × 6 columns</span></div>
+<div class="line">keymap = [</div>
+<div class="line">    <span class="comment"># Layer 0: Normal mode (IDE navigation and editing)</span></div>
+<div class="line">    [</div>
+<div class="line">        ESC,        F1,             F2,             F3,         F4,             F5,</div>
+<div class="line">        TOOLS,      PANEL,          DESKTOP,        BUILD,      DEBUG,          RUN,</div>
+<div class="line">        COMMENT,    ALL,            PTAB,           NTAB,       SAVE,           CLOSE,</div>
+<div class="line">        VI_MVLU,    HOME,           BSPC,           UP,         DEL,            END,</div>
+<div class="line">        VI_MVLD,    VI_PRVW,        LEFT,           DOWN,       RIGHT,          VI_NXTW,</div>
+<div class="line">        TAB,        VI_UNDO,        VI_CUT,         VI_YANK,    VI_PAST,        TO(1),</div>
+<div class="line">    ],</div>
+<div class="line"> </div>
+<div class="line">    <span class="comment"># Layer 1: Visual/Selection mode (Vim-style text selection with Shift modifiers)</span></div>
+<div class="line">    [</div>
+<div class="line">        TO(0),              F1,             F2,             F3,             F4,             F5,</div>
+<div class="line">        TOOLS,              PANEL,          DESKTOP,        BUILD,          DEBUG,          RUN,</div>
+<div class="line">        COMMENT,            ALL,            PTAB,           NTAB,           SAVE,           CLOSE,</div>
+<div class="line">        M_LSFT(VI_NXTL),    M_LSFT(HOME),   BSPC,           M_LSFT(UP),     DEL,            M_LSFT(END),</div>
+<div class="line">        M_LSFT(VI_PRVL),    M_LSFT(VI_PRVW),M_LSFT(LEFT),   M_LSFT(DOWN),   M_LSFT(RIGHT),  M_LSFT(VI_NXTW),</div>
+<div class="line">        TAB,                VI_UNDO,        VI_CUT,         VI_YANK,        VI_PAST,        TO(0),</div>
+<div class="line">    ],</div>
+<div class="line">]</div>
+<div class="line"> </div>
+<div class="line"><span class="comment"># fmt: on</span></div>
+<div class="line"> </div>
+<div class="line">keyboard.add_keymap(keymap, 6, 6)</div>
 <div class="line">keyboard.run_forever()</div>
 </div><!-- fragment --> </div></div><!-- contents -->
 </div><!-- PageDoc -->

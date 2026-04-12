@@ -37,7 +37,7 @@
   </td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">MKX
-   &#160;<span id="projectnumber">v1.0.0</span>
+   &#160;<span id="projectnumber">v2.0.0</span>
    </div>
    <div id="projectbrief">Next Generation Mechanical Keyboard Firmware</div>
   </td>
@@ -108,35 +108,45 @@ $(document).ready(function(){initNavTree('p_4.html',''); initResizable(); });
 <div class="contents">
 <div class="toc"><h3>Table of Contents</h3>
 <ul><li class="level1"><a href="#p_4_1">4.1 Boot Config</a></li>
-<li class="level1"><a href="#p_4_2">4.2 MKX Central</a><ul><li class="level2"><a href="#p_4_2_1">4.2.1 add_periphery_central</a></li>
-<li class="level2"><a href="#p_4_2_2">4.2.2 add_interface</a></li>
-<li class="level2"><a href="#p_4_2_3">4.2.3 add_layer_status_led</a></li>
-<li class="level2"><a href="#p_4_2_4">4.2.4 add_backlight</a></li>
-<li class="level2"><a href="#p_4_2_5">4.2.5 add_keymap</a></li>
-<li class="level2"><a href="#p_4_2_6">4.2.6 use_ble</a></li>
-<li class="level2"><a href="#p_4_2_7">4.2.7 run_forever</a></li>
+<li class="level1"><a href="#p_4_2">4.2 MKX Single</a></li>
+<li class="level1"><a href="#p_4_3">4.3 MKX Central</a><ul><li class="level2"><a href="#p_4_3_1">4.3.1 add_periphery_central</a></li>
+<li class="level2"><a href="#p_4_3_2">4.3.2 add_interface</a></li>
+<li class="level2"><a href="#p_4_3_3">4.3.3 add_layer_status_led</a></li>
+<li class="level2"><a href="#p_4_3_4">4.3.4 add_backlight</a></li>
+<li class="level2"><a href="#p_4_3_5">4.3.5 add_keymap</a></li>
+<li class="level2"><a href="#p_4_3_6">4.3.6 use_ble</a></li>
+<li class="level2"><a href="#p_4_3_7">4.3.7 run_forever</a></li>
 </ul>
 </li>
-<li class="level1"><a href="#p_4_3">4.3 MKX Periphery</a><ul><li class="level2"><a href="#p_4_3_1">4.3.1 PeripheryCentral</a></li>
-<li class="level2"><a href="#p_4_3_2">4.3.2 PeripheryUART</a></li>
+<li class="level1"><a href="#p_4_4">4.4 MKX Periphery</a><ul><li class="level2"><a href="#p_4_4_1">4.4.1 PeripherySingle</a></li>
+<li class="level2"><a href="#p_4_4_2">4.4.2 PeripheryCentral</a></li>
+<li class="level2"><a href="#p_4_4_3">4.4.3 PeripheryUART</a></li>
+<li class="level2"><a href="#p_4_4_4">4.4.4 PeripheryTouch</a></li>
 </ul>
 </li>
-<li class="level1"><a href="#p_4_4">4.4 Interface</a><ul><li class="level2"><a href="#p_4_4_1">4.4.1 InterfaceCentral</a></li>
-<li class="level2"><a href="#p_4_4_2">4.4.2 InterfaceUART</a></li>
+<li class="level1"><a href="#p_4_5">4.5 MKX Touch</a></li>
+<li class="level1"><a href="#p_4_6">4.6 Interface</a><ul><li class="level2"><a href="#p_4_6_1">4.6.1 InterfaceSingle</a></li>
+<li class="level2"><a href="#p_4_6_2">4.6.2 InterfaceCentral</a></li>
+<li class="level2"><a href="#p_4_6_3">4.6.3 InterfaceUART</a></li>
+<li class="level2"><a href="#p_4_6_4">4.6.4 InterfaceTouch</a></li>
+<li class="level2"><a href="#p_4_6_5">4.6.5 InterfaceTouchSlider</a></li>
+<li class="level2"><a href="#p_4_6_6">4.6.6 InterfaceTouchWheel</a></li>
 </ul>
 </li>
-<li class="level1"><a href="#p_4_5">4.5 Layer Status LED</a><ul><li class="level2"><a href="#p_4_5_1">4.5.1 LayerStatusLedRgbNeoPixel</a></li>
-<li class="level2"><a href="#p_4_5_2">4.5.2 LayerStatusLedRgbThreePin</a></li>
-<li class="level2"><a href="#p_4_5_3">4.5.3 LayerStatusLedArray</a></li>
+<li class="level1"><a href="#p_4_7">4.7 Layer Status LED</a><ul><li class="level2"><a href="#p_4_7_1">4.7.1 LayerStatusLedRgbNeoPixel</a></li>
+<li class="level2"><a href="#p_4_7_2">4.7.2 LayerStatusLedRgbThreePin</a></li>
+<li class="level2"><a href="#p_4_7_3">4.7.3 LayerStatusLedArray</a></li>
 </ul>
 </li>
-<li class="level1"><a href="#p_4_6">4.6 Backlight</a><ul><li class="level2"><a href="#p_4_6_1">4.6.1 BacklightNeopixelStatic</a></li>
-<li class="level2"><a href="#p_4_6_2">4.6.2 BacklightNeopixelRainbow</a></li>
-<li class="level2"><a href="#p_4_6_2_1">4.6.2.1 faster()</a></li>
-<li class="level2"><a href="#p_4_6_2_2">4.6.2.2 slower()</a></li>
-<li class="level2"><a href="#p_4_6_2_3">4.6.2.3 set_swirl()</a></li>
+<li class="level1"><a href="#p_4_8">4.8 Backlight</a><ul><li class="level2"><a href="#p_4_8_1">4.8.1 BacklightNeopixelStatic</a></li>
+<li class="level2"><a href="#p_4_8_2">4.8.2 BacklightNeopixelRainbow</a></li>
+<li class="level2"><a href="#p_4_8_2_1">4.8.2.1 faster()</a></li>
+<li class="level2"><a href="#p_4_8_2_2">4.8.2.2 slower()</a></li>
+<li class="level2"><a href="#p_4_8_2_3">4.8.2.3 set_swirl()</a></li>
 </ul>
 </li>
+<li class="level1"><a href="#p_4_9">4.9 I2C Helper</a></li>
+<li class="level1"><a href="#p_4_10">4.10 Haptic</a></li>
 </ul>
 </div>
 <div class="textblock"><h1><a class="anchor" id="p_4_1"></a>
@@ -234,8 +244,47 @@ $(document).ready(function(){initNavTree('p_4.html',''); initResizable(); });
 <div class="line">    usb_id=(<span class="stringliteral">&quot;MKX Device&quot;</span>, <span class="stringliteral">&quot;Sq Keyboard&quot;</span>),</div>
 <div class="line">)</div>
 </div><!-- fragment --><h1><a class="anchor" id="p_4_2"></a>
-4.2 MKX Central</h1>
-<p>Main <b>MKX</b> class that manages keyboard operation and handles communication with the computer. <br  />
+4.2 MKX Single</h1>
+<p>Simple <b>MKX</b> class for keyboard with one MCU. <br  />
+ Manages keyboard operation and handles communication with the computer. <br  />
+ Keep things simple and efficient if you are not building split keyboard with two MCU.</p>
+<div class="fragment"><div class="line"><span class="keyword">from</span> mkx.mkx_single <span class="keyword">import</span> MKX_Single</div>
+<div class="line"> </div>
+<div class="line">mkx = MKX_Single()</div>
+</div><!-- fragment --><p><b>Example:</b> </p><div class="fragment"><div class="line"><span class="keyword">import</span> board</div>
+<div class="line"> </div>
+<div class="line"><span class="keyword">from</span> mkx.mkx_single <span class="keyword">import</span> MKX_Single</div>
+<div class="line"><span class="keyword">from</span> mkx.periphery_single <span class="keyword">import</span> PeripherySingle</div>
+<div class="line"><span class="keyword">from</span> mkx.interface_single <span class="keyword">import</span> InterfaceSingle</div>
+<div class="line"><span class="keyword">from</span> mkx.keys_standard <span class="keyword">import</span> *</div>
+<div class="line"> </div>
+<div class="line">mkx = MKX_Single()</div>
+<div class="line"> </div>
+<div class="line"><span class="comment"># Set up matrix pins</span></div>
+<div class="line">col_pins = (board.GP9, board.GP7, board.GP5, board.GP4, board.GP3, board.GP2)</div>
+<div class="line">row_pins = (board.GP10, board.GP11, board.GP13, board.GP15, board.GP17)</div>
+<div class="line"> </div>
+<div class="line"><span class="comment"># Add local matrix periphery</span></div>
+<div class="line">periphery = PeripherySingle(col_pins, row_pins)</div>
+<div class="line">mkx.add_periphery_central(periphery)</div>
+<div class="line"> </div>
+<div class="line"><span class="comment"># Map matrix to keyboard</span></div>
+<div class="line">interface = InterfaceSingle(0, 0, 5, 4)</div>
+<div class="line">mkx.add_interface(interface)</div>
+<div class="line"> </div>
+<div class="line"><span class="comment"># Define keys</span></div>
+<div class="line">keymap = [</div>
+<div class="line">    [A, B, C, D, E, F],</div>
+<div class="line">    [G, H, I, J, K, L],</div>
+<div class="line">]</div>
+<div class="line">mkx.add_keymap(keymap, 5, 1)</div>
+<div class="line"> </div>
+<div class="line"><span class="comment"># Run keyboard</span></div>
+<div class="line">mkx.run_forever()</div>
+</div><!-- fragment --><h1><a class="anchor" id="p_4_3"></a>
+4.3 MKX Central</h1>
+<p>Main <b>MKX</b> class for split keyboards with many communicating MCU. <br  />
+ Manages keyboard operation and handles communication with the computer. <br  />
 </p>
 <div class="fragment"><div class="line"><span class="keyword">from</span> mkx.mkx_central <span class="keyword">import</span> MKX_Central</div>
 <div class="line"> </div>
@@ -252,8 +301,8 @@ $(document).ready(function(){initNavTree('p_4.html',''); initResizable(); });
 <p><b>Example:</b> </p><div class="fragment"><div class="line"><span class="keyword">from</span> mkx.mkx_central <span class="keyword">import</span> MKX_Central</div>
 <div class="line"> </div>
 <div class="line">mkx_central = MKX_Central()</div>
-</div><!-- fragment --><h2><a class="anchor" id="p_4_2_1"></a>
-4.2.1 add_periphery_central</h2>
+</div><!-- fragment --><h2><a class="anchor" id="p_4_3_1"></a>
+4.3.1 add_periphery_central</h2>
 <p>Add <b>PeripheryCentral</b> to the ***MKX_Central**. <br  />
 </p>
 <div class="fragment"><div class="line">mkx_central.add_periphery_central(</div>
@@ -268,8 +317,8 @@ $(document).ready(function(){initNavTree('p_4.html',''); initResizable(); });
 <div class="line"> </div>
 <div class="line">central_peryphery = PeripheryCentral(<span class="stringliteral">&quot;central&quot;</span>, col_pins, row_pins)</div>
 <div class="line">mkx_central.add_periphery_central(central_peryphery)</div>
-</div><!-- fragment --><h2><a class="anchor" id="p_4_2_2"></a>
-4.2.2 add_interface</h2>
+</div><!-- fragment --><h2><a class="anchor" id="p_4_3_2"></a>
+4.3.2 add_interface</h2>
 <p>Add <b>Interface</b> of a <b>Periphery</b> to the <b>MKX_Central</b>. <br  />
 </p>
 <div class="fragment"><div class="line">mkx_central.add_interface(</div>
@@ -291,8 +340,8 @@ $(document).ready(function(){initNavTree('p_4.html',''); initResizable(); });
 <div class="line"> </div>
 <div class="line">interface_right = InterfaceUART(<span class="stringliteral">&quot;right_peryphery&quot;</span>, <span class="keywordtype">None</span>, board.GP1, 11, 0, 6, 4)</div>
 <div class="line">keyboard.add_interface(interface_right)</div>
-</div><!-- fragment --><h2><a class="anchor" id="p_4_2_3"></a>
-4.2.3 add_layer_status_led</h2>
+</div><!-- fragment --><h2><a class="anchor" id="p_4_3_3"></a>
+4.3.3 add_layer_status_led</h2>
 <p>Add <b>LayerStatusLed</b> to the <b>MKX_Central</b>. <br  />
 </p>
 <div class="fragment"><div class="line">mkx_central.add_layer_status_led(</div>
@@ -314,8 +363,8 @@ $(document).ready(function(){initNavTree('p_4.html',''); initResizable(); });
 <div class="line">status_led.add_layer(2, (255, 255, 255))  <span class="comment"># White</span></div>
 <div class="line">status_led.add_layer(3, (255, 0, 0))  <span class="comment"># Red</span></div>
 <div class="line">mkx_central.add_layer_status_led(status_led)</div>
-</div><!-- fragment --><h2><a class="anchor" id="p_4_2_4"></a>
-4.2.4 add_backlight</h2>
+</div><!-- fragment --><h2><a class="anchor" id="p_4_3_4"></a>
+4.3.4 add_backlight</h2>
 <p>Add <b>Backlight</b> to the <b>MKX_Central</b>. <br  />
 </p>
 <div class="fragment"><div class="line">mkx_central.add_backlight(</div>
@@ -335,8 +384,8 @@ $(document).ready(function(){initNavTree('p_4.html',''); initResizable(); });
 <div class="line">backlight.slower(2)</div>
 <div class="line">backlight.set_swirl(<span class="keyword">True</span>)</div>
 <div class="line">mkx_central.add_backlight(backlight)</div>
-</div><!-- fragment --><h2><a class="anchor" id="p_4_2_5"></a>
-4.2.5 add_keymap</h2>
+</div><!-- fragment --><h2><a class="anchor" id="p_4_3_5"></a>
+4.3.5 add_keymap</h2>
 <p>Add <b>Keymap</b> to the <b>MKX_Central</b>. <br  />
  <b>Keymap</b> must have rectangular shape. In custom layouts where certain positions are unused, set them to <b>None</b>.</p>
 <div class="fragment"><div class="line">mkx_central.add_keymap(</div>
@@ -373,8 +422,8 @@ $(document).ready(function(){initNavTree('p_4.html',''); initResizable(); });
 <div class="line"><span class="comment"># fmt: on</span></div>
 <div class="line"> </div>
 <div class="line">mkx_central.add_keymap(keymap, 2, 1)</div>
-</div><!-- fragment --><h2><a class="anchor" id="p_4_2_6"></a>
-4.2.6 use_ble</h2>
+</div><!-- fragment --><h2><a class="anchor" id="p_4_3_6"></a>
+4.3.6 use_ble</h2>
 <p>Enable or disable BLE. <br  />
 </p>
 <div class="fragment"><div class="line">mkx_central.use_ble(</div>
@@ -386,12 +435,12 @@ $(document).ready(function(){initNavTree('p_4.html',''); initResizable(); });
 <div class="line"> </div>
 <div class="line">mkx_central = MKX_Central()</div>
 <div class="line">mkx_central.use_ble(<span class="keyword">True</span>)</div>
-</div><!-- fragment --><h2><a class="anchor" id="p_4_2_7"></a>
-4.2.7 run_forever</h2>
+</div><!-- fragment --><h2><a class="anchor" id="p_4_3_7"></a>
+4.3.7 run_forever</h2>
 <p>Start running keyboard's infinite loop.</p>
 <div class="fragment"><div class="line">mkx_central.run_forever()</div>
-</div><!-- fragment --><h1><a class="anchor" id="p_4_3"></a>
-4.3 MKX Periphery</h1>
+</div><!-- fragment --><h1><a class="anchor" id="p_4_4"></a>
+4.4 MKX Periphery</h1>
 <p>The general <b>Periphery</b> captures keystrokes and transmit messages to the <b>MKX_Central</b>. <br  />
  The <b>MKX_Periphery</b> is a simpler counterpart to the <b>MKX_Central</b>, <br  />
  operating continuously on hardware separate from the <b>MKX_Central</b>. <br  />
@@ -411,8 +460,43 @@ $(document).ready(function(){initNavTree('p_4.html',''); initResizable(); });
 <p><b>debug</b> <br  />
  Flag enabling verbose output for the Periphery. <br  />
 </p>
-<h2><a class="anchor" id="p_4_3_1"></a>
-4.3.1 PeripheryCentral</h2>
+<h2><a class="anchor" id="p_4_4_1"></a>
+4.4.1 PeripherySingle</h2>
+<p>Set the PeripherySingle for a single matrix on the same hardware as the main controller.</p>
+<div class="fragment"><div class="line"><span class="keyword">from</span> mkx.periphery_single <span class="keyword">import</span> PeripherySingle</div>
+<div class="line"> </div>
+<div class="line">periphery = PeripherySingle(</div>
+<div class="line">    col_pins, </div>
+<div class="line">    row_pins, </div>
+<div class="line">    **kwargs</div>
+<div class="line">)</div>
+</div><!-- fragment --><p><b>col_pins</b> <br  />
+ List of column pins. <br  />
+</p>
+<p><b>row_pins</b> <br  />
+ List of row pins. <br  />
+</p>
+<p>** <b>kwargs</b> <br  />
+ Other optional arguments. <br  />
+</p>
+<p><b>Example:</b> </p><div class="fragment"><div class="line"><span class="keyword">import</span> board</div>
+<div class="line"> </div>
+<div class="line"><span class="keyword">from</span> mkx.mkx_central <span class="keyword">import</span> MKX_Central</div>
+<div class="line"><span class="keyword">from</span> mkx.periphery_single <span class="keyword">import</span> PeripherySingle</div>
+<div class="line"><span class="keyword">from</span> mkx.interface_central <span class="keyword">import</span> InterfaceCentral</div>
+<div class="line"> </div>
+<div class="line">mkx_central = MKX_Central()</div>
+<div class="line"> </div>
+<div class="line">col_pins = (board.GP9, board.GP7, board.GP5, board.GP4, board.GP3, board.GP2)</div>
+<div class="line">row_pins = (board.GP10, board.GP11, board.GP13, board.GP15, board.GP17)</div>
+<div class="line"> </div>
+<div class="line">periphery = PeripherySingle(col_pins, row_pins)</div>
+<div class="line">mkx_central.add_periphery_central(periphery)</div>
+<div class="line"> </div>
+<div class="line">interface = InterfaceCentral(periphery, 0, 0, 5, 4)</div>
+<div class="line">mkx_central.add_interface(interface)</div>
+</div><!-- fragment --><h2><a class="anchor" id="p_4_4_2"></a>
+4.4.2 PeripheryCentral</h2>
 <p>Set the PeripheryCentral.</p>
 <div class="fragment"><div class="line"><span class="keyword">from</span> mkx.periphery_central <span class="keyword">import</span> PeripheryCentral</div>
 <div class="line"> </div>
@@ -458,8 +542,8 @@ $(document).ready(function(){initNavTree('p_4.html',''); initResizable(); });
 <div class="line"><span class="comment"># other code ...</span></div>
 <div class="line"> </div>
 <div class="line">mkx_central.run_forever()</div>
-</div><!-- fragment --><h2><a class="anchor" id="p_4_3_2"></a>
-4.3.2 PeripheryUART</h2>
+</div><!-- fragment --><h2><a class="anchor" id="p_4_4_3"></a>
+4.4.3 PeripheryUART</h2>
 <p>Set the PeripheryUART.</p>
 <div class="fragment"><div class="line"><span class="keyword">from</span> mkx.periphery_uart <span class="keyword">import</span> PeripheryUART</div>
 <div class="line"> </div>
@@ -507,8 +591,142 @@ $(document).ready(function(){initNavTree('p_4.html',''); initResizable(); });
 <div class="line"> </div>
 <div class="line">mkx_periphery = MKX_Periphery(peryphery, debug=<span class="keyword">True</span>)</div>
 <div class="line">mkx_periphery.run_forever()</div>
-</div><!-- fragment --><h1><a class="anchor" id="p_4_4"></a>
-4.4 Interface</h1>
+</div><!-- fragment --><h2><a class="anchor" id="p_4_4_4"></a>
+4.4.4 PeripheryTouch</h2>
+<p>Set the PeripheryTouch for capacitive touch sensing using the MPR121 touch sensor.</p>
+<div class="fragment"><div class="line"><span class="keyword">from</span> mkx.periphery_touch <span class="keyword">import</span> PeripheryTouch</div>
+<div class="line"> </div>
+<div class="line">periphery = PeripheryTouch(</div>
+<div class="line">    i2c, </div>
+<div class="line">    address=0x5B, </div>
+<div class="line">    irq_pin=<span class="keywordtype">None</span></div>
+<div class="line">)</div>
+</div><!-- fragment --><p><b>i2c</b> <br  />
+ I2C bus object (see I2C Helper section). <br  />
+</p>
+<p><b>address</b> <br  />
+ I2C address of the MPR121 sensor. <br  />
+</p>
+<p><b>irq_pin</b> <br  />
+ Optional interrupt pin for the MPR121. When provided, the sensor reads only when the IRQ pin is active (LOW). Improves performance by reducing unnecessary polling. <br  />
+</p>
+<p><b>Methods:</b></p>
+<p><b>fire_only_on_2electrodes(enable: bool)</b> <br  />
+ Configure matrix mode to track exactly two active electrodes. <br  />
+ Used for 2D touch matrix applications. <b>No support of multi-touch.</b></p>
+<p><b>set_thresholds(touch: int = 12, release: int = 6)</b> <br  />
+ Set touch and release thresholds for electrode sensitivity. Release threshold must be lower than touch threshold.</p>
+<p><b>get_thresholds() -&gt; tuple[int, int]</b> <br  />
+ Get current touch and release thresholds. Returns (touch_threshold, release_threshold).</p>
+<p><b>electrode_values() -&gt; dict</b> <br  />
+ Read electrode values from the MPR121. Returns a dictionary with electrode indices and their values, or <code>None</code> if no state change occurred.</p>
+<p><b>Example:</b> </p><div class="fragment"><div class="line"><span class="keyword">import</span> board</div>
+<div class="line"><span class="keyword">from</span> mkx.i2c <span class="keyword">import</span> init_i2c</div>
+<div class="line"><span class="keyword">from</span> mkx.mkx_central <span class="keyword">import</span> MKX_Central</div>
+<div class="line"><span class="keyword">from</span> mkx.periphery_touch <span class="keyword">import</span> PeripheryTouch</div>
+<div class="line"><span class="keyword">from</span> mkx.interface_touch <span class="keyword">import</span> InterfaceTouch</div>
+<div class="line"> </div>
+<div class="line">i2c = init_i2c()</div>
+<div class="line"> </div>
+<div class="line">touch_periphery = PeripheryTouch(i2c, address=0x5B, irq_pin=board.GP14)</div>
+<div class="line">touch_periphery.set_thresholds(touch=12, release=6)</div>
+<div class="line"> </div>
+<div class="line"><span class="comment"># For single electrode mode (one-to-one mapping to keys):</span></div>
+<div class="line">electrodes = {0x5B: (0, 1, 2, 3, 4, 5)}  <span class="comment"># 6 electrodes mapped to grid</span></div>
+<div class="line">touch_interface = InterfaceTouch.from_electrodes(electrodes, 0, 0, 5, 0)</div>
+<div class="line"> </div>
+<div class="line">mkx_central = MKX_Central()</div>
+<div class="line">mkx_central.add_interface(touch_interface)</div>
+</div><!-- fragment --><h1><a class="anchor" id="p_4_5"></a>
+4.5 MKX Touch</h1>
+<p><b>MKX</b> class for capacitive touch sensing keyboards using the MPR121 touch sensor. <br  />
+ Manages touch electrode inputs and converts them to keyboard events with optional haptic feedback. <br  />
+ Supports both single electrode mode and simplified matrix mode (2 electrodes per key next to each other, but these are not send and listen electrodes). <br  />
+ No support for multi-touch matrix, many keys pressed at once like: CTRL+C. But can call macro keys like: COPY = M_LCTL(C) <br  />
+ No support for split keyboards. <br  />
+ Can't mix with classical switches, pressed keys scanning is different.</p>
+<div class="fragment"><div class="line"><span class="keyword">from</span> mkx.mkx_touch <span class="keyword">import</span> MKX_Touch</div>
+<div class="line"> </div>
+<div class="line">mkx = MKX_Touch()</div>
+</div><!-- fragment --><p><b>Parameters:</b> <br  />
+ None (inherits all methods from <b>MKX_Abstract</b>).</p>
+<p><b>Methods:</b></p>
+<p><b>use_irq(irq_pin)</b> <br  />
+ Enable IRQ (interrupt request) mode using the specified pin. Improves performance by polling only when touch is detected.</p>
+<p><b>add_periphery_touch(periphery_touch: PeripheryTouch)</b> <br  />
+ Add a <b>PeripheryTouch</b> object to handle contact with the MPR121 sensor.</p>
+<p><b>add_haptic(haptic: Haptic)</b> <br  />
+ Add a <b>Haptic</b> object for vibration feedback on touch events.</p>
+<p><b>run_forever()</b> <br  />
+ Start the infinite loop for processing touch events.</p>
+<p><b>Example (Single Touch Interface):</b> </p><div class="fragment"><div class="line"><span class="keyword">import</span> board</div>
+<div class="line"><span class="keyword">from</span> mkx.i2c <span class="keyword">import</span> init_i2c</div>
+<div class="line"><span class="keyword">from</span> mkx.mkx_touch <span class="keyword">import</span> MKX_Touch</div>
+<div class="line"><span class="keyword">from</span> mkx.periphery_touch <span class="keyword">import</span> PeripheryTouch</div>
+<div class="line"><span class="keyword">from</span> mkx.interface_touch <span class="keyword">import</span> InterfaceTouch</div>
+<div class="line"><span class="keyword">from</span> mkx.keys_standard <span class="keyword">import</span> *</div>
+<div class="line"> </div>
+<div class="line">i2c = init_i2c()</div>
+<div class="line"> </div>
+<div class="line">mkx = MKX_Touch()</div>
+<div class="line"> </div>
+<div class="line"><span class="comment"># Set up MPR121 touch sensor</span></div>
+<div class="line">touch_periphery = PeripheryTouch(i2c, address=0x5B, irq_pin=board.GP14)</div>
+<div class="line">touch_periphery.set_thresholds(touch=12, release=6)</div>
+<div class="line">mkx.add_periphery_touch(touch_periphery)</div>
+<div class="line"> </div>
+<div class="line"><span class="comment"># Map 12 electrodes to a 3x4 grid</span></div>
+<div class="line">electrodes = {0x5B: (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11)}</div>
+<div class="line">touch_interface = InterfaceTouch.from_electrodes(electrodes, 0, 0, 3, 3)</div>
+<div class="line">mkx.add_interface(touch_interface)</div>
+<div class="line"> </div>
+<div class="line"><span class="comment"># Define keymap</span></div>
+<div class="line">keymap = [</div>
+<div class="line">    [A, B, C, D],</div>
+<div class="line">    [E, F, G, H],</div>
+<div class="line">    [I, J, K, L],</div>
+<div class="line">]</div>
+<div class="line">mkx.add_keymap(keymap, 3, 2)</div>
+<div class="line"> </div>
+<div class="line"><span class="comment"># Optional: Add haptic feedback</span></div>
+<div class="line"><span class="keyword">from</span> mkx.haptic <span class="keyword">import</span> Haptic</div>
+<div class="line">haptic = Haptic(i2c, effect_id=1, enable_pin=board.GP15, duration=0.05)</div>
+<div class="line">mkx.add_haptic(haptic)</div>
+<div class="line"> </div>
+<div class="line">mkx.run_forever()</div>
+</div><!-- fragment --><p><b>Example (2-Electrode Matrix Mode):</b> </p><div class="fragment"><div class="line"><span class="keyword">import</span> board</div>
+<div class="line"><span class="keyword">from</span> mkx.i2c <span class="keyword">import</span> init_i2c</div>
+<div class="line"><span class="keyword">from</span> mkx.mkx_touch <span class="keyword">import</span> MKX_Touch</div>
+<div class="line"><span class="keyword">from</span> mkx.periphery_touch <span class="keyword">import</span> PeripheryTouch</div>
+<div class="line"><span class="keyword">from</span> mkx.interface_touch <span class="keyword">import</span> InterfaceTouch</div>
+<div class="line"><span class="keyword">from</span> mkx.keys_standard <span class="keyword">import</span> *</div>
+<div class="line"> </div>
+<div class="line">i2c = init_i2c()</div>
+<div class="line"> </div>
+<div class="line">mkx = MKX_Touch()</div>
+<div class="line"> </div>
+<div class="line"><span class="comment"># Set up MPR121 with matrix mode</span></div>
+<div class="line">touch_periphery = PeripheryTouch(i2c, address=0x5B, irq_pin=board.GP14)</div>
+<div class="line">touch_periphery.fire_only_on_2electrodes(<span class="keyword">True</span>)</div>
+<div class="line">touch_periphery.set_thresholds(touch=12, release=6)</div>
+<div class="line">mkx.add_periphery_touch(touch_periphery)</div>
+<div class="line"> </div>
+<div class="line"><span class="comment"># 3 column electrodes × 4 row electrodes = 12 keys</span></div>
+<div class="line">electrodes_col = {0x5B: (0, 1, 2)}</div>
+<div class="line">electrodes_row = {0x5B: (8, 9, 10, 11)}</div>
+<div class="line">touch_interface = InterfaceTouch.from_rows_cols(electrodes_col, electrodes_row, 0, 0, 2, 3)</div>
+<div class="line">mkx.add_interface(touch_interface)</div>
+<div class="line"> </div>
+<div class="line">keymap = [</div>
+<div class="line">    [A, B, C, D],</div>
+<div class="line">    [E, F, G, H],</div>
+<div class="line">    [I, J, K, L],</div>
+<div class="line">]</div>
+<div class="line">mkx.add_keymap(keymap, 3, 2)</div>
+<div class="line"> </div>
+<div class="line">mkx.run_forever()</div>
+</div><!-- fragment --><h1><a class="anchor" id="p_4_6"></a>
+4.6 Interface</h1>
 <p>The <b>Interface</b> connects the <b>Peripheries</b> to the <b>MKX_Central</b>. <br  />
 </p>
 <p>Possible options are <b>InterfaceCentral</b> matching the <b>PeripheryCentral</b> and <br  />
@@ -538,9 +756,51 @@ $(document).ready(function(){initNavTree('p_4.html',''); initResizable(); });
 <div class="line"><span class="comment"># other code ...</span></div>
 <div class="line"> </div>
 <div class="line">mkx_central.run_forever()</div>
-</div><!-- fragment --><h2><a class="anchor" id="p_4_4_1"></a>
-4.4.1 InterfaceCentral</h2>
-<p>Set the InterfaceCentral. <br  />
+</div><!-- fragment --><h2><a class="anchor" id="p_4_6_1"></a>
+4.6.1 InterfaceSingle</h2>
+<p>Set simpler InterfaceSingle for a hardware with one MCU.</p>
+<div class="fragment"><div class="line"><span class="keyword">from</span> mkx.interface_single <span class="keyword">import</span> InterfaceSingle</div>
+<div class="line"> </div>
+<div class="line">interface = InterfaceSingle(</div>
+<div class="line">    col_min: int,</div>
+<div class="line">    row_min: int,</div>
+<div class="line">    col_max: int,</div>
+<div class="line">    row_max: int</div>
+<div class="line">)</div>
+</div><!-- fragment --><p><b>col_min</b> <br  />
+ Minimum column number. Counting start from '0'. <br  />
+</p>
+<p><b>row_min</b> <br  />
+ Minimum row number. Counting start from '0'. <br  />
+</p>
+<p><b>col_max</b> <br  />
+ Maximum column number. Counting start from '0'. <br  />
+</p>
+<p><b>row_max</b> <br  />
+ Maximum row number. Counting start from '0'. <br  />
+</p>
+<p>Min/max column and rows values can be inverted, meaning min value can be bigger than max. <br  />
+ Inverted min/max column and rows values will change the keys mapping. <br  />
+</p>
+<p><b>Example:</b> </p><div class="fragment"><div class="line"><span class="keyword">import</span> board</div>
+<div class="line"> </div>
+<div class="line"><span class="keyword">from</span> mkx.mkx_central <span class="keyword">import</span> MKX_Central</div>
+<div class="line"><span class="keyword">from</span> mkx.periphery_single <span class="keyword">import</span> PeripherySingle</div>
+<div class="line"><span class="keyword">from</span> mkx.interface_single <span class="keyword">import</span> InterfaceSingle</div>
+<div class="line"> </div>
+<div class="line">mkx_central = MKX_Central()</div>
+<div class="line"> </div>
+<div class="line">col_pins = (board.GP9, board.GP7, board.GP5, board.GP4, board.GP3, board.GP2)</div>
+<div class="line">row_pins = (board.GP10, board.GP11, board.GP13, board.GP15, board.GP17)</div>
+<div class="line"> </div>
+<div class="line">periphery = PeripherySingle(col_pins, row_pins)</div>
+<div class="line">mkx_central.add_periphery_central(periphery)</div>
+<div class="line"> </div>
+<div class="line">interface = InterfaceSingle(0, 0, 5, 4)</div>
+<div class="line">mkx_central.add_interface(interface)</div>
+</div><!-- fragment --><h2><a class="anchor" id="p_4_6_2"></a>
+4.6.2 InterfaceCentral</h2>
+<p>Set the InterfaceCentral for split keyboards with two MCU. <br  />
 </p>
 <p>Min/max column and rows values can be inverted, meaning min value can be bigger than max. <br  />
  Inverted min/max column and rows values will change the keys mapping. <br  />
@@ -568,8 +828,8 @@ $(document).ready(function(){initNavTree('p_4.html',''); initResizable(); });
 <p><b>row_max</b> <br  />
  Maximum row number. Counting start from '0'. <br  />
 </p>
-<h2><a class="anchor" id="p_4_4_2"></a>
-4.4.2 InterfaceUART</h2>
+<h2><a class="anchor" id="p_4_6_3"></a>
+4.6.3 InterfaceUART</h2>
 <p>Set the InterfaceUART.</p>
 <div class="fragment"><div class="line"><span class="keyword">from</span> mkx.interface_uart <span class="keyword">import</span> InterfaceUART</div>
 <div class="line"> </div>
@@ -607,12 +867,161 @@ $(document).ready(function(){initNavTree('p_4.html',''); initResizable(); });
 <p><b>baudrate</b> <br  />
  UART communication baudrate. <br  />
 </p>
-<h1><a class="anchor" id="p_4_5"></a>
-4.5 Layer Status LED</h1>
+<h2><a class="anchor" id="p_4_6_4"></a>
+4.6.4 InterfaceTouch</h2>
+<p>Interface for capacitive touch sensing. <br  />
+ Supports both single electrode mode and simplified matrix mode (2 electrodes per key next to each other, but these are not send and listen electrodes). <br  />
+ No support for split keyboards.</p>
+<div class="fragment"><div class="line"><span class="keyword">from</span> mkx.interface_touch <span class="keyword">import</span> InterfaceTouch</div>
+<div class="line"> </div>
+<div class="line"><span class="comment"># Single electrode mode</span></div>
+<div class="line">interface = InterfaceTouch.from_electrodes(</div>
+<div class="line">    electrodes: dict, </div>
+<div class="line">    col_min: int, </div>
+<div class="line">    row_min: int, </div>
+<div class="line">    col_max: int, </div>
+<div class="line">    row_max: int</div>
+<div class="line">)</div>
+<div class="line"> </div>
+<div class="line"><span class="comment"># Matrix mode (2 electrodes per key)</span></div>
+<div class="line">interface = InterfaceTouch.from_rows_cols(</div>
+<div class="line">    electrodes_col: dict, </div>
+<div class="line">    electrodes_row: dict, </div>
+<div class="line">    col_min: int, </div>
+<div class="line">    row_min: int, </div>
+<div class="line">    col_max: int, </div>
+<div class="line">    row_max: int</div>
+<div class="line">)</div>
+</div><!-- fragment --><p><b>electrodes</b> <br  />
+ Dictionary mapping I2C address to list of electrode pins for single electrode mode. <br  />
+ Example: <code>{0x5B: (0, 1, 2, 3, 4, 5)}</code></p>
+<p><b>electrodes_col</b> <br  />
+ Dictionary mapping I2C address to column electrode pins for matrix mode. <br  />
+ Example: <code>{0x5B: (0, 1, 2)}</code> <br  />
+</p>
+<p><b>electrodes_row</b> <br  />
+ Dictionary mapping I2C address to row electrode pins for matrix mode. <br  />
+ Example: <code>{0x5B: (8, 9, 10, 11)}</code></p>
+<p><b>col_min, row_min, col_max, row_max</b> <br  />
+ Grid boundaries defining the touch interface area.</p>
+<p><b>Example (Single Electrode Mode):</b> </p><div class="fragment"><div class="line"><span class="keyword">from</span> mkx.interface_touch <span class="keyword">import</span> InterfaceTouch</div>
+<div class="line"><span class="keyword">from</span> mkx.periphery_touch <span class="keyword">import</span> PeripheryTouch</div>
+<div class="line"> </div>
+<div class="line"><span class="comment"># 6 electrodes mapped to a 3x2 grid</span></div>
+<div class="line">electrodes = {0x5B: (0, 1, 2, 3, 4, 5)}</div>
+<div class="line">touch_interface = InterfaceTouch.from_electrodes(electrodes, 0, 0, 2, 1)</div>
+</div><!-- fragment --><p><b>Example (Matrix Mode - 2 Electrodes per Key):</b> </p><div class="fragment"><div class="line"><span class="keyword">from</span> mkx.interface_touch <span class="keyword">import</span> InterfaceTouch</div>
+<div class="line"> </div>
+<div class="line"><span class="comment"># 3 column electrodes × 4 row electrodes = 12 keys</span></div>
+<div class="line">electrodes_col = {0x5B: (0, 1, 2)}</div>
+<div class="line">electrodes_row = {0x5B: (8, 9, 10, 11)}</div>
+<div class="line">touch_interface = InterfaceTouch.from_rows_cols(</div>
+<div class="line">    electrodes_col, </div>
+<div class="line">    electrodes_row, </div>
+<div class="line">    0, 0, 2, 3</div>
+<div class="line">)</div>
+</div><!-- fragment --><h2><a class="anchor" id="p_4_6_5"></a>
+4.6.5 InterfaceTouchSlider</h2>
+<p>Linear slider interface for continuous value input using capacitive electrodes.</p>
+<div class="fragment"><div class="line"><span class="keyword">from</span> mkx.interface_touch_slider <span class="keyword">import</span> InterfaceTouchSlider</div>
+<div class="line"> </div>
+<div class="line">interface = InterfaceTouchSlider(</div>
+<div class="line">    electrodes: dict,</div>
+<div class="line">    slider_keymap: list,</div>
+<div class="line">    step_size: float = 0.05,</div>
+<div class="line">    dynamic_step: bool = <span class="keyword">False</span>,</div>
+<div class="line">    max_steps_per_loop: int = 5,</div>
+<div class="line">    value_min: float = 0.0,</div>
+<div class="line">    value_max: float = 1.0</div>
+<div class="line">)</div>
+</div><!-- fragment --><p><b>electrodes</b> <br  />
+ Dictionary mapping I2C address to list of electrode pins forming the slider track. <br  />
+ Electrodes are ordered from slider minimum to maximum position. <br  />
+ Example: <code>{0x5B: (0, 1, 2, 3, 4)}</code></p>
+<p><b>slider_keymap</b> <br  />
+ List of tuples for each layer, each containing (key_increase, key_decrease). <br  />
+ Example: <code>[(Keys_standard.UP, Keys_standard.DOWN)]</code></p>
+<p><b>step_size</b> <br  />
+ Normalized motion required to trigger one step event (default 0.05 = 5% of slider range).</p>
+<p><b>dynamic_step</b> <br  />
+ Enable automatic step size adjustment based on movement speed (default False). <br  />
+ Fast movements produce smaller steps for rapid scrolling; slow movements produce larger steps for precision.</p>
+<p><b>max_steps_per_loop</b> <br  />
+ Maximum number of key events generated per process call (default 5). Prevents burst transmission.</p>
+<p><b>value_min, value_max</b> <br  />
+ Normalized range for slider values (default 0.0 to 1.0).</p>
+<p><b>Example:</b> </p><div class="fragment"><div class="line"><span class="keyword">import</span> board</div>
+<div class="line"><span class="keyword">from</span> mkx.i2c <span class="keyword">import</span> init_i2c</div>
+<div class="line"><span class="keyword">from</span> mkx.interface_touch_slider <span class="keyword">import</span> InterfaceTouchSlider</div>
+<div class="line"><span class="keyword">from</span> mkx.keys_standard <span class="keyword">import</span> UP, DOWN</div>
+<div class="line"> </div>
+<div class="line">i2c = init_i2c()</div>
+<div class="line"> </div>
+<div class="line"><span class="comment"># 5 electrodes forming a horizontal slider</span></div>
+<div class="line">electrodes = {0x5B: (0, 1, 2, 3, 4)}</div>
+<div class="line">slider_keymap = [(UP, DOWN)]</div>
+<div class="line"> </div>
+<div class="line">slider_interface = InterfaceTouchSlider(</div>
+<div class="line">    electrodes,</div>
+<div class="line">    slider_keymap,</div>
+<div class="line">    step_size=0.05,</div>
+<div class="line">    dynamic_step=<span class="keyword">True</span>,</div>
+<div class="line">    max_steps_per_loop=5</div>
+<div class="line">)</div>
+</div><!-- fragment --><h2><a class="anchor" id="p_4_6_6"></a>
+4.6.6 InterfaceTouchWheel</h2>
+<p>Circular wheel interface for continuous rotational input using capacitive electrodes "closed, continous slider".</p>
+<div class="fragment"><div class="line"><span class="keyword">from</span> mkx.interface_touch_wheel <span class="keyword">import</span> InterfaceTouchWheel</div>
+<div class="line"> </div>
+<div class="line">interface = InterfaceTouchWheel(</div>
+<div class="line">    electrodes: dict,</div>
+<div class="line">    slider_keymap: list,</div>
+<div class="line">    step_size: float = 0.05,</div>
+<div class="line">    dynamic_step: bool = <span class="keyword">False</span>,</div>
+<div class="line">    max_steps_per_loop: int = 5,</div>
+<div class="line">    value_min: float = 0.0,</div>
+<div class="line">    value_max: float = 1.0</div>
+<div class="line">)</div>
+</div><!-- fragment --><p><b>electrodes</b> <br  />
+ Dictionary mapping I2C address to list of electrode pins arranged in circular order around the wheel. <br  />
+ Example: <code>{0x5B: (0, 1, 2, 3, 4, 5, 6, 7)}</code> <br  />
+ Electrodes should be ordered clockwise or counterclockwise around the wheel.</p>
+<p><b>slider_keymap</b> <br  />
+ List of tuples for each layer, each containing (key_clockwise, key_counterclockwise). <br  />
+</p>
+<p><b>step_size</b> <br  />
+ Normalized rotational motion required to trigger one step event (default 0.05 = 5% of wheel circumference).</p>
+<p><b>dynamic_step</b> <br  />
+ Enable automatic step size adjustment based on rotation speed (default False). <br  />
+ Fast rotations produce smaller steps for rapid navigation; slow rotations produce larger steps for precision.</p>
+<p><b>max_steps_per_loop</b> <br  />
+ Maximum number of key events generated per process call (default 5). Prevents burst transmission.</p>
+<p><b>value_min, value_max</b> <br  />
+ Normalized range for rotational values. Uses circular unwrapping for continuous rotation detection.</p>
+<p><b>Example:</b> </p><div class="fragment"><div class="line"><span class="keyword">import</span> board</div>
+<div class="line"><span class="keyword">from</span> mkx.i2c <span class="keyword">import</span> init_i2c</div>
+<div class="line"><span class="keyword">from</span> mkx.interface_touch_wheel <span class="keyword">import</span> InterfaceTouchWheel</div>
+<div class="line"><span class="keyword">from</span> mkx.keys_standard <span class="keyword">import</span> VOLU, VOLD</div>
+<div class="line"> </div>
+<div class="line">i2c = init_i2c()</div>
+<div class="line"> </div>
+<div class="line"><span class="comment"># 8 electrodes arranged in a circle</span></div>
+<div class="line">electrodes = {0x5B: (0, 1, 2, 3, 4, 5, 6, 7)}</div>
+<div class="line">wheel_keymap = [(VOLU, VOLD)]</div>
+<div class="line"> </div>
+<div class="line">wheel_interface = InterfaceTouchWheel(</div>
+<div class="line">    electrodes,</div>
+<div class="line">    wheel_keymap,</div>
+<div class="line">    step_size=0.05,</div>
+<div class="line">    dynamic_step=<span class="keyword">True</span>,</div>
+<div class="line">    max_steps_per_loop=5</div>
+<div class="line">)</div>
+</div><!-- fragment --><h1><a class="anchor" id="p_4_7"></a>
+4.7 Layer Status LED</h1>
 <p>Status LED used for the indication of the active layer. <br  />
 </p>
-<h2><a class="anchor" id="p_4_5_1"></a>
-4.5.1 LayerStatusLedRgbNeoPixel</h2>
+<h2><a class="anchor" id="p_4_7_1"></a>
+4.7.1 LayerStatusLedRgbNeoPixel</h2>
 <p>RGB NeoPixel LED which indicates active layer by color. <br  />
 </p>
 <div class="fragment"><div class="line"><span class="keyword">from</span> mkx.layer_status_led_rgb_neopixel <span class="keyword">import</span> LayerStatusLedRgbNeoPixel</div>
@@ -643,8 +1052,8 @@ $(document).ready(function(){initNavTree('p_4.html',''); initResizable(); });
 <div class="line">status_led.add_layer(1, (0, 0, 255))  <span class="comment"># Blue</span></div>
 <div class="line"> </div>
 <div class="line">mkx_central.add_layer_status_led(status_led)</div>
-</div><!-- fragment --><h2><a class="anchor" id="p_4_5_2"></a>
-4.5.2 LayerStatusLedRgbThreePin</h2>
+</div><!-- fragment --><h2><a class="anchor" id="p_4_7_2"></a>
+4.7.2 LayerStatusLedRgbThreePin</h2>
 <p>RGB three pin LED which indicates active layer by color. <br  />
  <em>Untested!</em> due to lack of proper hardware configuration.</p>
 <div class="fragment"><div class="line"><span class="keyword">from</span> mkx.layer_status_led_rgb_threepin <span class="keyword">import</span> LayerStatusLedRgbThreePin</div>
@@ -660,8 +1069,8 @@ $(document).ready(function(){initNavTree('p_4.html',''); initResizable(); });
  Green LED pin.</p>
 <p><b>blue_pin</b> <br  />
  Blue LED pin.</p>
-<h2><a class="anchor" id="p_4_5_3"></a>
-4.5.3 LayerStatusLedArray</h2>
+<h2><a class="anchor" id="p_4_7_3"></a>
+4.7.3 LayerStatusLedArray</h2>
 <p>Array of LED which indicates active layer. <br  />
  <em>Untested!</em> due to lack of proper hardware configuration.</p>
 <div class="fragment"><div class="line"><span class="keyword">from</span> mkx.layer_status_led_array <span class="keyword">import</span> LayerStatusLedArray</div>
@@ -671,11 +1080,11 @@ $(document).ready(function(){initNavTree('p_4.html',''); initResizable(); });
 <div class="line">)</div>
 </div><!-- fragment --><p> <b>pins</b> <br  />
  List of pins for LED-s.</p>
-<h1><a class="anchor" id="p_4_6"></a>
-4.6 Backlight</h1>
+<h1><a class="anchor" id="p_4_8"></a>
+4.8 Backlight</h1>
 <div style="margin-left: 100px;"> <img src="RGB_backlight.jpg" alt="" width="800" class="inline"/> </div><p>RGB NeoPixel backlight.</p>
-<h2><a class="anchor" id="p_4_6_1"></a>
-4.6.1 BacklightNeopixelStatic</h2>
+<h2><a class="anchor" id="p_4_8_1"></a>
+4.8.1 BacklightNeopixelStatic</h2>
 <p>Static color backlight.</p>
 <div class="fragment"><div class="line"><span class="keyword">from</span> mkx.backlight_neopixel_static <span class="keyword">import</span> BacklightNeopixelStatic</div>
 <div class="line"> </div>
@@ -707,8 +1116,8 @@ $(document).ready(function(){initNavTree('p_4.html',''); initResizable(); });
 <div class="line">backlight = BacklightNeopixelStatic(board.A0, num_pixels=72, rgb_color=(0, 0, 255), brightness=0.4)</div>
 <div class="line"> </div>
 <div class="line">mkx_central.add_backlight(backlight)</div>
-</div><!-- fragment --><h2><a class="anchor" id="p_4_6_2"></a>
-4.6.2 BacklightNeopixelRainbow</h2>
+</div><!-- fragment --><h2><a class="anchor" id="p_4_8_2"></a>
+4.8.2 BacklightNeopixelRainbow</h2>
 <p>Rainbow animated color backlight.</p>
 <div class="fragment"><div class="line"><span class="keyword">from</span> mkx.backlight_neopixel_rainbow <span class="keyword">import</span> BacklightNeopixelRainbow</div>
 <div class="line"> </div>
@@ -727,24 +1136,24 @@ $(document).ready(function(){initNavTree('p_4.html',''); initResizable(); });
 <p><b>brightness</b> <br  />
  Brightness of the LED in the range 0-1. <br  />
 </p>
-<h2><a class="anchor" id="p_4_6_2_1"></a>
-4.6.2.1 faster()</h2>
+<h2><a class="anchor" id="p_4_8_2_1"></a>
+4.8.2.1 faster()</h2>
 <p>Hom much faster should be the rainbow animation from the initial one.</p>
 <div class="fragment"><div class="line">backlight.faster(</div>
 <div class="line">    value</div>
 <div class="line">)</div>
 </div><!-- fragment --><p><b>value</b> <br  />
  Increased animation speed up to 20.</p>
-<h2><a class="anchor" id="p_4_6_2_2"></a>
-4.6.2.2 slower()</h2>
+<h2><a class="anchor" id="p_4_8_2_2"></a>
+4.8.2.2 slower()</h2>
 <p>Hom much slower should be the rainbow animation from the initial one.</p>
 <div class="fragment"><div class="line">backlight.slower(</div>
 <div class="line">    value</div>
 <div class="line">)</div>
 </div><!-- fragment --><p><b>value</b> <br  />
  Decreased animation speed up to 20.</p>
-<h2><a class="anchor" id="p_4_6_2_3"></a>
-4.6.2.3 set_swirl()</h2>
+<h2><a class="anchor" id="p_4_8_2_3"></a>
+4.8.2.3 set_swirl()</h2>
 <p>Should the LED-s change color independently by swirl or not.</p>
 <div class="fragment"><div class="line">backlight.set_swirl(</div>
 <div class="line">    swirl :bool</div>
@@ -763,6 +1172,103 @@ $(document).ready(function(){initNavTree('p_4.html',''); initResizable(); });
 <div class="line">backlight.set_swirl(<span class="keyword">True</span>)</div>
 <div class="line"> </div>
 <div class="line">mkx_central.add_backlight(backlight)</div>
+</div><!-- fragment --><h1><a class="anchor" id="p_4_9"></a>
+4.9 I2C Helper</h1>
+<p>Utility function for initializing and configuring I2C communication on CircuitPython devices. <br  />
+ Provides automatic device scanning and error handling with visual feedback on error via status LED.</p>
+<div class="fragment"><div class="line"><span class="keyword">from</span> mkx.i2c <span class="keyword">import</span> init_i2c</div>
+<div class="line"> </div>
+<div class="line">i2c = init_i2c(</div>
+<div class="line">    scl_pin=board.SCL, </div>
+<div class="line">    sda_pin=board.SDA, </div>
+<div class="line">    status_led=<span class="keywordtype">None</span></div>
+<div class="line">)</div>
+</div><!-- fragment --><p><b>scl_pin</b> <br  />
+ SCL (clock) pin for I2C communication (default: board.SCL). <br  />
+</p>
+<p><b>sda_pin</b> <br  />
+ SDA (data) pin for I2C communication (default: board.SDA). <br  />
+</p>
+<p><b>status_led</b> <br  />
+ Optional status LED object for error indication. <br  />
+ If provided, errors will trigger LED red pulsing. <br  />
+</p>
+<p><b>return value</b> <br  />
+ Returns initialized I2C bus object, or <code>None</code> on failure. <br  />
+ On success, prints a list of discovered I2C devices and their addresses in hexadecimal format.</p>
+<p><b>Behavior:</b> <br  />
+</p><ul>
+<li>Attempts to scan the I2C bus up to 3 times to work around timing issues <br  />
+</li>
+<li>Displays scan results with device addresses <br  />
+</li>
+<li>Halts on error if no devices are found after 3 attempts <br  />
+</li>
+<li>Handles slow I2C devices with automatic retry delays</li>
+</ul>
+<p><b>Example:</b> </p><div class="fragment"><div class="line"><span class="keyword">import</span> board</div>
+<div class="line"><span class="keyword">from</span> mkx.i2c <span class="keyword">import</span> init_i2c</div>
+<div class="line"><span class="keyword">from</span> mkx.periphery_touch <span class="keyword">import</span> PeripheryTouch</div>
+<div class="line"><span class="keyword">from</span> mkx.haptic <span class="keyword">import</span> Haptic</div>
+<div class="line"> </div>
+<div class="line"><span class="comment"># Initialize I2C bus</span></div>
+<div class="line">i2c = init_i2c(scl_pin=board.SCL, sda_pin=board.SDA)</div>
+<div class="line"> </div>
+<div class="line"><span class="comment"># Use with MPR121 touch sensor (address 0x5B)</span></div>
+<div class="line">touch_periphery = PeripheryTouch(i2c, address=0x5B)</div>
+<div class="line"> </div>
+<div class="line"><span class="comment"># Use with DRV2605 haptic driver (address 0x5A)</span></div>
+<div class="line">haptic = Haptic(i2c, effect_id=1, enable_pin=board.GP15)</div>
+</div><!-- fragment --><h1><a class="anchor" id="p_4_10"></a>
+4.10 Haptic</h1>
+<p>Haptic feedback driver using the DRV2605 motor driver for vibration effects. <br  />
+ Supports both ERM (Eccentric Rotating Mass) and LRM (Linear Resonant) motors.</p>
+<div class="fragment"><div class="line"><span class="keyword">from</span> mkx.haptic <span class="keyword">import</span> Haptic</div>
+<div class="line"> </div>
+<div class="line">haptic = Haptic(</div>
+<div class="line">    i2c,</div>
+<div class="line">    effect_id: int,</div>
+<div class="line">    enable_pin,</div>
+<div class="line">    duration: float = <span class="keywordtype">None</span>,</div>
+<div class="line">    play_on_init: bool = <span class="keyword">False</span></div>
+<div class="line">)</div>
+</div><!-- fragment --><p><b>i2c</b> <br  />
+ I2C bus object (see I2C Helper section). <br  />
+ The DRV2605 uses fixed I2C address 0x5A.</p>
+<p><b>effect_id</b> <br  />
+ Integer ID of the haptic effect to use (0-122, depending on DRV2605 firmware). <br  />
+ Common effects: 1 (strong click), 2 (strong buzz), 52 (select click), etc.</p>
+<p><b>enable_pin</b> <br  />
+ Digital output pin controlling the DRV2605 EN (enable) signal. <br  />
+ Must be HIGH for the driver to function. <b>Common mistake to forget to enable the device!</b></p>
+<p><b>duration</b> <br  />
+ Optional duration (in seconds) for the haptic effect. <br  />
+ If specified, the effect will automatically stop after this duration. <br  />
+ Set to <code>None</code> for the effect full playback.</p>
+<p><b>play_on_init</b> <br  />
+ If <code>True</code>, automatically plays the effect once during initialization for testing (default False).</p>
+<p><b>Methods:</b></p>
+<p><b>set_ERM_motor()</b> <br  />
+ Configure for ERM (Eccentric Rotating Mass) vibration motor. <br  />
+ Use for typical small vibration motors common in keyboards and phones.</p>
+<p><b>set_LRM_motor()</b> <br  />
+ Configure for LRM (Linear Resonant) vibration motor. <br  />
+ Use for haptic actuators with linear motion characteristics.</p>
+<p><b>set_electrodes(electrodes: dict)</b> <br  />
+ Define which electrodes trigger haptic feedback. Enables selective haptic response per touch area. <br  />
+ Ex. on buttons vibrate, on sliders don't. <br  />
+ <code>electrodes</code>: Dictionary mapping I2C address to list of electrode indices. <br  />
+</p>
+<p><b>Example:</b> </p><div class="fragment"><div class="line"><span class="keyword">import</span> board</div>
+<div class="line"><span class="keyword">from</span> mkx.i2c <span class="keyword">import</span> init_i2c</div>
+<div class="line"><span class="keyword">from</span> mkx.haptic <span class="keyword">import</span> Haptic</div>
+<div class="line"> </div>
+<div class="line">i2c = init_i2c()</div>
+<div class="line"> </div>
+<div class="line">haptic = Haptic(i2c, effect_id=52, enable_pin=board.GP15, duration=0.05)</div>
+<div class="line"> </div>
+<div class="line"><span class="comment"># Restrict haptic to specific electrodes on MPR121</span></div>
+<div class="line">haptic.set_electrodes({0x5B: [0, 1, 2, 3]})  <span class="comment"># Only these 4 electrodes trigger haptic</span></div>
 </div><!-- fragment --> </div></div><!-- contents -->
 </div><!-- PageDoc -->
 </div><!-- doc-content -->
