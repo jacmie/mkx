@@ -9,6 +9,8 @@ class KeysAbstract:
     Subclasses must implement `on_press` and `on_release`.
     """
 
+    __slots__ = ("_is_pressed",)
+
     def __init__(self):
         self._is_pressed = False
 

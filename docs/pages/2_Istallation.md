@@ -160,7 +160,20 @@ pip install pytest coverage
 Additional optional code quality tools can be installed:
 
 ```
-pip install pylint flake8 mypy
+pip install pylint flake8 mypy black
+```
+
+Enable the tools. For example if you are using VS Code install the 'Black Formatter' and add to settings.json:
+
+```
+{
+  "python.linting.enabled": true,
+  "python.linting.pylintEnabled": true,
+  "python.linting.flake8Enabled": true,
+  "python.linting.mypyEnabled": true,
+  "editor.defaultFormatter": "ms-python.black-formatter",
+  "editor.formatOnSave": true
+}
 ```
 
 See also @ref p_6_4 for how to run and write tests.

@@ -16,13 +16,14 @@ class MOD(KeysAbstract):
     def on_press(
         self, layer_manager: LayersManager, keyboard: Keyboard, timestamp: int
     ):
-        self._key_mod.on_press(layer_manager, keyboard, timestamp)
-        self._key_code.on_press(layer_manager, keyboard, timestamp)
-        self._key_code.on_release(layer_manager, keyboard, timestamp)
-        self._key_mod.on_release(layer_manager, keyboard, timestamp)
+        self._key_mod.press(layer_manager, keyboard, timestamp)
+        self._key_code.press(layer_manager, keyboard, timestamp)
 
-    def on_release(self, _, __, ___):
-        pass
+    def on_release(
+        self, layer_manager: LayersManager, keyboard: Keyboard, timestamp: int
+    ):
+        self._key_code.release(layer_manager, keyboard, timestamp)
+        self._key_mod.release(layer_manager, keyboard, timestamp)
 
 
 class M_LCTL(MOD):

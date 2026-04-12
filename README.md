@@ -1,11 +1,11 @@
 # <img src="docs/mkx.svg" alt="icon" height="60" style="display:inline-block; vertical-align: middle;">  MKX  
 
-[![version](https://img.shields.io/badge/version-1.0.0-blue)](#)
+[![version](https://img.shields.io/badge/version-2.0.0-blue)](#)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 [![docs](https://img.shields.io/badge/docs-online-blue)](https://jacmie.github.io/mkx/)
 [![CircuitPython](https://img.shields.io/badge/CircuitPython-Learn%20More-purple)](https://circuitpython.org/)
 
-Next Generation Mechanical Keyboard Firmware
+Next Generation Mechanical & Capacitive Touch Keyboard Firmware
 
 <div style="margin-left: 100px;">
   <img width=600 src="docs/images/IntroPic.jpg">
@@ -32,6 +32,17 @@ Next Generation Mechanical Keyboard Firmware
 :white_check_mark: media  
 :white_check_mark: keys sequence  
 :white_check_mark: vim  
+
+## Capacitive Touch
+
+<div style="margin-left: 100px;">
+  <img width=600 src="docs/images/Hackpad_keyboard.jpg">
+</div>
+
+:white_check_mark: Single-key and matrix touch modes  
+:white_check_mark: Sliders  
+:white_check_mark: Touch wheel  
+:white_check_mark: Haptic feedback  
 
 ## Docs
 

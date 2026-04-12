@@ -1,7 +1,37 @@
 @page p_3 3 Get Started
 @tableofcontents
 
-@section p_3_1  3.1 Hardware Keypass
+@section p_3_1  3.1 Basic Usage
+
+@subsection p_3_1_1 3.1.1 Files Structure
+
+- *lib/* - contains Adafruit bundle libraries & MKX library  
+- *boot.py* - runs **first on boot** - sets up the environment  
+- *boot_out.txt* - boot log (useful for debugging when USB monitor is unavailable)  
+- *code.py* - main script runs on soft reboot (after saving files)  
+
+@subsection p_3_1_2 3.1.2 Programming
+
+By default **CIRCUITPY** drive appears.  
+Edit files directly on the MCU and save. With auto reload enabled (default) there will be soft restart and the saved code reloded.
+
+The **MKX library** provides **extensive logging**
+- Useful for debugging keymaps and device behavior
+- Helps identify issues quickly
+
+To view logs in real time, use a **serial monitor**
+- Recommended editors & tools:  
+  https://learn.adafruit.com/welcome-to-circuitpython/recommended-editors  
+
+- Popular options:
+  - **Mu Editor** - built-in serial console (easy for beginners)
+  - **Thonny** - simple interface with serial output
+  - **VS Code** - use extensions like *Serial Monitor*
+  - **screen / minicom (Linux/macOS)** - in terminal
+
+In the following sections few use examples of the **MKX** library are presented.
+
+@section p_3_2  3.2 Hardware Keypass
 
 <div style="margin-left: 100px;">
   <img width=800 src="KeyPass_keyboard.jpg">
@@ -70,7 +100,7 @@ keyboard.add_keymap(keymap, 1, 1)
 keyboard.run_forever()
 ```
 
-@section p_3_2  3.2 Booster Keyboard
+@section p_3_3  3.3 Booster Keyboard
 
 <div style="margin-left: 100px;">
   <img width=800 src="BOOSTER_keyboard.jpg">
@@ -199,7 +229,7 @@ keyboard = MKX_Periphery(peryphery, debug=True)
 keyboard.run_forever()
 ```
 
-@section p_3_3  3.3 Square Keyboard
+@section p_3_4  3.4 Square Keyboard
 
 <div style="margin-left: 100px;">
   <img src="SQ_keyboard.jpg">
@@ -372,5 +402,145 @@ row_pins = (board.A2, board.MISO, board.D10, board.D9, board.D6, board.D5)
 peryphery = PeripheryUART("sq_r", col_pins, row_pins, board.TX, board.RX)
 
 keyboard = MKX_Periphery(peryphery, debug=True)
+keyboard.run_forever()
+```
+
+@section p_3_5  3.5 Hackpad Keyboard
+
+<div style="margin-left: 100px;">
+  <img src="Hackpad_keyboard.jpg">
+</div>
+
+Example of using capacitive touch sensing technology - a macro keypad called **Hackpad**.
+
+Runs on *Seeed Xiao RP2040* with the **MPR121** capacitive sensor and **DRV2605** for haptic feedback.  
+For these chips, Adafruit provides driver libraries, though independent drivers for other chips also exist.  
+Using custom drivers may require small MKX changes (mostly updating includes).  
+
+Hackpad uses a 6×6 key matrix. A keypress is triggered when exactly two electrodes are activated.  
+This is not a send/receive type architecture, and multi-touch is not supported.  
+
+Electrode pads are covered with solder mask for protection.  
+Key legends can be drawn with a marker and removed using high-percentage alcohol (IPA).  
+⚠️ Covering MPR121 electrodes with film significantly degrades sensing (material + air gap effects).  
+
+For storage/programming mode (see boot.py), micro mechanical switch is added on the back of the PCB, connected to pins D9 and D10.  
+
+``` {.py}
+# boot.py
+
+import board
+
+from mkx.boot_config import boot_cfg
+
+boot_cfg(
+    sense=board.D9,  
+    source=board.D10,  
+    autoreload=True,  
+    storage=True,  
+    usb_id=("MKX Device", "Hackpad"),  
+)
+```
+  
+``` {.py}
+# code.py
+
+import board
+
+from mkx.i2c import init_i2c
+from mkx.mkx_touch import MKX_Touch
+
+from mkx.layer_status_led_rgb_threepin import LayerStatusLedRgbThreePin
+
+from mkx.keys_standard import *
+from mkx.keys_modifiers import M_LCTL, M_LSFT, M_LGUI
+from mkx.keys_vim import *
+
+from mkx.periphery_touch import PeripheryTouch
+from mkx.interface_touch import InterfaceTouch
+
+from mkx.haptic import Haptic
+
+keyboard = MKX_Touch()
+
+status_led = LayerStatusLedRgbThreePin(
+    board.D1, board.D0, board.D2, brightness=1, common_anode=True
+)
+status_led.add_layer(0, (0, 0, 255))  # Layer 0: Blue
+status_led.add_layer(1, (255, 0, 0))  # Layer 1: Red
+keyboard.add_layer_status_led(status_led)
+
+i2c = init_i2c(board.SCL, board.SDA, status_led)
+
+keyboard.add_periphery_touch(PeripheryTouch(i2c, address=0x5B, irq_pin=board.D6))
+
+# Define touch sensor electrode mapping (columns and rows on the 0x5B sensor)
+electrodes_col = {
+    0x5B: tuple(range(6, 12)),  # Touch pins 6-11 map to Hackpad columns
+}
+electrodes_row = {
+    0x5B: tuple(range(0, 6)),  # Touch pins 0-5 map to Hackpad rows
+}
+
+# Create 6x6 grid interface from touch sensor electrodes
+keyboard.add_interface(
+    InterfaceTouch.from_rows_cols(electrodes_col, electrodes_row, 0, 0, 5, 5)
+)
+
+# Configure haptic feedback (vibration motor)
+hap = Haptic(i2c, 48, board.D7, play_on_init=True)
+hap.set_electrodes(electrodes_col)  # Vibrate on
+keyboard.add_haptic(hap)
+
+
+OPEN = M_LCTL(O)
+CLOSE = M_LCTL(W)
+SAVE = M_LCTL(S)
+
+DESKTOP = M_LGUI(D)
+LOCK = M_LGUI(L)
+
+PANEL = M_LCTL(J)
+TOOLS = M_LCTL(B)
+PTAB = M_LCTL(PGUP)
+NTAB = M_LCTL(PGDN)
+
+ALL = M_LCTL(A)
+COMMENT = M_LCTL(SLSH)
+FIND = M_LCTL(F)
+REPLACE = M_LCTL(H)
+
+BUILD = F7
+DEBUG = F5
+RUN = F9
+
+# fmt: off
+
+# Keymap: 2 layers -> 6 rows × 6 columns
+keymap = [
+    # Layer 0: Normal mode (IDE navigation and editing)
+    [
+        ESC,        F1,             F2,             F3,         F4,             F5,
+        TOOLS,      PANEL,          DESKTOP,        BUILD,      DEBUG,          RUN,
+        COMMENT,    ALL,            PTAB,           NTAB,       SAVE,           CLOSE,
+        VI_MVLU,    HOME,           BSPC,           UP,         DEL,            END,
+        VI_MVLD,    VI_PRVW,        LEFT,           DOWN,       RIGHT,          VI_NXTW,
+        TAB,        VI_UNDO,        VI_CUT,         VI_YANK,    VI_PAST,        TO(1),
+    ],
+
+    # Layer 1: Visual/Selection mode (Vim-style text selection with Shift modifiers)
+    [
+        TO(0),              F1,             F2,             F3,             F4,             F5,
+        TOOLS,              PANEL,          DESKTOP,        BUILD,          DEBUG,          RUN,
+        COMMENT,            ALL,            PTAB,           NTAB,           SAVE,           CLOSE,
+        M_LSFT(VI_NXTL),    M_LSFT(HOME),   BSPC,           M_LSFT(UP),     DEL,            M_LSFT(END),
+        M_LSFT(VI_PRVL),    M_LSFT(VI_PRVW),M_LSFT(LEFT),   M_LSFT(DOWN),   M_LSFT(RIGHT),  M_LSFT(VI_NXTW),
+        TAB,                VI_UNDO,        VI_CUT,         VI_YANK,        VI_PAST,        TO(0),
+    ],
+]
+
+# fmt: on
+
+keyboard.add_keymap(keymap, 6, 6)
 keyboard.run_forever()
 ```
