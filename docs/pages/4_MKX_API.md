@@ -369,7 +369,50 @@ PeripheryUART object (or other derived from the *PeripheryAbstract*).
 **debug**  
 Flag enabling verbose output for the Periphery.  
 
-@subsection p_4_3_1 4.3.1 PeripheryCentral
+@subsection p_4_3_1 4.3.1 PeripherySingle
+
+Set the PeripherySingle for a single matrix on the same hardware as the main controller.
+
+``` {.py}
+from mkx.periphery_single import PeripherySingle
+
+periphery = PeripherySingle(
+    col_pins, 
+    row_pins, 
+    **kwargs
+)
+```
+
+**col_pins**  
+List of column pins.  
+
+**row_pins**  
+List of row pins.  
+
+** **kwargs**  
+Other optional arguments.  
+
+**Example:**
+``` {.py}
+import board
+ 
+from mkx.mkx_central import MKX_Central
+from mkx.periphery_single import PeripherySingle
+from mkx.interface_central import InterfaceCentral
+
+mkx_central = MKX_Central()
+ 
+col_pins = (board.GP9, board.GP7, board.GP5, board.GP4, board.GP3, board.GP2)
+row_pins = (board.GP10, board.GP11, board.GP13, board.GP15, board.GP17)
+ 
+periphery = PeripherySingle(col_pins, row_pins)
+mkx_central.add_periphery_central(periphery)
+
+interface = InterfaceCentral(periphery, 0, 0, 5, 4)
+mkx_central.add_interface(interface)
+```
+
+@subsection p_4_3_2 4.3.2 PeripheryCentral
 
 Set the PeripheryCentral.
 
@@ -424,7 +467,7 @@ mkx_central.add_interface(interface_right)
 mkx_central.run_forever()
 ```
 
-@subsection p_4_3_2 4.3.2 PeripheryUART
+@subsection p_4_3_3 4.3.3 PeripheryUART
 
 Set the PeripheryUART.
 
@@ -481,6 +524,65 @@ mkx_periphery = MKX_Periphery(peryphery, debug=True)
 mkx_periphery.run_forever()
 ```
 
+@subsection p_4_3_4 4.3.4 PeripheryTouch
+
+Set the PeripheryTouch for capacitive touch sensing using the MPR121 touch sensor.
+
+``` {.py}
+from mkx.periphery_touch import PeripheryTouch
+
+periphery = PeripheryTouch(
+    i2c, 
+    address=0x5B, 
+    irq_pin=None
+)
+```
+
+**i2c**  
+I2C bus object (see I2C Helper section).  
+
+**address**  
+I2C address of the MPR121 sensor.  
+
+**irq_pin**  
+Optional interrupt pin for the MPR121. When provided, the sensor reads only when the IRQ pin is active (LOW). Improves performance by reducing unnecessary polling.  
+
+**Methods:**
+
+**fire_only_on_2electrodes(enable: bool)**  
+Configure matrix mode to track exactly two active electrodes.  
+Used for 2D touch matrix applications. **No support of multi-touch.**
+
+**set_thresholds(touch: int = 12, release: int = 6)**  
+Set touch and release thresholds for electrode sensitivity. Release threshold must be lower than touch threshold.
+
+**get_thresholds() -> tuple[int, int]**  
+Get current touch and release thresholds. Returns (touch_threshold, release_threshold).
+
+**electrode_values() -> dict**  
+Read electrode values from the MPR121. Returns a dictionary with electrode indices and their values, or `None` if no state change occurred.
+
+**Example:**
+``` {.py}
+import board
+from mkx.i2c import init_i2c
+from mkx.mkx_central import MKX_Central
+from mkx.periphery_touch import PeripheryTouch
+from mkx.interface_touch import InterfaceTouch
+
+i2c = init_i2c()
+
+touch_periphery = PeripheryTouch(i2c, address=0x5B, irq_pin=board.GP14)
+touch_periphery.set_thresholds(touch=12, release=6)
+
+# For single electrode mode (one-to-one mapping to keys):
+electrodes = {0x5B: (0, 1, 2, 3, 4, 5)}  # 6 electrodes mapped to grid
+touch_interface = InterfaceTouch.from_electrodes(electrodes, 0, 0, 5, 0)
+
+mkx_central = MKX_Central()
+mkx_central.add_interface(touch_interface)
+```
+
 @section p_4_4 4.4 Interface
 
 The **Interface** connects the **Peripheries** to the **MKX_Central**.  
@@ -516,9 +618,59 @@ mkx_central.add_interface(intefhace_right)
 mkx_central.run_forever()
 ```
 
-@subsection p_4_4_1 4.4.1 InterfaceCentral
+@subsection p_4_4_1 4.4.1 InterfaceSingle
 
-Set the InterfaceCentral.  
+Set simpler InterfaceSingle for a hardware with one MCU.
+
+``` {.py}
+from mkx.interface_single import InterfaceSingle
+
+interface = InterfaceSingle(
+    col_min: int,
+    row_min: int,
+    col_max: int,
+    row_max: int
+)
+```
+
+**col_min**  
+Minimum column number. Counting start from '0'.  
+
+**row_min**  
+Minimum row number. Counting start from '0'.  
+
+**col_max**  
+Maximum column number. Counting start from '0'.  
+
+**row_max**  
+Maximum row number. Counting start from '0'.  
+
+Min/max column and rows values can be inverted, meaning min value can be bigger than max.  
+Inverted min/max column and rows values will change the keys mapping.  
+
+**Example:**
+``` {.py}
+import board
+
+from mkx.mkx_central import MKX_Central
+from mkx.periphery_single import PeripherySingle
+from mkx.interface_single import InterfaceSingle
+
+mkx_central = MKX_Central()
+
+col_pins = (board.GP9, board.GP7, board.GP5, board.GP4, board.GP3, board.GP2)
+row_pins = (board.GP10, board.GP11, board.GP13, board.GP15, board.GP17)
+
+periphery = PeripherySingle(col_pins, row_pins)
+mkx_central.add_periphery_central(periphery)
+
+interface = InterfaceSingle(0, 0, 5, 4)
+mkx_central.add_interface(interface)
+```
+
+@subsection p_4_4_2 4.4.2 InterfaceCentral
+
+Set the InterfaceCentral for split keyboards with two MCU.  
 
 Min/max column and rows values can be inverted, meaning min value can be bigger than max.  
 Inverted min/max column and rows values will change the keys mapping.  
@@ -551,7 +703,7 @@ Maximum column number. Counting start from '0'.
 Maximum row number. Counting start from '0'.  
 
 
-@subsection p_4_4_2 4.4.2 InterfaceUART
+@subsection p_4_4_3 4.4.3 InterfaceUART
 
 Set the InterfaceUART.
 
@@ -593,6 +745,198 @@ Maximum row number. Counting start from '0'.
 
 **baudrate**  
 UART communication baudrate.  
+
+
+@subsection p_4_4_4 4.4.4 InterfaceTouch
+
+Interface for capacitive touch sensing.  
+Supports both single electrode mode and simplified matrix mode (2 electrodes per key next to each other, but these are not send and listen electrodes).  
+No support for split keyboards.
+
+``` {.py}
+from mkx.interface_touch import InterfaceTouch
+
+# Single electrode mode
+interface = InterfaceTouch.from_electrodes(
+    electrodes: dict, 
+    col_min: int, 
+    row_min: int, 
+    col_max: int, 
+    row_max: int
+)
+
+# Matrix mode (2 electrodes per key)
+interface = InterfaceTouch.from_rows_cols(
+    electrodes_col: dict, 
+    electrodes_row: dict, 
+    col_min: int, 
+    row_min: int, 
+    col_max: int, 
+    row_max: int
+)
+```
+
+**electrodes**  
+Dictionary mapping I2C address to list of electrode pins for single electrode mode.  
+Example: `{0x5B: (0, 1, 2, 3, 4, 5)}`
+
+**electrodes_col**  
+Dictionary mapping I2C address to column electrode pins for matrix mode.  
+Example: `{0x5B: (0, 1, 2)}`  
+
+**electrodes_row**  
+Dictionary mapping I2C address to row electrode pins for matrix mode.  
+Example: `{0x5B: (8, 9, 10, 11)}`
+
+**col_min, row_min, col_max, row_max**  
+Grid boundaries defining the touch interface area.
+
+**Example (Single Electrode Mode):**
+``` {.py}
+from mkx.interface_touch import InterfaceTouch
+from mkx.periphery_touch import PeripheryTouch
+
+# 6 electrodes mapped to a 3x2 grid
+electrodes = {0x5B: (0, 1, 2, 3, 4, 5)}
+touch_interface = InterfaceTouch.from_electrodes(electrodes, 0, 0, 2, 1)
+```
+
+**Example (Matrix Mode - 2 Electrodes per Key):**
+``` {.py}
+from mkx.interface_touch import InterfaceTouch
+
+# 3 column electrodes × 4 row electrodes = 12 keys
+electrodes_col = {0x5B: (0, 1, 2)}
+electrodes_row = {0x5B: (8, 9, 10, 11)}
+touch_interface = InterfaceTouch.from_rows_cols(
+    electrodes_col, 
+    electrodes_row, 
+    0, 0, 2, 3
+)
+```
+
+@subsection p_4_4_5 4.4.5 InterfaceTouchSlider
+
+Linear slider interface for continuous value input using capacitive electrodes.
+
+``` {.py}
+from mkx.interface_touch_slider import InterfaceTouchSlider
+
+interface = InterfaceTouchSlider(
+    electrodes: dict,
+    slider_keymap: list,
+    step_size: float = 0.05,
+    dynamic_step: bool = False,
+    max_steps_per_loop: int = 5,
+    value_min: float = 0.0,
+    value_max: float = 1.0
+)
+```
+
+**electrodes**  
+Dictionary mapping I2C address to list of electrode pins forming the slider track.  
+Electrodes are ordered from slider minimum to maximum position.  
+Example: `{0x5B: (0, 1, 2, 3, 4)}`
+
+**slider_keymap**  
+List of tuples for each layer, each containing (key_increase, key_decrease).  
+Example: `[(Keys_standard.UP, Keys_standard.DOWN)]`
+
+**step_size**  
+Normalized motion required to trigger one step event (default 0.05 = 5% of slider range).
+
+**dynamic_step**  
+Enable automatic step size adjustment based on movement speed (default False).  
+Fast movements produce smaller steps for rapid scrolling; slow movements produce larger steps for precision.
+
+**max_steps_per_loop**  
+Maximum number of key events generated per process call (default 5). Prevents burst transmission.
+
+**value_min, value_max**  
+Normalized range for slider values (default 0.0 to 1.0).
+
+**Example:**
+``` {.py}
+import board
+from mkx.i2c import init_i2c
+from mkx.interface_touch_slider import InterfaceTouchSlider
+from mkx.keys_standard import UP, DOWN
+
+i2c = init_i2c()
+
+# 5 electrodes forming a horizontal slider
+electrodes = {0x5B: (0, 1, 2, 3, 4)}
+slider_keymap = [(UP, DOWN)]
+
+slider_interface = InterfaceTouchSlider(
+    electrodes,
+    slider_keymap,
+    step_size=0.05,
+    dynamic_step=True,
+    max_steps_per_loop=5
+)
+```
+
+@subsection p_4_4_6 4.4.6 InterfaceTouchWheel
+
+Circular wheel interface for continuous rotational input using capacitive electrodes "closed, continous slider".
+
+``` {.py}
+from mkx.interface_touch_wheel import InterfaceTouchWheel
+
+interface = InterfaceTouchWheel(
+    electrodes: dict,
+    slider_keymap: list,
+    step_size: float = 0.05,
+    dynamic_step: bool = False,
+    max_steps_per_loop: int = 5,
+    value_min: float = 0.0,
+    value_max: float = 1.0
+)
+```
+
+**electrodes**  
+Dictionary mapping I2C address to list of electrode pins arranged in circular order around the wheel.  
+Example: `{0x5B: (0, 1, 2, 3, 4, 5, 6, 7)}`  
+Electrodes should be ordered clockwise or counterclockwise around the wheel.
+
+**slider_keymap**  
+List of tuples for each layer, each containing (key_clockwise, key_counterclockwise).  
+
+**step_size**  
+Normalized rotational motion required to trigger one step event (default 0.05 = 5% of wheel circumference).
+
+**dynamic_step**  
+Enable automatic step size adjustment based on rotation speed (default False).  
+Fast rotations produce smaller steps for rapid navigation; slow rotations produce larger steps for precision.
+
+**max_steps_per_loop**  
+Maximum number of key events generated per process call (default 5). Prevents burst transmission.
+
+**value_min, value_max**  
+Normalized range for rotational values. Uses circular unwrapping for continuous rotation detection.
+
+**Example:**
+``` {.py}
+import board
+from mkx.i2c import init_i2c
+from mkx.interface_touch_wheel import InterfaceTouchWheel
+from mkx.keys_standard import VOLU, VOLD
+
+i2c = init_i2c()
+
+# 8 electrodes arranged in a circle
+electrodes = {0x5B: (0, 1, 2, 3, 4, 5, 6, 7)}
+wheel_keymap = [(VOLU, VOLD)]
+
+wheel_interface = InterfaceTouchWheel(
+    electrodes,
+    wheel_keymap,
+    step_size=0.05,
+    dynamic_step=True,
+    max_steps_per_loop=5
+)
+```
 
 
 @section p_4_5 4.5 Layer Status LED
@@ -802,4 +1146,122 @@ backlight.slower(2)
 backlight.set_swirl(True)
 
 mkx_central.add_backlight(backlight)
+```
+
+@section p_4_7 4.7 I2C Helper
+
+Utility function for initializing and configuring I2C communication on CircuitPython devices.  
+Provides automatic device scanning and error handling with visual feedback on error via status LED.
+
+``` {.py}
+from mkx.i2c import init_i2c
+
+i2c = init_i2c(
+    scl_pin=board.SCL, 
+    sda_pin=board.SDA, 
+    status_led=None
+)
+```
+
+**scl_pin**  
+SCL (clock) pin for I2C communication (default: board.SCL).  
+
+**sda_pin**  
+SDA (data) pin for I2C communication (default: board.SDA).  
+
+**status_led**  
+Optional status LED object for error indication.  
+If provided, errors will trigger LED red pulsing.  
+
+**return value**  
+Returns initialized I2C bus object, or `None` on failure.  
+On success, prints a list of discovered I2C devices and their addresses in hexadecimal format.
+
+**Behavior:**  
+- Attempts to scan the I2C bus up to 3 times to work around timing issues  
+- Displays scan results with device addresses  
+- Halts on error if no devices are found after 3 attempts  
+- Handles slow I2C devices with automatic retry delays
+
+**Example:**
+``` {.py}
+import board
+from mkx.i2c import init_i2c
+from mkx.periphery_touch import PeripheryTouch
+from mkx.haptic import Haptic
+
+# Initialize I2C bus
+i2c = init_i2c(scl_pin=board.SCL, sda_pin=board.SDA)
+
+# Use with MPR121 touch sensor (address 0x5B)
+touch_periphery = PeripheryTouch(i2c, address=0x5B)
+
+# Use with DRV2605 haptic driver (address 0x5A)
+haptic = Haptic(i2c, effect_id=1, enable_pin=board.GP15)
+```
+
+@section p_4_8 4.8 Haptic
+
+Haptic feedback driver using the DRV2605 motor driver for vibration effects.  
+Supports both ERM (Eccentric Rotating Mass) and LRM (Linear Resonant) motors.
+
+``` {.py}
+from mkx.haptic import Haptic
+
+haptic = Haptic(
+    i2c,
+    effect_id: int,
+    enable_pin,
+    duration: float = None,
+    play_on_init: bool = False
+)
+```
+
+**i2c**  
+I2C bus object (see I2C Helper section).  
+The DRV2605 uses fixed I2C address 0x5A.
+
+**effect_id**  
+Integer ID of the haptic effect to use (0-122, depending on DRV2605 firmware).  
+Common effects: 1 (strong click), 2 (strong buzz), 52 (select click), etc.
+
+**enable_pin**  
+Digital output pin controlling the DRV2605 EN (enable) signal.  
+Must be HIGH for the driver to function. **Common mistake to forget to enable the device!**
+
+**duration**  
+Optional duration (in seconds) for the haptic effect.  
+If specified, the effect will automatically stop after this duration.  
+Set to `None` for the effect full playback.
+
+**play_on_init**  
+If `True`, automatically plays the effect once during initialization for testing (default False).
+
+**Methods:**
+
+**set_ERM_motor()**  
+Configure for ERM (Eccentric Rotating Mass) vibration motor.  
+Use for typical small vibration motors common in keyboards and phones.
+
+**set_LRM_motor()**  
+Configure for LRM (Linear Resonant) vibration motor.  
+Use for haptic actuators with linear motion characteristics.
+
+**set_electrodes(electrodes: dict)**  
+Define which electrodes trigger haptic feedback. Enables selective haptic response per touch area.  
+Ex. on buttons vibrate, on sliders don't.  
+`electrodes`: Dictionary mapping I2C address to list of electrode indices.  
+
+**Example:**
+``` {.py}
+import board
+from mkx.i2c import init_i2c
+from mkx.haptic import Haptic
+
+i2c = init_i2c()
+
+haptic = Haptic(i2c, effect_id=52, enable_pin=board.GP15, duration=0.05)
+
+# Restrict haptic to specific electrodes on MPR121
+haptic.set_electrodes({0x5B: [0, 1, 2, 3]})  # Only these 4 electrodes trigger haptic
 ```
