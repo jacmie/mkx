@@ -28,9 +28,7 @@ def set_enabled(enabled: bool):
 
 
 def _fallback(reason: str) -> bool:
-    print(
-        f"{Ansi256.PEACH}MatrixScanner: rp2pio not used ({reason}), falling back to digitalio{Ansi.RESET}\n"
-    )
+    print(f"{Ansi256.PEACH}MatrixScanner: rp2pio not used ({reason}){Ansi.RESET}")
     return False
 
 

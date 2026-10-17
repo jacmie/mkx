@@ -3,6 +3,7 @@ from keypad import Event as KeyEvent
 
 from mkx.diode_orientation import DiodeOrientation
 from mkx import matrix_scanner_rp_pio as rp_pio
+from mkx import matrix_scanner_keypad as keypad_scan
 from mkx.ansi_colors import Ansi, Ansi256
 
 # COL2ROW:
@@ -65,17 +66,30 @@ class MatrixScanner:
         else:
             raise ValueError(f"Invalid Pull: {self.pull}")
 
-        self._rp_pio_scanner = None
+        self._accelerated_scanner = None
 
         if rp_pio.is_eligible(self.drive_pins, self.sense_pins):
-            self._rp_pio_scanner = rp_pio.RpPioMatrixScanner(
+            self._accelerated_scanner = rp_pio.RpPioMatrixScanner(
                 self.drive_pins, self.sense_pins, self.pull
             )
             print(
                 f"{Ansi256.MINT}MatrixScanner: using rp2pio for matrix scanning{Ansi.RESET}"
             )
+            print()
+        elif keypad_scan.is_eligible(cols, rows):
+            self._accelerated_scanner = keypad_scan.KeypadMatrixScanner(
+                cols, rows, self.diode_orientation
+            )
+            print(
+                f"{Ansi256.MINT}MatrixScanner: using keypad for matrix scanning{Ansi.RESET}"
+            )
+            print()
         else:
             self._init_digitalio_scan()
+            print(
+                f"{Ansi256.MINT}MatrixScanner: using digitalio for matrix scanning{Ansi.RESET}"
+            )
+            print()
 
         initial_val = 1 if pull is digitalio.Pull.UP else 0
         self.state = bytearray([initial_val] * (self.len_cols * self.len_rows))
@@ -98,8 +112,8 @@ class MatrixScanner:
             pin.switch_to_input(pull=self.pull)
 
     def get_key_events(self) -> list[tuple[int, int, bool]]:
-        if self._rp_pio_scanner is not None:
-            return self._rp_pio_scanner.get_key_events(self)
+        if self._accelerated_scanner is not None:
+            return self._accelerated_scanner.get_key_events(self)
         return self._scan_digitalio()
 
     def _scan_digitalio(self):
