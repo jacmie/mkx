@@ -1,11 +1,8 @@
-import time
-
 import usb_hid
 from adafruit_hid.keyboard import Keyboard
 
 from mkx.ble import BLE
 
-from mkx.periphery_single import PeripherySingle
 from mkx.interface_abstract import InterfaceAbstract
 from mkx.keys_abstract import KeysAbstract
 
@@ -16,7 +13,6 @@ from mkx.keys_sticky import StickyKeyManager
 from mkx.backlight_abstract import BacklightAbstract
 
 from mkx.check import check
-from mkx.process_key_event import process_key_event
 from mkx.error import halt_on_error
 from mkx.ansi_colors import Ansi, Ansi256
 
@@ -44,14 +40,10 @@ class MKX_Abstract:
         self._use_ble = False
         self._ble = None
 
-        self.periphery_single = None
         self.keyboard = None
 
     def use_ble(self, use_ble: bool):
         self._use_ble = use_ble
-
-    def add_periphery_single(self, periphery_single: PeripherySingle):
-        self.periphery_single = periphery_single
 
     def add_interface(self, interface: InterfaceAbstract):
         self.interfaces.append(interface)
@@ -129,55 +121,8 @@ class MKX_Abstract:
             print(e)
             return None
 
-    def _collect_key_events(self):
-        if not self.periphery_single:
-            halt_on_error(
-                "No periphery single registered!",
-                status_led=getattr(self.layers_manager, "status_led", None),
-            )
-
-        iface = self._get_interface(self.periphery_single.device_id)
-        if iface is None:
-            halt_on_error(
-                "No interface single registered!",
-                status_led=getattr(self.layers_manager, "status_led", None),
-            )
-
-        raw_events = self.periphery_single.get_key_events()
-        if not raw_events:
-            return []
-
-        events = []
-
-        # translate to flat index through the interface’s coordinate map
-        for local_col, local_row, pressed in raw_events:
-            logical_index = self._get_logical_index(iface, local_col, local_row)
-            if logical_index is None:
-                continue
-
-            events.append((logical_index, pressed))
-
-        return events
-
     def run_once(self):
-        if not self._ensure_ble():
-            return
-
-        now = time.monotonic_ns() // 1_000_000
-
-        self.timed_keys_manager.update(self.layers_manager, self.keyboard, now)
-
-        for event in self._collect_key_events():
-            logical_index, pressed = event
-
-            process_key_event(
-                self, self.periphery_single.device_id, logical_index, pressed, now
-            )
-
-        if self.backlight:
-            self.backlight.shine()
-
-        time.sleep(0.001)  # Keep CPU usage low
+        raise NotImplementedError("Subclasses must implement run_once()")
 
     def run_forever(self):
         self._init_keyboard()
