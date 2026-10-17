@@ -2,6 +2,8 @@ import digitalio, time
 from keypad import Event as KeyEvent
 
 from mkx.diode_orientation import DiodeOrientation
+from mkx import matrix_scanner_rp_pio as rp_pio
+from mkx.ansi_colors import Ansi, Ansi256
 
 # COL2ROW:
 # [ Column (output) ] → [ + anode ]---|>|---[ - cathode (diode | ) ] → [ Row (input) ]
@@ -22,6 +24,8 @@ def ensure_digital_in_out(pin):
 
 
 class MatrixScanner:
+    """Internal scan-engine used by PeripheryAbstract; not meant for direct user instantiation."""
+
     def __init__(
         self,
         cols,
@@ -61,15 +65,17 @@ class MatrixScanner:
         else:
             raise ValueError(f"Invalid Pull: {self.pull}")
 
-        # In CircuitPython, to use a GPIO pin, wrap it in a digitalio.DigitalInOut(pin) object.
-        self.drive_pins = [ensure_digital_in_out(p) for p in self.drive_pins]
-        self.sense_pins = [ensure_digital_in_out(p) for p in self.sense_pins]
+        self._rp_pio_scanner = None
 
-        # Set drive and sense pin roles
-        for pin in self.drive_pins:
-            pin.switch_to_output()
-        for pin in self.sense_pins:
-            pin.switch_to_input(pull=self.pull)
+        if rp_pio.is_eligible(self.drive_pins, self.sense_pins):
+            self._rp_pio_scanner = rp_pio.RpPioMatrixScanner(
+                self.drive_pins, self.sense_pins, self.pull
+            )
+            print(
+                f"{Ansi256.MINT}MatrixScanner: using rp2pio for matrix scanning{Ansi.RESET}"
+            )
+        else:
+            self._init_digitalio_scan()
 
         initial_val = 1 if pull is digitalio.Pull.UP else 0
         self.state = bytearray([initial_val] * (self.len_cols * self.len_rows))
@@ -80,7 +86,23 @@ class MatrixScanner:
             _ = self.get_key_events()  # Throw away events
             time.sleep(0.001)
 
+    def _init_digitalio_scan(self):
+        # In CircuitPython, to use a GPIO pin, wrap it in a digitalio.DigitalInOut(pin) object.
+        self.drive_pins = [ensure_digital_in_out(p) for p in self.drive_pins]
+        self.sense_pins = [ensure_digital_in_out(p) for p in self.sense_pins]
+
+        # Set drive and sense pin roles
+        for pin in self.drive_pins:
+            pin.switch_to_output()
+        for pin in self.sense_pins:
+            pin.switch_to_input(pull=self.pull)
+
     def get_key_events(self) -> list[tuple[int, int, bool]]:
+        if self._rp_pio_scanner is not None:
+            return self._rp_pio_scanner.get_key_events(self)
+        return self._scan_digitalio()
+
+    def _scan_digitalio(self):
         raw_events = []
         output_active = (
             self.pull is not digitalio.Pull.UP
