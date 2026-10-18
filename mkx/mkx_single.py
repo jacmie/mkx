@@ -29,7 +29,9 @@ class MKX_Single(MKX_Abstract):
                 status_led=getattr(self.layers_manager, "status_led", None),
             )
 
-        raw_events = self.periphery_single.get_key_events()
+        use_interrupts = bool(getattr(self, "_interrupt_pins", None))
+
+        raw_events = self.periphery_single.get_key_events(use_interrupts)
         if not raw_events:
             return []
 
@@ -53,12 +55,13 @@ class MKX_Single(MKX_Abstract):
 
         self.timed_keys_manager.update(self.layers_manager, self.keyboard, now)
 
-        for event in self._collect_key_events():
-            logical_index, pressed = event
+        if self._should_scan():
+            for event in self._collect_key_events():
+                logical_index, pressed = event
 
-            process_key_event(
-                self, self.periphery_single.device_id, logical_index, pressed, now
-            )
+                process_key_event(
+                    self, self.periphery_single.device_id, logical_index, pressed, now
+                )
 
         if self.backlight:
             self.backlight.shine()

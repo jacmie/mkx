@@ -13,7 +13,9 @@ class PeripheryAbstract:
         *,
         diode_orientation=DiodeOrientation.COL2ROW,
         pull=digitalio.Pull.DOWN,
-        warmup_cycles=100
+        warmup_cycles=100,
+        use_rp_pio=True,
+        use_keypad_scan=True,
     ):
         self.device_id = device_id or "unknown"
 
@@ -23,11 +25,13 @@ class PeripheryAbstract:
             diode_orientation=diode_orientation,
             pull=pull,
             warmup_cycles=warmup_cycles,
+            use_rp_pio=use_rp_pio,
+            use_keypad_scan=use_keypad_scan,
         )
 
-    def get_key_events(self) -> list[tuple[int, int, bool]]:
+    def get_key_events(self, use_interrupts=False) -> list[tuple[int, int, bool]]:
         """Returns a list of (col, row, pressed) events"""
-        return self.matrix_scanner.get_key_events()
+        return self.matrix_scanner.get_key_events(use_interrupts)
 
     def receive(self, verbose=False) -> list[dict]:
         """Return list of incoming messages as parsed dicts."""

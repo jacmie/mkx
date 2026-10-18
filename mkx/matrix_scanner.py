@@ -33,7 +33,9 @@ class MatrixScanner:
         rows,
         diode_orientation,
         pull,
-        warmup_cycles=100,
+        warmup_cycles,
+        use_rp_pio,
+        use_keypad_scan,
     ):
         self.len_cols = len(cols)
         self.len_rows = len(rows)
@@ -68,7 +70,7 @@ class MatrixScanner:
 
         self._accelerated_scanner = None
 
-        if rp_pio.is_eligible(self.drive_pins, self.sense_pins):
+        if use_rp_pio and rp_pio.is_eligible(self.drive_pins, self.sense_pins):
             self._accelerated_scanner = rp_pio.RpPioMatrixScanner(
                 self.drive_pins, self.sense_pins, self.pull
             )
@@ -76,7 +78,7 @@ class MatrixScanner:
                 f"{Ansi256.MINT}MatrixScanner: using rp2pio for matrix scanning{Ansi.RESET}"
             )
             print()
-        elif keypad_scan.is_eligible(cols, rows):
+        elif use_keypad_scan and keypad_scan.is_eligible(cols, rows):
             self._accelerated_scanner = keypad_scan.KeypadMatrixScanner(
                 cols, rows, self.diode_orientation
             )
@@ -97,7 +99,7 @@ class MatrixScanner:
 
         # Run safety warmup cycles before hardware pins stabilize
         for _ in range(warmup_cycles):
-            _ = self.get_key_events()  # Throw away events
+            _ = self.get_key_events(use_interrupts=False)  # Throw away events
             time.sleep(0.001)
 
     def _init_digitalio_scan(self):
@@ -111,9 +113,13 @@ class MatrixScanner:
         for pin in self.sense_pins:
             pin.switch_to_input(pull=self.pull)
 
-    def get_key_events(self) -> list[tuple[int, int, bool]]:
+    def get_key_events(self, use_interrupts: bool) -> list[tuple[int, int, bool]]:
         if self._accelerated_scanner is not None:
             return self._accelerated_scanner.get_key_events(self)
+
+        if use_interrupts:
+            return self._scan_interrupts()
+
         return self._scan_digitalio()
 
     def _scan_digitalio(self):
@@ -130,28 +136,66 @@ class MatrixScanner:
             out_pin.value = output_active
 
             for in_idx, in_pin in enumerate(self.sense_pins):
-                new_val = int(in_pin.value)
-                old_val = self.state[ba_idx]
-
-                if old_val != new_val:
-                    self.state[ba_idx] = new_val
-                    pressed = new_val == input_active_val
-
-                    if self.diode_orientation == DiodeOrientation.COL2ROW:
-                        col = out_idx
-                        row = in_idx
-                    else:
-                        row = out_idx
-                        col = in_idx
-
-                    if col < self.len_cols and row < self.len_rows:
-                        raw_events.append((col, row, pressed))
-                    else:
-                        print(f"Ignoring out-of-bounds key event: col={col}, row={row}")
-
-                ba_idx += 1
+                ba_idx = self._process_pin_state(
+                    in_pin, ba_idx, input_active_val, out_idx, in_idx, raw_events
+                )
 
             out_pin.value = not output_active
 
-        # print(raw_events)
         return raw_events
+
+    def _scan_interrupts(self):
+        raw_events = []
+        output_active = self.pull is not digitalio.Pull.UP
+        input_active_val = 0 if self.pull is digitalio.Pull.UP else 1
+        ba_idx = 0
+
+        # Read the pins once to clear
+        for pin in self.sense_pins:
+            _ = pin.value
+
+        # Isolate rows safely by resetting them to resting states first
+        for out_pin in self.drive_pins:
+            out_pin.value = not output_active
+
+        for out_idx, out_pin in enumerate(self.drive_pins):
+            # Actively drive ONLY the current row line
+            out_pin.value = output_active
+
+            for in_idx, in_pin in enumerate(self.sense_pins):
+                ba_idx = self._process_pin_state(
+                    in_pin, ba_idx, input_active_val, out_idx, in_idx, raw_events
+                )
+
+            # Instantly drop it back to resting state
+            out_pin.value = not output_active
+
+        # Drive all rows low simultaneously so a new key edge can trip the MCU
+        for out_pin in self.drive_pins:
+            out_pin.value = output_active
+
+        return raw_events
+
+    def _process_pin_state(
+        self, in_pin, ba_idx, input_active_val, out_idx, in_idx, raw_events
+    ) -> int:
+        new_val = int(in_pin.value)
+        old_val = self.state[ba_idx]
+
+        if old_val != new_val:
+            self.state[ba_idx] = new_val
+            pressed = new_val == input_active_val
+
+            if self.diode_orientation == DiodeOrientation.COL2ROW:
+                col = out_idx
+                row = in_idx
+            else:
+                row = out_idx
+                col = in_idx
+
+            if col < self.len_cols and row < self.len_rows:
+                raw_events.append((col, row, pressed))
+            else:
+                print(f"Ignoring out-of-bounds key event: col={col}, row={row}")
+
+        return ba_idx + 1

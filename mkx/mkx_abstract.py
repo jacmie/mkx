@@ -1,3 +1,4 @@
+import digitalio
 import usb_hid
 from adafruit_hid.keyboard import Keyboard
 
@@ -40,10 +41,31 @@ class MKX_Abstract:
         self._use_ble = False
         self._ble = None
 
+        self._interrupt_pins = []
+
         self.keyboard = None
 
     def use_ble(self, use_ble: bool):
         self._use_ble = use_ble
+
+    def use_interrupt(self, pin_list):
+        """Register one or more active-low interrupt pins (e.g. MCP23017 INTA/INTB wired
+        open-drain to a shared MCU pin) used to skip matrix scanning when none are asserted.
+        Currently used only in the MKX_Single class.
+        """
+        if not isinstance(pin_list, (list, tuple)):
+            pin_list = [pin_list]
+
+        for pin in pin_list:
+            dio = digitalio.DigitalInOut(pin)
+            dio.switch_to_input(pull=digitalio.Pull.UP)
+            self._interrupt_pins.append(dio)
+
+    def _should_scan(self) -> bool:
+        if not self._interrupt_pins:
+            return True
+
+        return any(not pin.value for pin in self._interrupt_pins)
 
     def use_rp_pio(self, use_rp_pio: bool):
         """Explicitly enable/disable rp2pio-accelerated matrix scanning on RP2040/RP2350 boards.
