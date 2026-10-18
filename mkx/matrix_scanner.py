@@ -70,7 +70,9 @@ class MatrixScanner:
 
         self._accelerated_scanner = None
 
-        if use_rp_pio and rp_pio.is_eligible(self.drive_pins, self.sense_pins):
+        if use_rp_pio and rp_pio.RpPioMatrixScanner.is_eligible(
+            self.drive_pins, self.sense_pins
+        ):
             self._accelerated_scanner = rp_pio.RpPioMatrixScanner(
                 self.drive_pins, self.sense_pins, self.pull
             )
@@ -78,7 +80,9 @@ class MatrixScanner:
                 f"{Ansi256.MINT}MatrixScanner: using rp2pio for matrix scanning{Ansi.RESET}"
             )
             print()
-        elif use_keypad_scan and keypad_scan.is_eligible(cols, rows):
+        elif use_keypad_scan and keypad_scan.KeypadMatrixScanner.is_eligible(
+            cols, rows
+        ):
             self._accelerated_scanner = keypad_scan.KeypadMatrixScanner(
                 cols, rows, self.diode_orientation
             )

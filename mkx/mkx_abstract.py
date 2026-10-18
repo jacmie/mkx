@@ -67,24 +67,6 @@ class MKX_Abstract:
 
         return any(not pin.value for pin in self._interrupt_pins)
 
-    def use_rp_pio(self, use_rp_pio: bool):
-        """Explicitly enable/disable rp2pio-accelerated matrix scanning on RP2040/RP2350 boards.
-
-        Must be called before peripheries (and their MatrixScanner) are constructed.
-        """
-        from mkx.matrix_scanner_rp_pio import set_enabled
-
-        set_enabled(use_rp_pio)
-
-    def use_keypad_scan(self, use_keypad_scan: bool):
-        """Explicitly enable/disable the CircuitPython keypad.KeyMatrix background scanner.
-
-        Must be called before peripheries (and their MatrixScanner) are constructed.
-        """
-        from mkx.matrix_scanner_keypad import set_enabled
-
-        set_enabled(use_keypad_scan)
-
     def add_interface(self, interface: InterfaceAbstract):
         self.interfaces.append(interface)
 

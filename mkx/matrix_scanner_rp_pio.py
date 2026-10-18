@@ -19,44 +19,10 @@ PIO_SETTLE_CYCLES = (
     5  # cycles to let the driven column line settle before sampling rows
 )
 
-_enabled = True  # user-facing toggle, see MKX_Abstract.use_rp_pio()
-
-
-def set_enabled(enabled: bool):
-    global _enabled
-    _enabled = enabled
-
 
 def _fallback(reason: str) -> bool:
     print(f"{Ansi256.PEACH}MatrixScanner: rp2pio not used ({reason}){Ansi.RESET}")
     return False
-
-
-def is_eligible(drive_pins, sense_pins) -> bool:
-    if not _enabled:
-        return _fallback("disabled via use_rp_pio(False)")
-
-    if not _has_rp2pio:
-        return _fallback("rp2pio/adafruit_pioasm not available on this board")
-
-    # rp2pio only drives/reads raw microcontroller pins directly, not
-    # wrapped digitalio objects or pins behind an I2C expander (e.g. MCP23017)
-    all_pins = drive_pins + sense_pins
-    if not all(isinstance(p, microcontroller.Pin) for p in all_pins):
-        return _fallback("pins are not raw microcontroller pins")
-
-    # "out pins"/"in pins" can only address up to 32 pins in one instruction
-    if len(drive_pins) > 32 or len(sense_pins) > 32:
-        return _fallback("more than 32 column/row pins")
-
-    # "out pins, N"/"in pins, N" each need a single contiguous GPIO range
-    if not (
-        rp2pio.pins_are_sequential(drive_pins)
-        and rp2pio.pins_are_sequential(sense_pins)
-    ):
-        return _fallback("column/row pins are not a contiguous GPIO range")
-
-    return True
 
 
 def _build_program(col_count, row_count):
@@ -75,6 +41,39 @@ def _build_program(col_count, row_count):
 
 class RpPioMatrixScanner:
     """Drives columns and samples rows via the RP2040/RP2350 PIO block."""
+
+    enabled = True  # Class-facing toggle replacing the global variable
+
+    @classmethod
+    def set_enabled(cls, enabled: bool):
+        cls.enabled = enabled
+
+    @classmethod
+    def is_eligible(cls, drive_pins, sense_pins) -> bool:
+        if not cls.enabled:
+            return _fallback("disabled via use_rp_pio(False)")
+
+        if not _has_rp2pio:
+            return _fallback("rp2pio/adafruit_pioasm not available on this board")
+
+        # rp2pio only drives/reads raw microcontroller pins directly, not
+        # wrapped digitalio objects or pins behind an I2C expander (e.g. MCP23017)
+        all_pins = drive_pins + sense_pins
+        if not all(isinstance(p, microcontroller.Pin) for p in all_pins):
+            return _fallback("pins are not raw microcontroller pins")
+
+        # "out pins"/"in pins" can only address up to 32 pins in one instruction
+        if len(drive_pins) > 32 or len(sense_pins) > 32:
+            return _fallback("more than 32 column/row pins")
+
+        # "out pins, N"/"in pins, N" each need a single contiguous GPIO range
+        if not (
+            rp2pio.pins_are_sequential(drive_pins)
+            and rp2pio.pins_are_sequential(sense_pins)
+        ):
+            return _fallback("column/row pins are not a contiguous GPIO range")
+
+        return True
 
     def __init__(self, drive_pins, sense_pins, pull):
         self.drive_pins = drive_pins

@@ -10,37 +10,36 @@ try:
 except ImportError:
     _has_keypad = False
 
-_enabled = True  # user-facing toggle, see MKX_Abstract.use_keypad_scan()
-
-
-def set_enabled(enabled: bool):
-    global _enabled
-    _enabled = enabled
-
 
 def _fallback(reason: str) -> bool:
     print(f"{Ansi256.PEACH}MatrixScanner: keypad not used ({reason}){Ansi.RESET}")
     return False
 
 
-def is_eligible(cols, rows) -> bool:
-    if not _enabled:
-        return _fallback("disabled via use_keypad_scan(False)")
-
-    if not _has_keypad:
-        return _fallback("keypad module not available on this board")
-
-    # keypad.KeyMatrix only drives/reads raw microcontroller pins directly, not
-    # wrapped digitalio objects or pins behind an I2C expander (e.g. MCP23017)
-    all_pins = list(cols) + list(rows)
-    if not all(isinstance(p, microcontroller.Pin) for p in all_pins):
-        return _fallback("pins are not raw microcontroller pins")
-
-    return True
-
-
 class KeypadMatrixScanner:
     """Drives/reads the matrix via the CircuitPython keypad.KeyMatrix background scanner."""
+
+    enabled = True
+
+    @classmethod
+    def set_enabled(cls, enabled: bool):
+        cls.enabled = enabled
+
+    @classmethod
+    def is_eligible(cls, cols, rows) -> bool:
+        if not cls.enabled:
+            return _fallback("disabled via use_keypad_scan(False)")
+
+        if not _has_keypad:
+            return _fallback("keypad module not available on this board")
+
+        # keypad.KeyMatrix only drives/reads raw microcontroller pins directly, not
+        # wrapped digitalio objects or pins behind an I2C expander (e.g. MCP23017)
+        all_pins = list(cols) + list(rows)
+        if not all(isinstance(p, microcontroller.Pin) for p in all_pins):
+            return _fallback("pins are not raw microcontroller pins")
+
+        return True
 
     def __init__(self, cols, rows, diode_orientation):
         self.col_count = len(cols)
