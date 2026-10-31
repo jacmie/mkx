@@ -405,7 +405,273 @@ keyboard = MKX_Periphery(peryphery, debug=True)
 keyboard.run_forever()
 ```
 
-@section p_3_5  3.5 Hackpad Keyboard
+@section p_3_5  3.5 Myk Keyboard
+
+<div style="margin-left: 100px;">
+  <img src="MykF_keyboard.jpg">
+</div>
+  
+<div style="margin-left: 100px;">
+  <img src="MykR_keyboard.jpg">
+</div>
+
+This "split" keyboard uses one MCU and two *MCP23017* pin expanders. It was initially driven by a *Seeed Xiao nRF52840* to test Bluetooth functionality.  
+However, the BLE stack took up too much memory, preventing the full keyboard firmware from fitting.  
+The resource constraint caused severe input latency and lack of Bluetooth connection. Due to these limitations, the MCU was changed to a *Seeed Xiao RP2350*.  
+While it lacks Bluetooth capabilities, it offers significantly faster processing speeds and a much larger memory capacity to easily handle the full keyboard code.  
+
+In this architecture, the MCU communicates with the two pin expanders over I2C using unique addresses.  
+While this approach dramatically increases the available pin count, it introduces complications in the keymap layout.  
+Moreover, the expanders work only with the *digitalio.Pull.UP* which flips the key mapping logic.
+
+To prevent key conflicts, the matrix had to be remapped using custom code into a larger, virtual matrix.  
+In this layout, columns are converted to rows and the top-left quadrant handles the left half of the keyboard,  
+while the bottom-right quadrant handles the right half.  
+The remaining two quadrants are populated with null values to avoid overlapping inputs. 
+
+However, even with the faster RP2350 MCU, there is still a noticeable input lag.  
+This latency is likely caused by either the overhead of the I2C communication protocol,  
+or the processing demands of managing a much larger matrix than usual.
+
+Another challenge arose when connecting the keyboard halves to the main MCU board using JST-SH 1.0mm connectors.  
+These connectors proved to be highly unreliable. After extensive hardware debugging,  
+I had to bypass them by soldering custom wire bridges directly to the specific pads visible in the photo.
+
+The yellow casing interferes with the status LED light, altering its perceived color.  
+
+While this keyboard design introduced quite a few challenges, it served as an invaluable learning experience,  
+and some variations of this concept you may find useful.
+
+
+``` {.py}
+# boot.py
+
+import board
+
+from mkx.boot_config import boot_cfg
+
+boot_cfg(
+    sense=board.D9,  # column
+    source=board.D8,  # row
+    autoreload=False,
+    storage=False,
+    usb_id=("MKX Device", "Myk Keyboard"),
+)
+```
+  
+``` {.py}
+# remapper.py
+
+def remapper(keymap):
+    """
+    Transforms a list of layers from a 6x12 layout into a 12x12 layout
+    where each hand occupies a non-overlapping diagonal 6x6 block.
+    This decouples the row selections of mcp1 (Rows 0-5) and mcp2 (Rows 6-11) to avoid physical pin sharing.
+
+              Columns 0-5 (mcp1)     Columns 6-11 (mcp2)
+            +---------------------+---------------------+
+    Rows    |                     |                     |
+    0-5     |   LEFT SIDE (6x6)   |     NULL (None)     |
+    (mcp1)  |     Transposed      |                     |
+            +---------------------+---------------------+
+    Rows    |                     |                     |
+    6-11    |     NULL (None)     |  RIGHT SIDE (6x6)   |
+    (mcp2)  |                     |     Transposed      |
+            +---------------------+---------------------+
+    """
+    remapped_keymap = []
+
+    for layer in keymap:
+        # 1. Break the flat layer into a standard 6 rows x 12 columns layout
+        grid_12x6 = [layer[i : i + 12] for i in range(0, len(layer), 12)]
+        
+        # 2. Extract the left and right 6x6 blocks
+        left_6x6 = [row[0:6] for row in grid_12x6]
+        right_6x6 = [row[6:12] for row in grid_12x6]
+        
+        # 3. Transpose both 6x6 matrices independently (swap rows and columns)
+        left_transposed = [
+            [left_6x6[r][c] for r in range(6)] for c in range(6)
+        ]
+        right_transposed = [
+            [right_6x6[r][c] for r in range(6)] for c in range(6)
+        ]
+        
+        # 4. Construct a 12x12 grid with active maps on the diagonal quarters
+        grid_12x12 = []
+        
+        # Top 6 Rows: mcp1 active on Left (Cols 0-5), Right (Cols 6-11) is None
+        for r in range(6):
+            row_left_half = left_transposed[r]
+            row_right_half = [None] * 6
+            grid_12x12.extend(row_left_half + row_right_half)
+            
+        # Bottom 6 Rows: Left (Cols 0-5) is None, mcp2 active on Right (Cols 6-11)
+        for r in range(6):
+            row_left_half = [None] * 6
+            row_right_half = right_transposed[r]
+            grid_12x12.extend(row_left_half + row_right_half)
+            
+        remapped_keymap.append(grid_12x12)
+
+    return remapped_keymap
+```
+  
+``` {.py}
+# code.py
+
+import board
+import digitalio
+from adafruit_mcp230xx.mcp23017 import MCP23017
+
+from mkx.mkx_single import MKX_Single
+from mkx.periphery_single import PeripherySingle
+from mkx.interface_single import InterfaceSingle
+from mkx.diode_orientation import DiodeOrientation
+
+from mkx.layer_status_led_rgb_neopixel import LayerStatusLedRgbNeoPixel
+
+from mkx.keys_standard import *
+from mkx.keys_media import VOLU, VOLD
+from mkx.keys_modifiers import M_LCTL, M_LSFT, M_LGUI
+from mkx.keys_sequence import SEQ
+from mkx.keys_holdtap import HT
+from mkx.keys_layers import TO
+from mkx.keys_vim import *
+
+from mkx.i2c import init_i2c
+
+keyboard = MKX_Single()
+
+status_led = LayerStatusLedRgbNeoPixel(board.RX)
+status_led.add_layer(0, (0, 0, 255))  # Blue
+status_led.add_layer(1, (0, 255, 0))  # Green
+status_led.add_layer(2, (255, 255, 255))  # Write
+status_led.add_layer(3, (255, 0, 0))  # Red
+keyboard.add_layer_status_led(status_led)
+
+keyboard.use_interrupt(board.D0)
+
+i2c = init_i2c(board.SCL, board.SDA, status_led)
+
+mcp1 = MCP23017(i2c, address=0x20)
+mcp2 = MCP23017(i2c, address=0x21)
+
+# Configures the IOCON register on both chips to enable open-drain (bit ODR = 0x04)
+# This prevents a hardware short-circuit across your shared INT line
+for mcp in (mcp1, mcp2):
+    current_iocon = mcp.io_control
+    mcp.io_control = current_iocon | 0x04
+
+col_pins = (
+    # Left Side (mcp1) - Columns 0 to 5
+    mcp1.get_pin(13),  # COL0 -> GPB5
+    mcp1.get_pin(12),  # COL1 -> GPB4
+    mcp1.get_pin(11),  # COL2 -> GPB3
+    mcp1.get_pin(10),  # COL3 -> GPB2
+    mcp1.get_pin(9),  # COL4 -> GPB1
+    mcp1.get_pin(8),  # COL5 -> GPB0
+    # Right Side (mcp2) - Columns 6 to 11
+    mcp2.get_pin(13),  # COL6 -> GPB5
+    mcp2.get_pin(12),  # COL7 -> GPB4
+    mcp2.get_pin(11),  # COL8 -> GPB3
+    mcp2.get_pin(10),  # COL9 -> GPB2
+    mcp2.get_pin(9),  # COL10 -> GPB1
+    mcp2.get_pin(8),  # COL11 -> GPB0
+)
+
+row_pins = (
+    # Left Side Rows (mcp1) - Rows 0 to 5
+    mcp1.get_pin(2),  # ROW0 -> GPA2
+    mcp1.get_pin(3),  # ROW1 -> GPA3
+    mcp1.get_pin(4),  # ROW2 -> GPA4
+    mcp1.get_pin(5),  # ROW3 -> GPA5
+    mcp1.get_pin(6),  # ROW4 -> GPA6
+    mcp1.get_pin(7),  # ROW5 -> GPA7
+    # Right Side Rows (mcp2) - Rows 6 to 11
+    mcp2.get_pin(2),  # ROW6 -> GPA2
+    mcp2.get_pin(3),  # ROW7 -> GPA3
+    mcp2.get_pin(4),  # ROW8 -> GPA4
+    mcp2.get_pin(5),  # ROW9 -> GPA5
+    mcp2.get_pin(6),  # ROW10 -> GPA6
+    mcp2.get_pin(7),  # ROW11 -> GPA7
+)
+
+periphery = PeripherySingle(
+    col_pins,
+    row_pins,
+    pull=digitalio.Pull.UP,
+    diode_orientation=DiodeOrientation.COL2ROW,
+)
+keyboard.add_periphery_single(periphery)
+
+interface = InterfaceSingle(0, 0, 11, 11)
+keyboard.add_interface(interface)
+
+
+OPEN = M_LCTL(O)
+CLOSE = M_LCTL(W)
+SAVE = M_LCTL(S)
+TABS = M_LCTL(J)
+TOOLS = M_LCTL(B)
+DESKTOP = M_LGUI(D)
+LOCK = M_LGUI(L)
+PTAB = M_LCTL(PGUP)
+NTAB = M_LCTL(PGDN)
+COMMENT = M_LCTL(SLSH)
+ALL = M_LCTL(A)
+REPLACE = M_LCTL(H)
+
+RALT_DEL = HT(DEL, RALT)
+LALT_DEL = HT(DEL, LALT)
+LSFT_SPC = HT(SPC, LSFT)
+
+# fmt: off
+
+keymap = [
+    # Normal
+    [
+        ESC,        F1,             F2,             F3,         F4,             F5,         F6,         F7,         F8,         F9,             F10,        F11,
+        COMMENT,    ALL,            PTAB,           NTAB,       SAVE,           CLOSE,      None,       None,       None,       None,           None,       F12,
+        VI_MVLU,    HOME,           BSPC,           UP,         DEL,            END,        TABS,       VI_FIND,    REPLACE,    None,           None,       VOLU,
+        VI_MVLD,    VI_PRVW,        LEFT,           DOWN,       RIGHT,          VI_NXTW,    TOOLS,      None,       None,       OPEN,           None,       VOLD,
+        TAB,        VI_UNDO,        VI_CUT,         VI_YANK,    VI_PAST,        TO(2),      DESKTOP,    None,       PTAB,       NTAB,           LOCK,       None,
+        LCTRL,      LCTRL,          VI_APND.L(1),   VI_APND.L(1),LSFT_SPC,      LSFT_SPC,   BSPC,       LALT,       LEFT,       UP,             DOWN,       RIGHT,
+    ],
+    
+    # Edit 
+    [
+        TO(0),      F1,             F2,             F3,         F4,             F5,         F6,         F7,         F8,         F9,             F10,        F11,
+        GRV,        N1,             N2,             N3,         N4,             N5,         N6,         N7,         N8,         N9,             N0,         BSLS,
+        EQL,        Q,              D,              R,          W,              L,          J,          F,          U,          P,              SCLN,       LBRC,
+        MINS,       A,              S,              H,          T,              G,          Y,          N,          E,          O,              I,          QUOT,
+        TAB,        Z,              X,              C,          V,              B,          K,          M,          COMM,       DOT,            SLSH,       RBRC,
+        LCTRL,      LCTRL,          ENT,            ENT,        LSFT_SPC,       LSFT_SPC,   BSPC,       RALT,       LEFT,       UP,             DOWN,       RIGHT,
+    ],
+
+    # Visual
+    [
+        TO(0),              F1,             F2,             F3,             F4,             F5,                 F6,         F7,             F8,             F9,         F10,            F11,
+        COMMENT,            ALL,            PTAB,           NTAB,           SAVE,           CLOSE,              None,       None,           None,           None,       None,           F12,
+        M_LSFT(VI_NXTL),    M_LSFT(HOME),   BSPC,           M_LSFT(UP),     DEL,            M_LSFT(END),        TABS,       VI_FIND,        None,           None,       None,           VOLU,
+        M_LSFT(VI_PRVL),    M_LSFT(VI_PRVW),M_LSFT(LEFT),   M_LSFT(DOWN),   M_LSFT(RIGHT),  M_LSFT(VI_NXTW),    TOOLS,      None,           None,           OPEN,       None,           VOLD,
+        TAB,                VI_UNDO,        VI_CUT,         VI_YANK,        VI_PAST,        TO(0),              DESKTOP,    None,           PTAB,           NTAB,       LOCK,           None,
+        LCTRL,              LCTRL,          VI_APND.L(1),   VI_APND.L(1),   LSFT_SPC,       LSFT_SPC,           BSPC,       LALT,           M_LSFT(LEFT),   M_LSFT(UP), M_LSFT(DOWN),   M_LSFT(RIGHT),
+    ],
+]
+
+# fmt: on
+
+# Process the keymap into the 12x12 matrix format
+from remapper import remapper
+
+keymap = remapper(keymap)
+
+keyboard.add_keymap(keymap, 12, 12)
+keyboard.run_forever()
+```
+
+@section p_3_6  3.6 Hackpad Keyboard
 
 <div style="margin-left: 100px;">
   <img src="Hackpad_keyboard.jpg">
