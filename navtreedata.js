@@ -27,9 +27,16 @@ var NAVTREE =
   [ "MKX", "index.html", [
     [ "Introduction", "index.html", null ],
     [ "1 Main Concepts", "p_1.html", [
-      [ "1.1 Central", "p_1.html#p_1_1", null ],
-      [ "1.2 Periphery", "p_1.html#p_1_2", null ],
-      [ "1.3 MKX Keyboard", "p_1.html#p_1_3", null ]
+      [ "1.1 MKX Keyboard", "p_1.html#p_1_1", null ],
+      [ "1.2 Central", "p_1.html#p_1_2", null ],
+      [ "1.3 Periphery", "p_1.html#p_1_3", null ],
+      [ "1.4 Matrix Scanning", "p_1.html#p_1_4", null ],
+      [ "1.5 Interfaces and Coordinate Mapping", "p_1.html#p_1_5", null ],
+      [ "1.6 Keymap and Layers", "p_1.html#p_1_6", null ],
+      [ "1.7 Keys System", "p_1.html#p_1_7", null ],
+      [ "1.8 Capacitive Touch Input", "p_1.html#p_1_8", null ],
+      [ "1.9 Visual and Haptic Feedback", "p_1.html#p_1_9", null ],
+      [ "1.10 Connectivity and Safety", "p_1.html#p_1_10", null ]
     ] ],
     [ "2 Istallation", "p_2.html", [
       [ "2.1 Install Circuit Python", "p_2.html#p_2_1", null ],
@@ -51,7 +58,8 @@ var NAVTREE =
       [ "3.2 Hardware Keypass", "p_3.html#p_3_2", null ],
       [ "3.3 Booster Keyboard", "p_3.html#p_3_3", null ],
       [ "3.4 Square Keyboard", "p_3.html#p_3_4", null ],
-      [ "3.5 Hackpad Keyboard", "p_3.html#p_3_5", null ]
+      [ "3.5 Myk Keyboard", "p_3.html#p_3_5", null ],
+      [ "3.6 Hackpad Keyboard", "p_3.html#p_3_6", null ]
     ] ],
     [ "4 MKX API", "p_4.html", [
       [ "4.1 Boot Config", "p_4.html#p_4_1", null ],
@@ -140,5 +148,6 @@ var NAVTREEINDEX =
 "index.html"
 ];
 
-var SYNCONMSG = 'click to disable panel synchronisation';
-var SYNCOFFMSG = 'click to enable panel synchronisation';
+var SYNCONMSG = 'click to disable panel synchronization';
+var SYNCOFFMSG = 'click to enable panel synchronization';
+var LISTOFALLMEMBERS = 'List of all members';

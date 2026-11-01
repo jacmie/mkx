@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['periphery_0',['periphery',['../p_1.html#p_1_2',1,'1.2 Periphery'],['../p_4.html#p_4_4',1,'4.4 MKX Periphery']]],
+  ['periphery_0',['Periphery',['../p_1.html#p_1_3',1,'1.3 Periphery'],['../p_4.html#p_4_4',1,'4.4 MKX Periphery']]],
   ['peripherycentral_1',['4.4.2 PeripheryCentral',['../p_4.html#p_4_4_2',1,'']]],
   ['peripherysingle_2',['4.4.1 PeripherySingle',['../p_4.html#p_4_4_1',1,'']]],
   ['peripherytouch_3',['4.4.4 PeripheryTouch',['../p_4.html#p_4_4_4',1,'']]],

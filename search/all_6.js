@@ -15,9 +15,12 @@ var searchData=
   ['6_205_20interfacetouchslider_12',['4.6.5 InterfaceTouchSlider',['../p_4.html#p_4_6_5',1,'']]],
   ['6_206_20interfacetouchwheel_13',['4.6.6 InterfaceTouchWheel',['../p_4.html#p_4_6_6',1,'']]],
   ['6_20development_14',['6 Development',['../p_6.html',1,'']]],
-  ['6_20interface_15',['4.6 Interface',['../p_4.html#p_4_6',1,'']]],
-  ['6_20td_20tapdance_20keys_16',['5.6 TD - TapDance Keys',['../p_5.html#p_5_6',1,'']]],
-  ['6_20to_20to_20layer_20toggle_20one_20shot_20layer_17',['5.3.6 TO - To Layer (Toggle One-Shot Layer)',['../p_5.html#p_5_3_6',1,'']]],
-  ['6_20use_5fble_18',['4.3.6 use_ble',['../p_4.html#p_4_3_6',1,'']]],
-  ['6_5fdevelopment_2emd_19',['6_Development.md',['../6__Development_8md.html',1,'']]]
+  ['6_20hackpad_20keyboard_15',['3.6 Hackpad Keyboard',['../p_3.html#p_3_6',1,'']]],
+  ['6_20interface_16',['4.6 Interface',['../p_4.html#p_4_6',1,'']]],
+  ['6_20interfacetouchwheel_17',['4.6.6 InterfaceTouchWheel',['../p_4.html#p_4_6_6',1,'']]],
+  ['6_20keymap_20and_20layers_18',['1.6 Keymap and Layers',['../p_1.html#p_1_6',1,'']]],
+  ['6_20td_20tapdance_20keys_19',['5.6 TD - TapDance Keys',['../p_5.html#p_5_6',1,'']]],
+  ['6_20to_20to_20layer_20toggle_20one_20shot_20layer_20',['5.3.6 TO - To Layer (Toggle One-Shot Layer)',['../p_5.html#p_5_3_6',1,'']]],
+  ['6_20use_5fble_21',['4.3.6 use_ble',['../p_4.html#p_4_3_6',1,'']]],
+  ['6_5fdevelopment_2emd_22',['6_Development.md',['../6__Development_8md.html',1,'']]]
 ];

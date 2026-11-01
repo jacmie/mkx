@@ -28,10 +28,14 @@ var searchData=
   ['5_209_20media_20keys_25',['5.9 Media Keys',['../p_5.html#p_5_9',1,'']]],
   ['5_20add_5fkeymap_26',['4.3.5 add_keymap',['../p_4.html#p_4_3_5',1,'']]],
   ['5_20build_20html_20docs_27',['6.5 Build HTML docs',['../p_6.html#p_6_5',1,'']]],
-  ['5_20hackpad_20keyboard_28',['3.5 Hackpad Keyboard',['../p_3.html#p_3_5',1,'']]],
-  ['5_20interfacetouchslider_29',['4.6.5 InterfaceTouchSlider',['../p_4.html#p_4_6_5',1,'']]],
-  ['5_20keys_30',['5 Keys',['../p_5.html',1,'']]],
-  ['5_20mkx_20touch_31',['4.5 MKX Touch',['../p_4.html#p_4_5',1,'']]],
-  ['5_20optional_32',['2.5 Optional',['../p_2.html#p_2_5',1,'']]],
-  ['5_5fkeys_2emd_33',['5_Keys.md',['../5__Keys_8md.html',1,'']]]
+  ['5_20ht_20holdtap_20keys_28',['5.5 HT - HoldTap Keys',['../p_5.html#p_5_5',1,'']]],
+  ['5_20interfaces_20and_20coordinate_20mapping_29',['1.5 Interfaces and Coordinate Mapping',['../p_1.html#p_1_5',1,'']]],
+  ['5_20interfacetouchslider_30',['4.6.5 InterfaceTouchSlider',['../p_4.html#p_4_6_5',1,'']]],
+  ['5_20keys_31',['5 Keys',['../p_5.html',1,'']]],
+  ['5_20mkx_20touch_32',['4.5 MKX Touch',['../p_4.html#p_4_5',1,'']]],
+  ['5_20myk_20keyboard_33',['3.5 Myk Keyboard',['../p_3.html#p_3_5',1,'']]],
+  ['5_20optional_34',['2.5 Optional',['../p_2.html#p_2_5',1,'']]],
+  ['5_20tg_20toggle_20layer_35',['5.3.5 TG - Toggle Layer',['../p_5.html#p_5_3_5',1,'']]],
+  ['5_20vim_20layout_36',['5.8.5 Vim Layout',['../p_5.html#p_5_8_5',1,'']]],
+  ['5_5fkeys_2emd_37',['5_Keys.md',['../5__Keys_8md.html',1,'']]]
 ];

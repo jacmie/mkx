@@ -11,5 +11,6 @@ var searchData=
   ['8_204_20replace_20mode_8',['5.8.4 Replace Mode',['../p_5.html#p_5_8_4',1,'']]],
   ['8_205_20vim_20layout_9',['5.8.5 Vim Layout',['../p_5.html#p_5_8_5',1,'']]],
   ['8_20backlight_10',['4.8 Backlight',['../p_4.html#p_4_8',1,'']]],
-  ['8_20vim_20keys_11',['5.8 VIM Keys',['../p_5.html#p_5_8',1,'']]]
+  ['8_20capacitive_20touch_20input_11',['1.8 Capacitive Touch Input',['../p_1.html#p_1_8',1,'']]],
+  ['8_20vim_20keys_12',['5.8 VIM Keys',['../p_5.html#p_5_8',1,'']]]
 ];
