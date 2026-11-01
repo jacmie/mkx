@@ -45,14 +45,14 @@ boot_cfg(
 The boot configuration is only applied if `sense` reads `True` or "high", and
 skipped if it reads `False` or "low".
 If `sense` is an uninitialized `Pin`, it'll be configured as pulled-up input; it
-wont be further configured if it is a `DigitalInOut`.
+won't be further configured if it is a `DigitalInOut`.
 
 
 **source**  
 `source` accepts either uninitialized `microcontroller.Pin`, `digitalio.DigitalInOut`, or `None`.
 It's the "source" of the test voltage to be read by the sense pin.
 If `source` is an uninitialized `Pin`, it'll be configured as a "low" output; it
-wont be further configured if it is a `DigitalInOut`.
+won't be further configured if it is a `DigitalInOut`.
 
 Common matrix and direct pin configurations (see also the examples below):
 
@@ -148,14 +148,14 @@ mkx = MKX_Single()
 
 # Set up matrix pins
 col_pins = (board.GP9, board.GP7, board.GP5, board.GP4, board.GP3, board.GP2)
-row_pins = (board.GP10, board.GP11, board.GP13, board.GP15, board.GP17)
+row_pins = (board.GP10,)
 
 # Add local matrix periphery
 periphery = PeripherySingle(col_pins, row_pins)
-mkx.add_periphery_central(periphery)
+mkx.add_periphery_single(periphery)
 
 # Map matrix to keyboard
-interface = InterfaceSingle(0, 0, 5, 4)
+interface = InterfaceSingle(0, 0, 5, 0)
 mkx.add_interface(interface)
 
 # Define keys
@@ -163,7 +163,7 @@ keymap = [
     [A, B, C, D, E, F],
     [G, H, I, J, K, L],
 ]
-mkx.add_keymap(keymap, 5, 1)
+mkx.add_keymap(keymap, 6, 1)
 
 # Run keyboard
 mkx.run_forever()
@@ -178,20 +178,8 @@ Manages keyboard operation and handles communication with the computer.
 ``` {.py}
 from mkx.mkx_central import MKX_Central
 
-MKX_Central(
-    keymap=None, 
-    coord_mapping=None
-)
+mkx_central = MKX_Central()
 ```
-
-**keymap**  
-Add *keymap* object to the **MKX_Central**.
-May be also added later with the **add_keymap()** method.
-
-**coord_mapping**  
-Add custom *coord_mapping* object to the **MKX_Central**.  
-Usualy coord_mapping is defined while **MKX Interpfaces** declaration.  
-May be also added later with the **add_coord_mapping()** method. # TO DO
 
 **Example:**
 ``` {.py}
@@ -202,7 +190,7 @@ mkx_central = MKX_Central()
 
 @subsection p_4_3_1 4.3.1 add_periphery_central
 
-Add **PeripheryCentral** to the ***MKX_Central**.  
+Add **PeripheryCentral** to the **MKX_Central**.  
 
 ``` {.py}
 mkx_central.add_periphery_central(
@@ -220,8 +208,8 @@ from mkx.periphery_central import PeripheryCentral
 
 mkx_central = MKX_Central()
 
-central_peryphery = PeripheryCentral("central", col_pins, row_pins)
-mkx_central.add_periphery_central(central_peryphery)
+central_periphery = PeripheryCentral("central", col_pins, row_pins)
+mkx_central.add_periphery_central(central_periphery)
 ```
 
 @subsection p_4_3_2 4.3.2 add_interface
@@ -230,7 +218,7 @@ Add **Interface** of a **Periphery** to the **MKX_Central**.
 
 ``` {.py}
 mkx_central.add_interface(
-    interface: InterfahceAbstract
+    interface: InterfaceAbstract
 )
 ```
 
@@ -246,12 +234,12 @@ from mkx.interface_uart import InterfaceUART
 
 mkx_central = MKX_Central()
 
-central_peryphery = PeripheryCentral("central", col_pins, row_pins)
+central_periphery = PeripheryCentral("central", col_pins, row_pins)
 
-interface_central = InterfaceCentral(central_peryphery, 0, 0, 5, 4)
+interface_central = InterfaceCentral(central_periphery, 0, 0, 5, 4)
 keyboard.add_interface(interface_central)
  
-interface_right = InterfaceUART("right_peryphery", None, board.GP1, 11, 0, 6, 4)
+interface_right = InterfaceUART("right_periphery", None, board.GP1, 11, 0, 6, 4)
 keyboard.add_interface(interface_right)
 ```
 
@@ -330,16 +318,16 @@ mkx_central.add_keymap(
 *Keymap* object.
 
 **col_size**  
-Keymap layer max column number.  
-Counting starts from '0'.  
+Number of columns in a keymap layer.  
 
 **row_size**  
-Keymap layer max row number.  
-Counting starts from '0'.  
+Number of rows in a keymap layer.  
+
+Each keymap layer must contain exactly `col_size * row_size` keys.
 
 **Example:**  
 ``` {.py}
-from mkx.mkx_central import MKX_Centrals
+from mkx.mkx_central import MKX_Central
  
 from mkx.keys_standard import *
  
@@ -356,7 +344,7 @@ keymap = [
  
 # fmt: on
  
-mkx_central.add_keymap(keymap, 2, 1)
+mkx_central.add_keymap(keymap, 3, 2)
 ```
 
 @subsection p_4_3_6 4.3.6 use_ble
@@ -405,12 +393,12 @@ or as **PeripheryUART**, on a separate hardware module and communicates via UART
 from mkx.mkx_periphery import MKX_Periphery
 
 mkx_periphery = MKX_Periphery(
-    uart_peryphery: PeripheryAbstract, 
+    periphery: PeripheryAbstract, 
     debug :bool=False
 )
 ```
 
-**uart_peryphery**  
+**periphery**  
 PeripheryUART object (or other derived from the *PeripheryAbstract*).  
 
 **debug**  
@@ -500,10 +488,10 @@ mkx_central = MKX_Central()
 col_pins = (board.GP9, board.GP7, board.GP5, board.GP4, board.GP3, board.GP2)
 row_pins = (board.GP10, board.GP11, board.GP13, board.GP15, board.GP17)
  
-central_peryphery = PeripheryCentral("central_peryphery", col_pins, row_pins)
-mkx_central.add_periphery_central(central_peryphery)
+central_periphery = PeripheryCentral("central_periphery", col_pins, row_pins)
+mkx_central.add_periphery_central(central_periphery)
 
-interface_central = InterfaceCentral(central_peryphery, 0, 0, 5, 4)
+interface_central = InterfaceCentral(central_periphery, 0, 0, 5, 4)
 mkx_central.add_interface(interface_central)
  
 interface_right = InterfaceUART("side_periphery", None, board.GP1, 11, 0, 6, 4)
@@ -565,9 +553,9 @@ from mkx.periphery_uart import PeripheryUART
 col_pins = (board.GP9, board.GP7, board.GP5, board.GP4, board.GP3, board.GP2)
 row_pins = (board.GP10, board.GP11, board.GP13, board.GP15, board.GP17)
  
-peryphery = PeripheryUART("booster_r", col_pins, row_pins, board.GP0, board.GP1)
+periphery = PeripheryUART("booster_r", col_pins, row_pins, board.GP0, board.GP1)
  
-mkx_periphery = MKX_Periphery(peryphery, debug=True)
+mkx_periphery = MKX_Periphery(periphery, debug=True)
 mkx_periphery.run_forever()
 ```
 
@@ -758,14 +746,14 @@ mkx_central = MKX_Central()
 col_pins = (board.GP9, board.GP7, board.GP5, board.GP4, board.GP3, board.GP2)
 row_pins = (board.GP10, board.GP11, board.GP13, board.GP15, board.GP17)
  
-central_peryphery = PeripheryCentral("central_peryphery", col_pins, row_pins)
-mkx_central.add_periphery_central(central_peryphery)
+central_periphery = PeripheryCentral("central_periphery", col_pins, row_pins)
+mkx_central.add_periphery_central(central_periphery)
 
-interface_central = InterfaceCentral(central_peryphery, 0, 0, 5, 4)
+interface_central = InterfaceCentral(central_periphery, 0, 0, 5, 4)
 mkx_central.add_interface(interface_central)
  
 interface_right = InterfaceUART("side_periphery", None, board.GP1, 11, 0, 6, 4)
-mkx_central.add_interface(intefhace_right)
+mkx_central.add_interface(interface_right)
 
 # other code ...
 
@@ -833,7 +821,7 @@ Inverted min/max column and rows values will change the keys mapping.
 from mkx.interface_central import InterfaceCentral
 
 interface = InterfaceCentral(
-    central_periphery: InterfahceAbstract, 
+    central_periphery: PeripheryAbstract, 
     col_min :int, 
     row_min :int, 
     col_max :int, 
@@ -1118,7 +1106,7 @@ Pin for the RGB NeoPixel LED.
 Brightness of the LED in the range 0-1.  
 
 **auto_write**  
-Flag to update LED color automaticly.  
+Flag to update LED color automatically.  
 
 **Example:**
 ``` {.py}
@@ -1147,7 +1135,9 @@ from mkx.layer_status_led_rgb_threepin import LayerStatusLedRgbThreePin
 status_led = LayerStatusLedRgbThreePin(
     red_pin,
     green_pin,
-    blue_pin
+    blue_pin,
+    brightness=1.0,
+    common_anode=False
 )
 ```
 **red_pin**  
@@ -1158,6 +1148,12 @@ Green LED pin.
 
 **blue_pin**  
 Blue LED pin.
+
+**brightness**  
+Brightness of the LED in the range 0-1.  
+
+**common_anode**  
+Set to `True` for a common-anode LED, `False` (default) for a common-cathode LED.
 
 @subsection p_4_7_3 4.7.3 LayerStatusLedArray
 
@@ -1204,7 +1200,7 @@ Pin for the backlight RGB NeoPixel LED-s.
 Number of the RGB NeoPixel LED-s.  
 
 **rgb_color**  
-Peaked values of the RGB color.  
+RGB color value as an (R, G, B) tuple.  
 
 **brightness**  
 Brightness of the LED in the range 0-1.  
@@ -1233,7 +1229,6 @@ from mkx.backlight_neopixel_rainbow import BacklightNeopixelRainbow
 status_led = BacklightNeopixelRainbow(
     pin, 
     num_pixels :int, 
-    rgb_color=(0, 0, 255), 
     brightness :float=1
 )
 ```
@@ -1249,7 +1244,7 @@ Brightness of the LED in the range 0-1.
 
 @subsection p_4_8_2_1 4.8.2.1 faster()
 
-Hom much faster should be the rainbow animation from the initial one.
+How much faster should be the rainbow animation from the initial one.
 
 ``` {.py}
 backlight.faster(
@@ -1262,7 +1257,7 @@ Increased animation speed up to 20.
 
 @subsection p_4_8_2_2 4.8.2.2 slower()
 
-Hom much slower should be the rainbow animation from the initial one.
+How much slower should be the rainbow animation from the initial one.
 
 ``` {.py}
 backlight.slower(
@@ -1313,6 +1308,7 @@ from mkx.i2c import init_i2c
 i2c = init_i2c(
     scl_pin=board.SCL, 
     sda_pin=board.SDA, 
+    frequency=400000, 
     status_led=None
 )
 ```
@@ -1322,6 +1318,9 @@ SCL (clock) pin for I2C communication (default: board.SCL).
 
 **sda_pin**  
 SDA (data) pin for I2C communication (default: board.SDA).  
+
+**frequency**  
+I2C bus clock frequency in Hz (default fast: 400000).  
 
 **status_led**  
 Optional status LED object for error indication.  
