@@ -155,9 +155,3 @@ class MKX_Touch(MKX_Abstract):
             self.backlight.shine()
 
         time.sleep(0.01)  # Keep CPU usage low
-
-    def run_forever(self):
-        self._init_keyboard()
-
-        while True:
-            self.run_once()

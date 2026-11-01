@@ -6,11 +6,13 @@ from mkx.error import halt_on_error
 from mkx.ansi_colors import Ansi, Ansi256
 
 
-def init_i2c(scl_pin=board.SCL, sda_pin=board.SDA, status_led=None):
+def init_i2c(scl_pin=board.SCL, sda_pin=board.SDA, frequency=400000, status_led=None):
     print(f"{Ansi256.MINT}=== Initializing I2C ==={Ansi.RESET}")
     try:
-        i2c = busio.I2C(scl_pin, sda_pin)
-        print(f"{Ansi256.SKY}✓ I2C bus created\n{Ansi.RESET}")
+        i2c = busio.I2C(scl_pin, sda_pin, frequency=frequency)
+        print(
+            f"{Ansi256.SKY}✓ I2C bus created at {frequency // 1000} kHz\n{Ansi.RESET}"
+        )
     except Exception as e:
         halt_on_error(
             f"✗ I2C failed: {e}",
