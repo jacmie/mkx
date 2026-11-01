@@ -46,8 +46,8 @@ To make it more useful and entertaining, we simulate the behavior of a hardware 
 
 By bridging pin D5 (sending pin) and pin D6 (receiving pin) with pliers or any other conductive object like a wire, paper clip, etc. predefined key string is sent to the computer.
 
-This setup uses only one hardware component, which acts as both the signal sender and the central processing unit.  
-For this reason **PeripheryCentral** is defined and added to the keyboard object. Each peripheral device also requires an interface, here **InterfaceCentral** is added to fulfill that role.
+This setup uses only one hardware component, which both senses the signal and processes it locally, with no separate central/periphery split.  
+For this reason **MKX_Single** is used: **PeripherySingle** is defined and added to the keyboard object, and **InterfaceSingle** is added as its matching interface.
 
 Standard keyboard keys were used, modifier key **M_LSFT** was applied to produce capital letters and special characters.  
 All input is grouped under a single key called **HK**, defined as a sequence **SEQ** key.  
@@ -415,33 +415,43 @@ keyboard.run_forever()
   <img src="MykR_keyboard.jpg">
 </div>
 
-This "split" keyboard uses one MCU and two *MCP23017* pin expanders. It was initially driven by a *Seeed Xiao nRF52840* to test Bluetooth functionality.  
-However, the BLE stack took up too much memory, preventing the full keyboard firmware from fitting.  
-The resource constraint caused severe input latency and lack of Bluetooth connection. Due to these limitations, the MCU was changed to a *Seeed Xiao RP2350*.  
-While it lacks Bluetooth capabilities, it offers significantly faster processing speeds and a much larger memory capacity to easily handle the full keyboard code.  
+This "split" keyboard uses one MCU and two *MCP23017* pin expanders.  
+It was initially driven by a *Seeed Xiao nRF52840* to test Bluetooth functionality, but the BLE stack took up too much memory, preventing the full keyboard firmware from fitting.  
+This resource constraint caused severe input latency and an lack of Bluetooth connection, so the MCU was changed to a *Seeed Xiao RP2350*.  
+While it lacks Bluetooth capabilities, it offers significantly faster processing speeds and a much larger memory capacity.  
 
-In this architecture, the MCU communicates with the two pin expanders over I2C using unique addresses.  
+In this architecture, the MCU communicates with the two pin expanders over I2C, each using a unique address.  
 While this approach dramatically increases the available pin count, it introduces complications in the keymap layout.  
-Moreover, the expanders work only with the *digitalio.Pull.UP* which flips the key mapping logic.
+Moreover, the expanders work only with *digitalio.Pull.UP*, which inverts the key-mapping logic.
+
+Driving the *MCP23017* expanders requires the **adafruit_mcp230xx** library, which is not part of the base Adafruit bundle installed in @ref p_2_3.  
+Install it additionally with **circup**:
+```
+circup install adafruit_mcp230xx
+```
 
 To prevent key conflicts, the matrix had to be remapped using custom code into a larger, virtual matrix.  
-In this layout, columns are converted to rows and the top-left quadrant handles the left half of the keyboard,  
+In this layout, the columns and rows are transposed: the top-left quadrant handles the left half of the keyboard,  
 while the bottom-right quadrant handles the right half.  
-The remaining two quadrants are populated with null values to avoid overlapping inputs. 
+The remaining two quadrants are populated with null values to avoid overlapping inputs.  
+*See the remapper.py*.  
 
-However, even with the faster RP2350 MCU, there is still a noticeable input lag.  
-This latency is likely caused by either the overhead of the I2C communication protocol,  
-or the processing demands of managing a much larger matrix than usual.
+However, even with the faster RP2350 MCU, there was still a noticeable input lag.  
+The standard I2C frequency wasn't fast enough, so it had to be increased to fast mode with 400kHz, which resolved the lag.
+
+Unlike the Square keyboard (see @ref p_3_4), where `sense`/`source` are wired to a dedicated matrix key, that approach doesn't work here.  
+The *MCP23017* expanders are only initialized later in **code.py**, so none of them are available yet while **boot.py** runs, which rules out using any matrix key (they all live behind the expanders) as the `sense`/`source` pair.  
+Instead, `sense` and `source` are wired directly to raw MCU pins (**D9** and **D8**), so entering storage/programming mode requires physically bridging these two pads on the board rather than holding down a key,  
+or adding separate key (not present on this keyboard).
 
 Another challenge arose when connecting the keyboard halves to the main MCU board using JST-SH 1.0mm connectors.  
-These connectors proved to be highly unreliable. After extensive hardware debugging,  
-I had to bypass them by soldering custom wire bridges directly to the specific pads visible in the photo.
+These connectors proved to be highly unreliable.  
+After extensive hardware debugging, I had to bypass them by soldering custom wire bridges directly to the specific pads visible in the photo.
 
-The yellow casing interferes with the status LED light, altering its perceived color.  
+The yellow casing also tints the status LED, altering its perceived color.  
 
-While this keyboard design introduced quite a few challenges, it served as an invaluable learning experience,  
-and some variations of this concept you may find useful.
-
+While this keyboard design introduced quite a few challenges, it finally works and served as an invaluable learning experience.  
+Some variations of this concept may still prove useful to you.
 
 ``` {.py}
 # boot.py
@@ -544,15 +554,14 @@ from mkx.i2c import init_i2c
 keyboard = MKX_Single()
 
 status_led = LayerStatusLedRgbNeoPixel(board.RX)
-status_led.add_layer(0, (0, 0, 255))  # Blue
+status_led.add_layer(0, (255, 0, 0))  # Red
 status_led.add_layer(1, (0, 255, 0))  # Green
-status_led.add_layer(2, (255, 255, 255))  # Write
-status_led.add_layer(3, (255, 0, 0))  # Red
+status_led.add_layer(2, (0, 0, 255))  # Blue
 keyboard.add_layer_status_led(status_led)
 
 keyboard.use_interrupt(board.D0)
 
-i2c = init_i2c(board.SCL, board.SDA, status_led)
+i2c = init_i2c(board.SCL, board.SDA, frequency=400000, status_led=status_led)
 
 mcp1 = MCP23017(i2c, address=0x20)
 mcp2 = MCP23017(i2c, address=0x21)

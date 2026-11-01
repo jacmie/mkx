@@ -4,7 +4,7 @@
 @section p_1_1 1.1 MKX Keyboard
 
 All boards capable of running [Circuit Python](https://circuitpython.org/downloads) should be suitable for a keyboard.  
-The library has already been tested on boards: Waveshare RP2040-Zero, Seeed XIAO RP2040, PGA2040, Feather ESP32-S3  
+The library has already been tested on boards: Waveshare RP2040-Zero, Seeed XIAO RP2040, Seeed XIAO RP2350, Seeed Xiao nRF52840, PGA2040, Feather ESP32-S3  
 
 The MKX architecture is designed to be flexible and reliable.  
 It includes mechanisms for time synchronization, debouncing, matrix scanning warm-up, user configuration checks, and other features that enhance stability.  
